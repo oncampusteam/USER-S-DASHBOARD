@@ -1,0 +1,365 @@
++233545807777
++233535447426
++233533412305
++233554158115
++233555828768
++233536528989
+
++233550433905
++233546081693
++233553683465
++233547945862
++233244138087
++233592981029
+
++233208136373
++233507046626
++233541666658
++233541853009
++233536997936
++233591627733
++23353667962
+
++233505350838
++233536471496
++233595228506
++233530301589
++233241192689
++233245146473
+
++233242082868
++233242220263
++233247494745
++233542076269
++233256584332
++233202574292
++233240724532
++233599684115
+
++233598256153
++233502586709
+----------
++233530291537
++233505838325
++233233235899
++233539391702
+
++233541857497
++233547080197
++233598436500
++233598736755
++233597262121
++233598103233
++233555996375
+
++233591935671
++233552193753
++233555243055
++233553016104
++233543307285
++233552036729
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+
+import 'package:on_campus/screens/personal_info.dart';
+
+class Profile extends StatefulWidget {
+  final String username;
+  const Profile({super.key, required this.username});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  int selectedIndex = 3;
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15.h),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {},
+                      ),
+                      Text("Profile"),
+                      IconButton(
+                          icon: IconButton(
+                            icon: SvgPicture.asset(
+                                "assets/user_interface_icons/profile_screen/User,Profile.svg"),
+                            onPressed: () {},
+                          ),
+                          onPressed: () {}),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 55,
+                        width: 55,
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage(
+                            "assets/welcome_screen_4/welcomeImage4.jpg",
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Kwame Obeng", style: TextStyle),
+                          Text("oncampus@gmail.com"),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/User,Profile.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Personal Information"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.arrow_forward_ios_outlined, size: 10),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/credit-cards.svg"),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                    title: Text("Payment History"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/save-2.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Bookings"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/heart.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Wishlist"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/Chat, Messages.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Message"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/share.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Share the app"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/shop-add.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Host Business or Service"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/refer.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Refer & Earn"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/help.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Help"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                  ListTile(
+                    leading: IconButton(
+                      icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/logout.svg"),
+                      onPressed: () {},
+                    ),
+                    title: Text("Log out"),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 15,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      onPressed: () {},
+                    ),
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

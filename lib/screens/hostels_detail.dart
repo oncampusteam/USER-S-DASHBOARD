@@ -1,0 +1,3670 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:get/get.dart';
+import 'package:on_campus/classes/classes.dart';
+import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
+import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
+import 'package:on_campus/screens/enquire.dart';
+import 'package:on_campus/screens/get_icon.dart';
+import 'package:intl/intl.dart';
+
+class HostelDetails extends StatefulWidget {
+  final Hostels hostel;
+  const HostelDetails({super.key, required this.hostel});
+
+  @override
+  State<HostelDetails> createState() => _HostelDetailsState();
+}
+
+String gender = "";
+String selectedGender = "";
+
+class _HostelDetailsState extends State<HostelDetails> {
+  int selectedIndex = 0;
+  List<RoomTypes> roomTypes = [];
+  bool isLoading = false;
+  bool isChecked = false;
+  User? user = FirebaseAuth.instance.currentUser;
+
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController dateController_movein = TextEditingController();
+  final TextEditingController dateController_moveout = TextEditingController();
+  final Map<String, GlobalKey> _sectionKeys = {};
+  final _formkey = GlobalKey<FormState>();
+  final _formkey2 = GlobalKey<FormState>();
+
+  Future<void> getRoomTypes() async {
+    setState(() {
+      isLoading = true;
+    });
+    roomTypes = await FirestoreDb.instance.roomTypes(widget.hostel);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void occupantFields({
+    required int count,
+    required StateSetter setModalState,
+    required List<TextEditingController> occupantNames,
+    required List<TextEditingController> occupantEmails,
+  }) {
+    if (count >= 1 && count <= 4) {
+      setModalState(() {
+        occupantNames.clear();
+        occupantEmails.clear();
+
+        for (int i = 0; i < count; i++) {
+          occupantNames.add(TextEditingController());
+          occupantEmails.add(TextEditingController());
+        }
+      });
+    } else {
+      Get.snackbar(
+        "Incorrect value",
+        "You can book for up to 4 occupants only",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController moveInController,
+    TextEditingController? moveOutController,
+  ) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        // Set move-in date
+        moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
+
+        // If move-out controller was provided, add 2 years automatically
+        if (moveOutController != null) {
+          final moveOutDate = DateTime(
+            pickedDate.year + duration,
+            pickedDate.month,
+            pickedDate.day,
+          );
+
+          moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRoomTypes().then((_) {
+      for (var room in roomTypes) {
+        _sectionKeys[room.type ?? "null"] = GlobalKey();
+      }
+      for (final tile in tileList) {
+        _sectionKeys[tile.name ?? "null"] = GlobalKey();
+      }
+    });
+    // occupantFields(1);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToSection(String? sectionString) {
+    final context = _sectionKeys[sectionString]?.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        alignment: 0.1,
+      );
+    }
+  }
+
+  List<Photos> tileList = [
+    Photos(name: "Overview"),
+    Photos(name: "Description"),
+    Photos(name: "Amenities"),
+    Photos(name: "Room type"),
+    Photos(name: "Policies"),
+    Photos(name: "Faqs"),
+  ];
+  List<Swipper> swipers = [
+    Swipper(image: "assets/search/search_imgs.jpeg"),
+    Swipper(image: "assets/search/search_imgs_1.jpeg"),
+    Swipper(image: "assets/search/search_imgs_2.jpeg"),
+    Swipper(image: "assets/search/search_imgs_3.jpeg"),
+    Swipper(image: "assets/search/search_imgs_4.jpeg"),
+  ];
+
+  int duration = 1;
+
+  Widget selectWidget(StateSetter setModalState) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+
+      height: MediaQuery.of(context).size.height * 0.35,
+      padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 5.h,
+              width: 30.w,
+              decoration: BoxDecoration(
+                color: const Color(0xFF79747E),
+                borderRadius: BorderRadius.circular(100.r),
+              ),
+            ),
+            5.verticalSpace,
+            Text(
+              "Select Info",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16.sp.clamp(0, 16),
+                letterSpacing: 0.2,
+              ),
+            ),
+            15.verticalSpace,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Gender",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp.clamp(0, 16),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    Text(
+                      "Choose your gender",
+                      style: TextStyle(
+                        fontFamily: "Roboto",
+                        color: const Color(0xFF333333),
+                        fontSize: 9.sp.clamp(0, 9),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    genderSelector(setModalState, "M"),
+                    25.horizontalSpace,
+                    genderSelector(setModalState, "F"),
+                  ],
+                ),
+              ],
+            ),
+            15.verticalSpace,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Duration",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp.clamp(0, 16),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    Text(
+                      "Maximum 4 years",
+                      style: TextStyle(
+                        fontFamily: "Roboto",
+                        color: const Color(0xFF333333),
+                        fontSize: 10.sp.clamp(0, 10),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (duration >= 2)
+                          setModalState(() {
+                            duration--;
+                          });
+                      },
+                      child: Container(
+                        height: 30.h,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                              color: Colors.black.withOpacity(0.05),
+                            ),
+                          ],
+                        ),
+                        child: const Align(
+                          child: Text(
+                            "-",
+                            style: TextStyle(color: Color(0xFF00EFD1)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    5.horizontalSpace,
+                    Text(
+                      "$duration",
+                      style: TextStyle(
+                        fontSize: 16.sp.clamp(0, 16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    5.horizontalSpace,
+                    GestureDetector(
+                      onTap: () {
+                        if (duration <= 3) {
+                          setModalState(() {
+                            duration++;
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: 30.h,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                              color: Colors.black.withOpacity(0.05),
+                            ),
+                          ],
+                        ),
+                        child: const Align(
+                          child: Text(
+                            "+",
+                            style: TextStyle(color: Color(0xFF00EFD1)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            50.verticalSpace,
+            SizedBox(
+              height: 45.h,
+              width: double.infinity,
+              child: FilledButton(
+                style: ButtonStyle(
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    ),
+                  ),
+                  backgroundColor: const WidgetStatePropertyAll(
+                    Color.fromARGB(255, 0, 239, 209),
+                  ),
+                ),
+                onPressed: () async {
+                  setModalState(() {
+                    isLoading = true;
+                  });
+                  final user = FirebaseAuth.instance.currentUser;
+                  await FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(user!.uid)
+                      .collection('Booked hostels')
+                      .doc(widget.hostel.name) // Set your own ID
+                      .set({
+                        'gender': selectedGender == "M" ? "male" : "female",
+                        'duration': duration,
+                      }, SetOptions(merge: true));
+
+                  setModalState(() {
+                    isLoading = false;
+                  });
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                        builder:
+                            (BuildContext context, StateSetter setModalState) {
+                              return IntrinsicHeight(
+                                child: setDate(setModalState),
+                              );
+                            },
+                      );
+                    },
+                  );
+                },
+                child: isLoading
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Text("Please wait.."),
+                          ],
+                        ),
+                      )
+                    : Text(
+                        "Continue",
+                        style: TextStyle(
+                          fontFamily: "Roboto",
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17.sp.clamp(0, 17),
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget book(
+    StateSetter setModalState,
+    TextEditingController num_people,
+    TextEditingController name,
+    TextEditingController email_address,
+    List<TextEditingController> occupantEmails,
+    List<TextEditingController> occupantNames,
+  ) {
+    return SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+
+        padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Align(
+                child: Container(
+                  height: 5.h,
+                  width: 30.w,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF79747E),
+                    borderRadius: BorderRadius.circular(100.r),
+                  ),
+                ),
+              ),
+            ),
+            5.verticalSpace,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "20% Off",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.sp.clamp(0, 12),
+                    letterSpacing: 0.15.w,
+                    color: const Color(0xFF00EFD1),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.star_border_outlined,
+                      size: 15.h,
+                      color: const Color(0xFF00EFD1),
+                    ),
+                    Text(
+                      "4.5",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.15.w,
+                        fontSize: 12.sp.clamp(0, 12),
+                        color: const Color(0xFF323232),
+                      ),
+                    ),
+                    Text(
+                      " (180 reviews)",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.15.w,
+                        fontSize: 12.sp.clamp(0, 12),
+                        color: const Color.fromRGBO(50, 50, 50, 0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            5.verticalSpace,
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    widget.hostel.hostel_images![0] ?? "",
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "4in Room Bedroom Apartment",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "GHS 4000/"),
+                          TextSpan(
+                            text: "Academic year",
+                            style: TextStyle(fontSize: 8),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text("Available Rooms", style: TextStyle(fontSize: 10)),
+                  ],
+                ),
+              ],
+            ),
+            const Divider(color: Color.fromRGBO(120, 120, 120, 0.3)),
+            SizedBox(height: 5),
+            Form(
+              key: _formkey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Number of people booking?",
+                    style: TextStyle(
+                      fontSize: 15.sp.clamp(0, 15),
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.2.w,
+                      color: const Color(0xFF323232),
+                    ),
+                  ),
+                  10.verticalSpace,
+                  TextFormField(
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        int count = int.tryParse(value) ?? 1;
+                        occupantFields(
+                          count: count,
+                          setModalState: setModalState,
+                          occupantNames: occupantNames,
+                          occupantEmails: occupantEmails,
+                        );
+                        setModalState(() {});
+                      }
+                    },
+                    enabled: isChecked,
+                    controller: num_people,
+                    cursorColor: Colors.black,
+                    style: const TextStyle(color: Colors.grey),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(1),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: "1",
+                      labelStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 1,
+                          style: BorderStyle.none,
+                          color: Colors.grey.withOpacity(0.3),
+                        ),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a number';
+                      }
+                      final num = int.tryParse(value);
+                      if (num == null || num < 1 || num > 4) {
+                        return 'Enter a number between 1 and 4';
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, top: 4),
+                    child: Text(
+                      "Min 1 - Max 4",
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  Column(
+                    children: [
+                      for (int i = 0; i < occupantNames.length; i++)
+                        Column(
+                          children: [
+                            Text(
+                              "Occupant ${i + 1}",
+                              style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontSize: 15.sp.clamp(0, 15),
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.2.w,
+                                color: const Color(0xFF323232),
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+
+                            TextFormField(
+                              controller: occupantNames[i],
+                              cursorColor: Colors.black,
+                              style: const TextStyle(color: Colors.grey),
+                              decoration: InputDecoration(
+                                labelText: "Full name",
+                                labelStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.none,
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                ),
+                              ),
+                              keyboardType: TextInputType.name,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                              },
+                            ),
+
+                            SizedBox(height: 10.h),
+                            TextFormField(
+                              controller: occupantEmails[i],
+                              cursorColor: Colors.black,
+                              style: const TextStyle(color: Colors.grey),
+
+                              decoration: InputDecoration(
+                                labelText: "Occupant Email",
+                                labelStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.none,
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email address';
+                                }
+                                final emailRegex = RegExp(
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                                );
+
+                                // 3️ Check if it matches
+                                if (!emailRegex.hasMatch(value)) {
+                                  return 'Enter a valid email address';
+                                }
+                              },
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20.0,
+                                top: 4,
+                              ),
+                              child: Text(
+                                "Optional",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ),
+                            15.verticalSpace,
+                          ],
+                        ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isChecked,
+                        onChanged: (bool? newValue) {
+                          setModalState(() {
+                            isChecked = newValue!;
+                            if (isChecked == false) {
+                              occupantFields(
+                                count: 1,
+                                setModalState: setModalState,
+                                occupantNames: occupantNames,
+                                occupantEmails: occupantEmails,
+                              );
+                              num_people.text = "1";
+                            }
+                          });
+                        },
+                      ),
+                      Text(
+                        "Booking for others",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 40.h),
+                  SizedBox(
+                    height: 40.h,
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.r),
+                            ),
+                          ),
+                        ),
+                        backgroundColor: const WidgetStatePropertyAll(
+                          Color.fromARGB(255, 0, 239, 209),
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formkey.currentState!.validate()) {
+                          setModalState(() {
+                            isLoading = true;
+                          });
+
+                          final user = FirebaseAuth.instance.currentUser;
+
+                          List<Map<String, dynamic>> occupants = [];
+
+                          for (int i = 0; i < occupantNames.length; i++) {
+                            occupants.add({
+                              'name': occupantNames[i].text.trim(),
+                              'email': occupantEmails[i].text.trim(),
+                            });
+                          }
+                          await FirebaseFirestore.instance
+                              .collection('Users')
+                              .doc(user!.uid)
+                              .collection('Booked hostels')
+                              .doc(widget.hostel.name) // Set your own ID
+                              .set({
+                                'hostel_name': widget.hostel.name,
+                                'paid': false,
+                                'isDone': false,
+                                'people_booking': int.parse(num_people.text),
+                                'name': name.text,
+                                'occupants': occupants,
+                                'email': email_address.text,
+                              }, SetOptions(merge: true));
+                          setModalState(() {
+                            isLoading = false;
+                          });
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                builder:
+                                    (
+                                      BuildContext context,
+                                      StateSetter setModalState,
+                                    ) {
+                                      return selectWidget(setModalState);
+                                    },
+                              );
+                            },
+                          );
+                        }
+                      },
+                      child: isLoading
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 15,
+                                    height: 15,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text("Please wait.."),
+                                ],
+                              ),
+                            )
+                          : Text(
+                              "Continue",
+                              style: TextStyle(
+                                fontFamily: "Roboto",
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp.clamp(0, 20),
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget setDate(StateSetter setModalState) {
+    return SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+
+        padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+        child: Form(
+          key: _formkey2,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Align(
+                  child: Container(
+                    height: 5.h,
+                    width: 30.w,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF79747E),
+                      borderRadius: BorderRadius.circular(100.r),
+                    ),
+                  ),
+                ),
+              ),
+              5.verticalSpace,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "20% Off",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12.sp.clamp(0, 12),
+                      letterSpacing: 0.15.w,
+                      color: const Color(0xFF00EFD1),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_border_outlined,
+                        size: 15.h,
+                        color: const Color(0xFF00EFD1),
+                      ),
+                      Text(
+                        "4.5",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.15.w,
+                          fontSize: 12.sp.clamp(0, 12),
+                          color: const Color(0xFF323232),
+                        ),
+                      ),
+                      Text(
+                        " (180 reviews)",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.15.w,
+                          fontSize: 12.sp.clamp(0, 12),
+                          color: const Color.fromRGBO(50, 50, 50, 0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              5.verticalSpace,
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      widget.hostel.hostel_images![0] ?? "",
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "4in Room Bedroom Apartment",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(text: "GHS 4000/"),
+                            TextSpan(
+                              text: "Academic year",
+                              style: TextStyle(fontSize: 8),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Available Rooms:",
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          SizedBox(width: 10.w),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Divider(color: Color.fromRGBO(120, 120, 120, 0.3)),
+              SizedBox(height: 5),
+
+              Text(
+                "Book Hostel",
+                style: TextStyle(
+                  fontSize: 18.sp.clamp(0, 18),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.2.w,
+                  color: Colors.grey,
+                ),
+              ),
+              SizedBox(height: 7),
+              Text(
+                "Move in",
+                style: TextStyle(
+                  fontSize: 15.sp.clamp(0, 15),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.2.w,
+                  color: const Color(0xFF323232),
+                ),
+              ),
+              7.verticalSpace,
+              Container(
+                height: 60,
+                child: TextFormField(
+                  controller: dateController_movein,
+                  readOnly: true,
+                  onTap: () {
+                    _selectDate(
+                      context,
+                      dateController_movein,
+                      dateController_moveout,
+                    );
+                  },
+                  decoration: InputDecoration(
+                    labelText: "date",
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                    ),
+                    suffix: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () {
+                        _selectDate(
+                          context,
+                          dateController_movein,
+                          dateController_moveout,
+                        );
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please pick a date';
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 4),
+                child: Text("MM/DD/YYYY", style: TextStyle(fontSize: 10)),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Move out",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: 15.sp.clamp(0, 15),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.2.w,
+                  color: const Color(0xFF323232),
+                ),
+              ),
+              SizedBox(height: 7.h),
+              Container(
+                height: 60,
+                child: TextFormField(
+                  controller: dateController_moveout,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: "date",
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    filled: true,
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                    ),
+                    suffixIcon: Icon(Icons.calendar_today),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 4),
+                child: Text("MM/DD/YYYY", style: TextStyle(fontSize: 10)),
+              ),
+              SizedBox(height: 20.h),
+              SizedBox(
+                height: 40.h,
+                width: double.infinity,
+                child: FilledButton(
+                  style: ButtonStyle(
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                      ),
+                    ),
+                    backgroundColor: const WidgetStatePropertyAll(
+                      Color.fromARGB(255, 0, 239, 209),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (_formkey2.currentState!.validate()) {
+                      setModalState(() {
+                        isLoading = true;
+                      });
+                      final user = FirebaseAuth.instance.currentUser;
+                      await FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(user!.uid)
+                          .collection('Booked hostels')
+                          .doc(widget.hostel.name) // Set your own ID
+                          .set({
+                            'move_in': dateController_movein.text,
+                            'move_out': dateController_moveout.text,
+                            'isDone': true,
+                          }, SetOptions(merge: true));
+                      setModalState(() {
+                        isLoading = false;
+                      });
+                      Get.to(
+                        () => Payment(user: user),
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                  child: isLoading
+                      ? Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text("Please wait.."),
+                            ],
+                          ),
+                        )
+                      : Text(
+                          "Proceed to payment",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.sp.clamp(0, 20),
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            height: 400.h,
+                            width: MediaQuery.of(context).size.width,
+                            color: const Color(0xFFF5F8FF),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.r),
+                              child: Swiper(
+                                controller: SwiperController(),
+                                autoplay: true,
+                                curve: Curves.easeIn,
+                                autoplayDelay: 5000,
+                                itemCount: widget.hostel.hostel_images!.length,
+                                itemBuilder: (BuildContext, index) {
+                                  // Swipper swiper = swipers[index];
+                                  String? string =
+                                      widget.hostel.hostel_images![index];
+                                  return CachedNetworkImage(
+                                    imageUrl: string ?? "",
+                                    width: MediaQuery.sizeOf(context).width,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        SpinKitThreeBounce(
+                                          color: const Color.fromARGB(
+                                            255,
+                                            0,
+                                            239,
+                                            209,
+                                          ),
+                                          size: 50.0,
+                                        ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 400.h,
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(height: 16.h),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(left: 20.h),
+                                        height: 40.h,
+                                        width: 40,
+                                        foregroundDecoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            8.r,
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.8),
+                                          borderRadius: BorderRadius.circular(
+                                            8.r,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.chevron_left,
+                                          color: Colors.black,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(right: 20.h),
+                                      foregroundDecoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.8),
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
+                                      ),
+                                      height: 40.h,
+                                      width: 40.w,
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            child: Container(
+                                              child: const Icon(
+                                                Icons.favorite,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            child: Container(
+                                              child: const Icon(
+                                                Icons.favorite_border,
+                                                color: Color(0xFF00EFD1),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                Container(
+                                  // height: 160.h,
+                                  margin: EdgeInsets.symmetric(
+                                    vertical: 5.h,
+                                    horizontal: 15.h,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: 50.h,
+                                          left: 10.h,
+                                        ),
+                                        // color: Colors.red,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.hostel.name,
+                                              style: TextStyle(
+                                                fontFamily: "Poppins",
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 24.sp.clamp(0, 24),
+                                                letterSpacing: 0.1.w,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: 2.w,
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(height: 5.h),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                          left: 2.h,
+                                                        ),
+                                                        child: Image.asset(
+                                                          "assets/hostels_detail/location_white.png",
+                                                          height: 15.h,
+                                                          width: 15.w.clamp(
+                                                            0,
+                                                            15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "${widget.hostel.city}, ${widget.hostel.region} Region",
+                                                        style: TextStyle(
+                                                          fontFamily: "Roboto",
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.white,
+                                                          fontSize: 12.sp.clamp(
+                                                            0,
+                                                            12,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  // Container(
+                                                  //     margin: EdgeInsets.only(
+                                                  //         left: 7.h),
+                                                  //     height: 10.h,
+                                                  //     width: 1.w,
+                                                  //     color: Colors.white),
+                                                  // Row(
+                                                  //   children: [
+                                                  //     Container(
+                                                  //         margin:
+                                                  //             EdgeInsets.only(
+                                                  //                 left: 1.h),
+                                                  //         child: Image.asset(
+                                                  //             'assets/hostels_detail/University_white.png',
+                                                  //             height: 15.h,
+                                                  //             width: 15.w.clamp(
+                                                  //                 0, 15))),
+                                                  //     SizedBox(width: 5.w),
+                                                  //     SizedBox(
+                                                  //       height: 22.h,
+                                                  //       child: Text(
+                                                  //         "Main Campus, University of Ghana\nAccra",
+                                                  //         style: TextStyle(
+                                                  //           fontFamily:
+                                                  //               "Roboto",
+                                                  //           fontWeight:
+                                                  //               FontWeight.w500,
+                                                  //           color: Colors.white,
+                                                  //           fontSize: 12
+                                                  //               .sp
+                                                  //               .clamp(0, 12),
+                                                  //         ),
+                                                  //       ),
+                                                  //     ),
+                                                  //   ],
+                                                  // ),
+                                                  // SizedBox(height: 5.h),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      const Icon(
+                                                        Icons
+                                                            .directions_walk_sharp,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Text(
+                                                        // " 1 hour 08 min",
+                                                        "${widget.hostel.distance_walk} mins",
+                                                        style: TextStyle(
+                                                          fontFamily: "Roboto",
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.white,
+                                                          fontSize: 12.sp.clamp(
+                                                            0,
+                                                            12,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      5.horizontalSpace,
+                                                      Image.asset(
+                                                        "assets/hostels_detail/Steering Wheel.png",
+                                                        width: 15.w,
+                                                        height: 15.h,
+                                                      ),
+                                                      Text(
+                                                        " ${widget.hostel.distance_car} mins",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 11.sp.clamp(
+                                                            0,
+                                                            11,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      5.horizontalSpace,
+                                                      Image.asset(
+                                                        "assets/hostels_detail/Bus_white.png",
+                                                        height: 15.h,
+                                                        width: 15.w,
+                                                      ),
+                                                      Text(
+                                                        " ${widget.hostel.distance_car} mins",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 11.sp.clamp(
+                                                            0,
+                                                            11,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 130.h,
+                                        // color: Colors.blue,
+                                        margin: EdgeInsets.only(
+                                          right: 10.h,
+                                          top: 15.h,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: Image.asset(
+                                                  'assets/hostels_detail/hostel-2.png',
+                                                  height: 35.h,
+                                                  width: 40.w.clamp(0, 40),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            // SizedBox(height: 10.h),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: Image.asset(
+                                                  'assets/hostels_detail/hostel-2.png',
+                                                  height: 35.h,
+                                                  width: 40.w.clamp(0, 40),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            // SizedBox(height: 10.h),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2.w,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: Image.asset(
+                                                  'assets/hostels_detail/hostel-2.png',
+                                                  height: 35.h,
+                                                  width: 40.w.clamp(0, 40),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        color: const Color(0xFFF5F8FF),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                              ),
+                              child: SizedBox(
+                                height: 70.h,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      height: 40.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ).r,
+                                      ),
+                                      child: OutlinedButton(
+                                        onPressed: () {},
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: Colors.black87,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
+                                          ),
+                                          side: BorderSide(
+                                            width: 1.w,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/hostels_detail/photos.png",
+                                              height: 15.h,
+                                              width: 15.w,
+                                            ),
+                                            Text(
+                                              " Photos",
+                                              style: TextStyle(
+                                                fontFamily: "Work Sans",
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13.sp.clamp(0, 13),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 40.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ).r,
+                                      ),
+                                      child: OutlinedButton(
+                                        onPressed: () {},
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: Colors.black87,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
+                                          ),
+                                          side: const BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/hostels_detail/videocam.png",
+                                              height: 24.h,
+                                              width: 24.w,
+                                            ),
+                                            Text(
+                                              " Videos",
+                                              style: TextStyle(
+                                                fontFamily: "Work Sans",
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13.sp.clamp(0, 13),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 40.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ).r,
+                                      ),
+                                      child: OutlinedButton(
+                                        onPressed: () {},
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: Colors.black87,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
+                                          ),
+                                          side: BorderSide(
+                                            width: 1.w,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/hostels_detail/360 View.png",
+                                              height: 24.h,
+                                              width: 24.w,
+                                            ),
+                                            Text(
+                                              " View",
+                                              style: TextStyle(
+                                                fontFamily: "Work Sans",
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13.sp.clamp(0, 13),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF5F8FF),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 3.r,
+                                    blurRadius: 8.r,
+                                    // offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              height: 36.h,
+                              width: 600.w,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: tileList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Photos tile = tileList[index];
+                                  return Center(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedIndex = index;
+                                        });
+                                        _scrollToSection(tile.name);
+                                      },
+                                      child: AnimatedContainer(
+                                        height: 36.h,
+                                        duration: const Duration(
+                                          milliseconds: 300,
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          // color: Colors.blue,
+                                          border: selectedIndex == index
+                                              ? Border(
+                                                  bottom: BorderSide(
+                                                    color: const Color(
+                                                      0xFF00EFD1,
+                                                    ),
+                                                    width: 1.5.w,
+                                                  ),
+                                                )
+                                              : null,
+                                        ),
+                                        child: Container(
+                                          child: Text(
+                                            tile.name,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: selectedIndex == index
+                                                  ? null
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: 20.w,
+                                  right: 20.w,
+                                  top: 5.h,
+                                  bottom: 10.h,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      key: _sectionKeys['Description'],
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Description",
+                                        style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp.clamp(0, 20),
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Welcome to resort paradise we ensure the best service during your stay in bali with an emphasis on customer comfort. Enjoy Balinese specialties, dance and music every saturday for free at competitve prices you can...",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: const Color(0xFF787878),
+                                        fontSize: 12.sp.clamp(0, 12),
+                                      ),
+                                    ),
+                                    const Divider(
+                                      color: Color.fromRGBO(120, 120, 120, 0.7),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Read More",
+                                        style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          letterSpacing: 0.15.w,
+                                          color: const Color(0xFF00EFD1),
+                                          fontSize: 15.sp.clamp(0, 15),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: const Color.fromRGBO(255, 255, 255, 1),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 30.w,
+                                  vertical: 10.h,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      key: _sectionKeys["Amenities"],
+                                      child: Text(
+                                        "Amenities",
+                                        style: TextStyle(
+                                          fontSize: 20.sp.clamp(0, 20),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    // Row()
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
+                                                      widget
+                                                          .hostel
+                                                          .amenities![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  widget
+                                                          .hostel
+                                                          .amenities![index] ??
+                                                      "",
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Container(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom,
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            height: 4,
+                                                            width: 30,
+                                                            margin:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical: 15,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  const Color.fromARGB(
+                                                                    255,
+                                                                    75,
+                                                                    74,
+                                                                    74,
+                                                                  ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    2,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Amenities",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  vertical: 8.0,
+                                                                  horizontal:
+                                                                      30,
+                                                                ),
+                                                            child: Divider(
+                                                              height: 10,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        30.0,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
+                                                              child: GridView.count(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                mainAxisSpacing:
+                                                                    1,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                shrinkWrap:
+                                                                    true,
+                                                                childAspectRatio:
+                                                                    4.0,
+                                                                children: List.generate(
+                                                                  widget
+                                                                      .hostel
+                                                                      .amenities!
+                                                                      .length,
+                                                                  (index) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        getIcon(
+                                                                          text:
+                                                                              widget.hostel.amenities![index] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        Text(
+                                                                          widget.hostel.amenities![index] ??
+                                                                              "",
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Bills & Utilities",
+                                        style: TextStyle(
+                                          letterSpacing: 0.15.w,
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h),
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        // padding: EdgeInsets.zero,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
+                                                      widget
+                                                          .hostel
+                                                          .bills_utilities![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  widget
+                                                          .hostel
+                                                          .bills_utilities![index] ??
+                                                      "",
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Container(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom,
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            height: 4,
+                                                            width: 30,
+                                                            margin:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical: 15,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  const Color.fromARGB(
+                                                                    255,
+                                                                    75,
+                                                                    74,
+                                                                    74,
+                                                                  ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    2,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Bills & Utilities",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  vertical: 8.0,
+                                                                  horizontal:
+                                                                      30,
+                                                                ),
+                                                            child: Divider(
+                                                              height: 10,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        30.0,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
+                                                              child: GridView.count(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                mainAxisSpacing:
+                                                                    1,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                shrinkWrap:
+                                                                    true,
+                                                                childAspectRatio:
+                                                                    4.0,
+                                                                children: List.generate(
+                                                                  widget
+                                                                      .hostel
+                                                                      .bills_utilities!
+                                                                      .length,
+                                                                  (index) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        getIcon(
+                                                                          text:
+                                                                              widget.hostel.bills_utilities![index] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        Text(
+                                                                          widget.hostel.bills_utilities![index] ??
+                                                                              "",
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h),
+
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Security & Safety",
+                                        style: TextStyle(
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        // padding: EdgeInsets.zero,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
+                                                      widget
+                                                          .hostel
+                                                          .security_safety![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                Expanded(
+                                                  child: Text(
+                                                    widget
+                                                            .hostel
+                                                            .security_safety![index] ??
+                                                        "",
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Container(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom,
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            height: 4,
+                                                            width: 30,
+                                                            margin:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical: 15,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  const Color.fromARGB(
+                                                                    255,
+                                                                    75,
+                                                                    74,
+                                                                    74,
+                                                                  ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    2,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Security & Safety",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  vertical: 8.0,
+                                                                  horizontal:
+                                                                      30,
+                                                                ),
+                                                            child: Divider(
+                                                              height: 10,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        30.0,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
+                                                              child: GridView.count(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                mainAxisSpacing:
+                                                                    1,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                shrinkWrap:
+                                                                    true,
+                                                                childAspectRatio:
+                                                                    4.0,
+                                                                children: List.generate(
+                                                                  widget
+                                                                      .hostel
+                                                                      .security_safety!
+                                                                      .length,
+                                                                  (index) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        getIcon(
+                                                                          text:
+                                                                              widget.hostel.security_safety![index] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        Expanded(
+                                                                          child: Text(
+                                                                            widget.hostel.security_safety![index] ??
+                                                                                "",
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 30.w, top: 20.h),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  key: _sectionKeys['Room type'],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Room Types(${roomTypes.length})",
+                                        style: TextStyle(
+                                          fontSize: 20.sp.clamp(0, 20),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: BouncingScrollPhysics(),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 4,
+                                                    vertical: 8,
+                                                  ),
+                                              child: Container(
+                                                height: 30,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                              horizontal: 15,
+                                                              vertical: 4,
+                                                            ),
+                                                        foregroundColor:
+                                                            Colors.white,
+                                                        backgroundColor: Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                      ),
+                                                  onPressed: () {
+                                                    _scrollToSection(
+                                                      "Room type",
+                                                    );
+                                                  },
+                                                  child: Text("All"),
+                                                ),
+                                              ),
+                                            ),
+                                            ...List.generate(roomTypes.length, (
+                                              index,
+                                            ) {
+                                              bool isRoomAvailable = true;
+                                              RoomTypes rooms =
+                                                  roomTypes[index];
+                                              if (rooms.availableRooms ==
+                                                      null ||
+                                                  rooms.availableRooms == 0) {
+                                                setState(() {
+                                                  isRoomAvailable = false;
+                                                });
+                                              }
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 4,
+                                                      vertical: 8,
+                                                    ),
+                                                child: Container(
+                                                  height: 30,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton.styleFrom(
+                                                      elevation: 0,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            horizontal: 15,
+                                                            vertical: 4,
+                                                          ),
+                                                      foregroundColor:
+                                                          Colors.black,
+                                                      backgroundColor:
+                                                          Color.fromARGB(
+                                                            255,
+                                                            223,
+                                                            224,
+                                                            224,
+                                                          ).withOpacity(0.4),
+                                                    ),
+                                                    onPressed: () {
+                                                      _scrollToSection(
+                                                        rooms.type,
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      "${rooms.type} Room",
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                              ;
+                                            }),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            isLoading
+                                ? CircularProgressIndicator()
+                                : SingleChildScrollView(
+                                    controller: _scrollController,
+                                    child: Column(
+                                      children: List.generate(roomTypes.length, (
+                                        index,
+                                      ) {
+                                        bool isRoomAvailable = true;
+                                        RoomTypes room = roomTypes[index];
+                                        if (room.availableRooms == null ||
+                                            room.availableRooms == 0) {
+                                          setState(() {
+                                            isRoomAvailable = false;
+                                          });
+                                        }
+                                        return Column(
+                                          children: [
+                                            Container(
+                                              key: _sectionKeys[room.type],
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 30.w,
+                                                  vertical: 20.h,
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                5,
+                                                              ).r,
+                                                          child: Image.asset(
+                                                            "assets/hostels_detail/roomTypeImage.png",
+                                                            height: 70.h,
+                                                            width: 90.w.clamp(
+                                                              0,
+                                                              90,
+                                                            ),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 10),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                "${room.type} Room Bedroom Apartment",
+                                                                maxLines: 2,
+                                                                style: TextStyle(
+                                                                  fontSize: 16
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        16,
+                                                                      ),
+                                                                  // letterSpacing: 0.2.w,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5.h,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "¢${room.price}/",
+                                                                    style: TextStyle(
+                                                                      fontSize: 18
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            18,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                  Text(
+                                                                    "Academic Year",
+                                                                    style: TextStyle(
+                                                                      fontSize: 12
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5.h,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "Available Rooms:",
+                                                                    style: TextStyle(
+                                                                      fontSize: 12
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10.w,
+                                                                  ),
+                                                                  isRoomAvailable
+                                                                      ? Text(
+                                                                          "${room.availableRooms}",
+                                                                          style: TextStyle(
+                                                                            color: const Color(
+                                                                              0xFF23A26D,
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color:
+                                                                                const Color(
+                                                                                  0xFF23A26D,
+                                                                                ).withOpacity(
+                                                                                  0.1,
+                                                                                ),
+                                                                            borderRadius: BorderRadius.circular(
+                                                                              15.r,
+                                                                            ),
+                                                                          ),
+                                                                          width:
+                                                                              55.w,
+                                                                          height:
+                                                                              25.h,
+                                                                          child: Center(
+                                                                            child: Text(
+                                                                              "Sold out",
+                                                                              style: TextStyle(
+                                                                                fontSize: 10.sp.clamp(
+                                                                                  0,
+                                                                                  10,
+                                                                                ),
+                                                                                fontWeight: FontWeight.w500,
+                                                                                color: const Color(
+                                                                                  0xFF00EFD1,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        // Image.asset("assets/hostels_detail/bed.jpeg"),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/hostels_detail/home.png",
+                                                                height: 24.h,
+                                                                width: 24.w,
+                                                              ),
+                                                              Container(
+                                                                margin:
+                                                                    EdgeInsets.only(
+                                                                      top: 5.h,
+                                                                    ),
+                                                                child: Text(
+                                                                  " Bedroom 1",
+                                                                  style: TextStyle(
+                                                                    fontFamily:
+                                                                        "Work Sans",
+                                                                    fontSize: 14
+                                                                        .sp
+                                                                        .clamp(
+                                                                          0,
+                                                                          14,
+                                                                        ),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: const Color(
+                                                                      0xFF323232,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/bathtub.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    top: 5.h,
+                                                                  ),
+                                                              child: Text(
+                                                                " Bathroom 1",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Work Sans",
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: const Color(
+                                                                    0xFF323232,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset(
+                                                                "assets/hostels_detail/bed.png",
+                                                                height: 24.h,
+                                                                width: 24.w,
+                                                              ),
+                                                              Text(
+                                                                " 2 Beds",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Work Sans",
+                                                                  color: const Color(
+                                                                    0xFF323232,
+                                                                  ),
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/home.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    top: 5.h,
+                                                                  ),
+                                                              child: Text(
+                                                                " Private Bedroom",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Work Sans",
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.3,
+                                                          child: Container(
+                                                            height: 40.h,
+                                                            decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    10.r,
+                                                                  ),
+                                                              border: Border.all(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                "View more details",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 40.h),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/kitchen.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Text(
+                                                              " Private Kitchen",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Work Sans",
+                                                                fontSize: 14.sp
+                                                                    .clamp(
+                                                                      0,
+                                                                      14,
+                                                                    ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Divider(
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                            120,
+                                                            120,
+                                                            120,
+                                                            0.7,
+                                                          ),
+                                                      height: .2.h,
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Text(
+                                                            "Academic Year",
+                                                            style: TextStyle(
+                                                              fontSize: 15.sp
+                                                                  .clamp(0, 15),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Move in: 08 Aug 2024",
+                                                          style: TextStyle(
+                                                            fontSize: 13.sp
+                                                                .clamp(0, 13),
+                                                            color: const Color(
+                                                              0xFF323232,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 15.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Column(
+                                                              children: [
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
+                                                                  child: Text(
+                                                                    "Price Estimate",
+                                                                    style: TextStyle(
+                                                                      fontSize: 12
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
+                                                                      letterSpacing:
+                                                                          0.2.w,
+                                                                      color: const Color(
+                                                                        0xFF787878,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10.h,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      "¢${room.price}/",
+                                                                      style: TextStyle(
+                                                                        fontSize: 18
+                                                                            .sp
+                                                                            .clamp(
+                                                                              0,
+                                                                              18,
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: Text(
+                                                                        "Academic Year",
+                                                                        style: TextStyle(
+                                                                          fontSize: 12.sp.clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
+                                                                          color: const Color(
+                                                                            0xFF787878,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.3,
+                                                          child: Center(
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: SizedBox(
+                                                                width: 110.w,
+                                                                height: 40.h,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    TextEditingController
+                                                                    num_people =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    name =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    phone_num =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    email_address =
+                                                                        TextEditingController();
+                                                                    List<
+                                                                      TextEditingController
+                                                                    >
+                                                                    occupantNames = [
+                                                                      TextEditingController(),
+                                                                    ];
+                                                                    List<
+                                                                      TextEditingController
+                                                                    >
+                                                                    occupantEmails = [
+                                                                      TextEditingController(),
+                                                                    ];
+
+                                                                    if (user !=
+                                                                        null) {
+                                                                      Get.snackbar(
+                                                                        'Success',
+                                                                        'Task saved!',
+                                                                      );
+                                                                      showModalBottomSheet(
+                                                                        context:
+                                                                            context,
+                                                                        isScrollControlled:
+                                                                            true,
+                                                                        builder:
+                                                                            (
+                                                                              BuildContext
+                                                                              context,
+                                                                            ) {
+                                                                              return StatefulBuilder(
+                                                                                builder:
+                                                                                    (
+                                                                                      BuildContext context,
+                                                                                      StateSetter setModalState,
+                                                                                    ) {
+                                                                                      return Padding(
+                                                                                        padding: EdgeInsets.only(
+                                                                                          bottom: MediaQuery.of(
+                                                                                            context,
+                                                                                          ).viewInsets.bottom,
+                                                                                        ),
+                                                                                        child: IntrinsicHeight(
+                                                                                          child: book(
+                                                                                            setModalState,
+                                                                                            name,
+                                                                                            phone_num,
+                                                                                            email_address,
+                                                                                            occupantNames,
+                                                                                            occupantEmails,
+                                                                                          ),
+                                                                                        ),
+                                                                                      );
+                                                                                    },
+                                                                              );
+                                                                            },
+                                                                      ).whenComplete(() {
+                                                                        num_people
+                                                                            .dispose();
+
+                                                                        setState(() {
+                                                                          isChecked =
+                                                                              false;
+                                                                        });
+
+                                                                        for (var c
+                                                                            in occupantNames) {
+                                                                          c.dispose();
+                                                                        }
+                                                                        ;
+                                                                        for (var c
+                                                                            in occupantEmails) {
+                                                                          c.dispose();
+                                                                        }
+                                                                        ;
+                                                                      });
+                                                                    } else {
+                                                                      Get.snackbar(
+                                                                        'Error',
+                                                                        'Please sign in to continue.',
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    elevation:
+                                                                        0,
+                                                                    shape: ContinuousRectangleBorder(
+                                                                      side: BorderSide
+                                                                          .none,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            30.r,
+                                                                          ),
+                                                                    ),
+                                                                    backgroundColor:
+                                                                        const Color.fromARGB(
+                                                                          255,
+                                                                          33,
+                                                                          243,
+                                                                          201,
+                                                                        ),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      "Book now",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        fontSize: 14
+                                                                            .sp
+                                                                            .clamp(
+                                                                              0,
+                                                                              14,
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 20.h),
+                                          ],
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                            SizedBox(height: 10.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.r),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      key: _sectionKeys['Policies'],
+                                      child: Text(
+                                        "Cancellation Policies",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp.clamp(0, 20),
+                                          letterSpacing: 0.2.w,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Cooling off period",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.r),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Payment Details",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp.clamp(0, 20),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Booking deposit",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Payment Iinstallment plan",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Mode of payment",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Guarantor requirement",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.r),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        "Location",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp.clamp(0, 20),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0.w,
+                                      ),
+                                      child: SizedBox(
+                                        width: MediaQuery.sizeOf(
+                                          context,
+                                        ).width.w,
+                                        height: 400.h,
+                                        // color: Colors.red,
+                                        child: Image.asset(
+                                          "assets/hostels_detail/screenshot.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            Container(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.r),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      key: _sectionKeys["Faqs"],
+                                      child: Text(
+                                        "Frequently Asked Questions (FAQs)",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp.clamp(0, 20),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Can i bring a TV?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Can i make a group booking?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Can i have friends stay over?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Do i have a cleaner?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Is beddings and linens provided?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "What are our rents covered?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Divider(height: .2.h),
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Do i need a guarantor?",
+                                          style: TextStyle(
+                                            fontSize: 15.sp.clamp(0, 15),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                              fontSize: 15.sp.clamp(0, 15),
+                                              color: const Color(0xFF00EFD1),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 45.h),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3.r,
+                        blurRadius: 12.r,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                      bottom: 15,
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 150.w,
+                          height: 40,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              // await FirestoreDb.instance.createVariables();
+                              _scrollToSection("Room type");
+                            },
+                            child: Text(
+                              "View Rooms",
+                              style: TextStyle(color: Color(0xFF00EFD1)),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Color(
+                                0xFF00EFD1,
+                              ).withOpacity(0.1),
+                              side: BorderSide(
+                                color: Color(0xFF00EFD1).withOpacity(0.5),
+                                width: 1.5,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150.w,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              Get.to(
+                                () => Enquire(hostel: widget.hostel),
+                                transition: Transition.fadeIn,
+                                duration: const Duration(milliseconds: 800),
+                                curve: Curves.easeIn,
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide.none,
+                                borderRadius: BorderRadius.circular(5.r),
+                              ),
+                              backgroundColor: const Color(0xFF00EFD1),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Enquire now",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.sp.clamp(0, 14),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget customTextField({
+  required TextEditingController controller,
+  required String labelText,
+}) {
+  return TextField(
+    //   onChanged: (){},
+    //   focusNode:,
+    controller: controller,
+    obscureText: false,
+    enableSuggestions: true,
+    autocorrect: false,
+    cursorColor: Colors.white,
+    style: const TextStyle(color: Colors.grey),
+    decoration: InputDecoration(
+      labelText: labelText,
+      labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+      filled: true,
+      fillColor: Colors.white,
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          width: 1,
+          style: BorderStyle.none,
+          color: Colors.grey.withOpacity(0.3),
+        ),
+      ),
+    ),
+    keyboardType: TextInputType.visiblePassword,
+  );
+}
+
+Widget genderSelector(StateSetter setModalState, String gender) {
+  bool isGender = selectedGender == gender;
+  return GestureDetector(
+    onTap: () {
+      setModalState(() {
+        selectedGender = gender;
+        print(selectedGender);
+      });
+    },
+    child: Container(
+      height: 30.h,
+      width: 30.w,
+      decoration: BoxDecoration(
+        color: isGender ? Color(0xFF00EFD1) : Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.05),
+          ),
+        ],
+      ),
+      child: Align(
+        child: Text(
+          gender,
+          style: TextStyle(color: isGender ? Colors.white : Color(0xFF00EFD1)),
+        ),
+      ),
+    ),
+  );
+}
