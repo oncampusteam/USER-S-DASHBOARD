@@ -48,7 +48,10 @@ class _PhoneState extends State<Phone> {
 
           /// ✅ Navigate ONLY after reCAPTCHA succeeds
           Get.to(
-            () => Otp(verificationId: verId, phoneNumber: _phoneController.text.trim(),),
+            () => Otp(
+              verificationId: verId,
+              phoneNumber: _phoneController.text.trim(),
+            ),
             transition: Transition.fadeIn,
             duration: const Duration(milliseconds: 600),
           );
@@ -67,119 +70,128 @@ class _PhoneState extends State<Phone> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 60),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            SizedBox(height: 30),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Text(
-                    "Log in with Phone number",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    "Welcome back! Sign in using your Phone number or email to continue with us",
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 50),
-                ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 60),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
-            ),
-            Text(
-              'Your Phone number',
-              style: TextStyle(
-                color: Color.fromARGB(255, 0, 239, 209),
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.grey.shade400)),
-              ),
-              child: Row(
-                children: [
-                  Image.network('https://flagcdn.com/w40/gh.png', width: 24),
-                  const SizedBox(width: 8),
-                  const Text('Ghana'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Text('+233', style: TextStyle(fontSize: 18)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(9),
-                    ],
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      hintText: '0 00 00 00 00',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                try {
-                  await verifyPhoneNumber();
-                } catch (e) {
-                  Get.snackbar("Error", e.toString());
-                }
-
-                setState(() {
-                  isLoading = false;
-                });
-                Get.to(
-                  () => Otp(verificationId: _verificationId, phoneNumber: _phoneController.text.trim(),),
-                  transition: Transition.fadeIn,
-                  curve: Curves.easeIn,
-                  duration: Duration(milliseconds: 600),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 0, 239, 209),
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: isLoading
-                  ? CircularProgressIndicator()
-                  : Text(
-                      'Send OTP',
+              SizedBox(height: 30),
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text(
+                      "Log in with Phone number",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 23,
                       ),
                     ),
-            ),
-            SizedBox(height: 70),
-          ],
+                    SizedBox(height: 15),
+                    Text(
+                      "Welcome back! Sign in using your Phone number or email to continue with us",
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 50),
+                  ],
+                ),
+              ),
+              Text(
+                'Your Phone number',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 0, 239, 209),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade400),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Image.network('https://flagcdn.com/w40/gh.png', width: 24),
+                    const SizedBox(width: 8),
+                    const Text('Ghana'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Text('+233', style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(9),
+                      ],
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        hintText: '0 00 00 00 00',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  try {
+                    await verifyPhoneNumber();
+                  } catch (e) {
+                    Get.snackbar("Error", e.toString());
+                  }
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Get.to(
+                    () => Otp(
+                      verificationId: _verificationId,
+                      phoneNumber: _phoneController.text.trim(),
+                    ),
+                    transition: Transition.fadeIn,
+                    curve: Curves.easeIn,
+                    duration: Duration(milliseconds: 600),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 0, 239, 209),
+                  minimumSize: const Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: isLoading
+                    ? CircularProgressIndicator()
+                    : Text(
+                        'Send OTP',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+              SizedBox(height: 70),
+            ],
+          ),
         ),
       ),
     );

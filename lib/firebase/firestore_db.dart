@@ -274,6 +274,72 @@ class FirestoreDb {
     }
   }
 
+  Future<void> signInWithPhone(final credential) async {
+    try {
+
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      final user = userCredential.user;
+      if (user != null) {
+        final userModel = UserModel(
+          email: user.email,
+          name: user.displayName,
+          id: user.uid,
+          userInfoDone: false,
+          phone: user.phoneNumber ?? "",
+          gender: "",
+          program: "",
+          year: null,
+          guardian: "",
+          emergency1: null,
+          emergency2: null,
+        );
+
+        await db
+            .collection("Users")
+            .doc(user.uid)
+            .set(userModel.toJson(), SetOptions(merge: true));
+
+        // Step 6: Navigate with smooth transition
+
+        Get.to(
+          () => WelcomeScreen5(
+            username: user.phoneNumber ?? "User",
+          ),
+          transition: Transition.fadeIn,
+          duration: Duration(milliseconds: 600),
+        );
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        // No internet (general device network failure)
+        Get.snackbar(
+          "No Internet",
+          "Check your internet connection",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e is PlatformException &&
+          (e.code == 'network_error' ||
+              e.message?.contains('ApiException: 7') == true)) {
+        // Firebase/Google Play Services network error
+        Get.snackbar(
+          "No Internet",
+          "Check your internet connection",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        // Other error
+        Get.snackbar(
+          "Error",
+          "Something went wrong. Please try again.\n${e.toString()}",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    }
+  }
+
+
   Future<void> createFavHostels(Hostels hostel, UserModel usermodel) async {
     await db
         .collection("Users")

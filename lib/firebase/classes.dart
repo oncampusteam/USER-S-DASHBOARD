@@ -163,7 +163,7 @@ class UserModel {
   String? email;
   String? guardian;
   String? gender;
-  int? phone;
+  String? phone;
   String? program;
   int? year;
   int? emergency1;
