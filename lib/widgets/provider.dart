@@ -1,0 +1,3 @@
+class AppProvider{
+  void addtofavourites(){}
+}
