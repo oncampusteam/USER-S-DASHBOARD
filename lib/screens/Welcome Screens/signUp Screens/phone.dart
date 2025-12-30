@@ -13,8 +13,8 @@ class Phone extends StatefulWidget {
 class _PhoneState extends State<Phone> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  String _verificationId = '';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final String _verificationId = '';
 
   Future<void> verifyPhoneNumber() async {
     await _auth.verifyPhoneNumber(

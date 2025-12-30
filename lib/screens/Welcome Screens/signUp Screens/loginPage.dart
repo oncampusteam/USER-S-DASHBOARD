@@ -1,20 +1,14 @@
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:on_campus/classes/screen_details.dart';
-import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
-import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/phone.dart';
+// import 'package:on_campus/Screens/GetStartedScreen/getStartedScreen.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
-import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_5.dart';
-import 'package:on_campus/third-party-auth/google-auth.dart';
+import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/phone.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
 
 class LoginPage extends StatefulWidget {
-  final double? index;
+  final int index;
   const LoginPage({super.key, required this.index});
 
   @override
@@ -22,163 +16,205 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? result;
+
   bool isLoading = false;
   @override
-  void initState() {
-    super.initState();
-  }
-
-  TextEditingController PhoneNumTextEditingController = TextEditingController();
-  TextEditingController GoogleTextEditingController = TextEditingController();
-  TextEditingController AppleTextEditingController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFFFFF),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Image.asset(
-                      "assets/loginPage/Group 7.png",
-                      fit: BoxFit.fitHeight,
+    return Material(
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 16.h,
+          left: 28.w,
+          right: 28.w,
+          bottom: 30.h,
+        ),
+        color: Colors.white,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: FittedBox(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 392.h,
+                width: 375.w,
+                child: Image.asset(
+                  "assets/loginPage/Group 7.png",
+                ),
+              ),
+              SizedBox(
+                // color: Colors.blue,
+                // padding: EdgeInsets.only(top: 11.h, left: 10.w, right: 10.w),
+                height: 189.h,
+                width: 356.w,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 117.h,
+                      width: 356.w,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 40.h,
+                            // color: Colors.red,
+                            child: FittedBox(
+                              child: Text(
+                                "Find Your Home",
+                                style: TextStyle(
+                                  fontFamily: "Poppins-Black",
+                                  fontSize: 28.sp,
+                                  letterSpacing: 28.sp * 0.02,
+                                  // height: 1.4.h,
+                                  color: const Color(0XFF323232),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 35.h,
+                            // color: Colors.red,
+                            child: FittedBox(
+                              child: Text(
+                                "Away from Home",
+                                style: TextStyle(
+                                  fontFamily: "Poppins-Black",
+                                  fontSize: 28.sp,
+                                  letterSpacing: 28.sp * 0.02,
+                                  height: 1.4.h,
+                                  color: const Color(0XFF323232),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 35.h,
+                            // color: Colors.red,
+                            child: FittedBox(
+                              child: Text(
+                                "Easy & Simple",
+                                style: TextStyle(
+                                  fontFamily: "Poppins-Black",
+                                  fontSize: 28.sp,
+                                  letterSpacing: 28.sp * 0.02,
+                                  height: 1.4.h,
+                                  color: const Color(0XFF323232),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    Container(
+                      height: 65.h,
+                      width: 400.w,
+                      padding: EdgeInsets.only(left: 22.w, right: 22.w),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 17.h,
+                            // color: Colors.red,
+                            child: FittedBox(
+                              child: Text(
+                               "Get the opportunity to stay at incredible",
+                                style: TextStyle(
+                                  fontFamily: "Poppins-Light",
+                                  fontSize: 14.sp,
+                                  letterSpacing: 14.sp * 0.03,
+                                  height: 1.4.h,
+                                  // color: const Color(323232)
+                                  color: const Color(0XFF787878),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 17.h,
+                            // color: Colors.red,
+                            child: FittedBox(
+                              child: Text(
+                                "place at economical prices.",
+                                style: TextStyle(
+                                  fontFamily: "Poppins-Light",
+                                  fontSize: 14.sp,
+                                  letterSpacing: 14.sp * 0.03,
+                                  height: 1.4.h,
+                                  color: const Color(0XFF787878),
+                                  // color: const Color(323232)
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5.h,),
+                          SizedBox(
+                height: MediaQuery.of(context).size.height * 0.025,
+                child: DotsIndicator(
+                  position: 0,
+                  dotsCount: 3,
+                  decorator: DotsDecorator(
+                    size: Size(9.h, 7.w),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    color: const Color.fromARGB(100, 158, 158, 158),
+                    activeColor: const Color.fromARGB(255, 0, 239, 209),
+                    activeShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    activeSize: Size(51.w, 7.h),
                   ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          child: Text(
-                            "Find Your Home \n Away from Home",
-                            style: TextStyle(
-                              decoration: TextDecoration.none,
-                              color: Colors.black87,
-                              fontSize: 25.sp,
-                              fontFamily: "Poppins-Black",
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                ),
+                ),
+                        ],
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              ),
+              
+              GestureDetector(
+                onTap: (){
+                  Get.to(()=> Phone());
+                },
+                child: Container(
+                  height: 48.h,
+                  width: 346.w,
+                  
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 0.81),
+                    border: Border.all(color: const Color(0XFFE5E5E5)),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 32.h,
+                        width: 32.w,
+                        padding: EdgeInsets.only(left: 5.w),
+                        child: Image.asset(
+                          "assets/loginPage/Phone.png",
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.h),
-                          child: Text(
-                            "Easy & Simple",
-                            style: TextStyle(
-                              fontFamily: "Poppins-Black",
-                              decoration: TextDecoration.none,
-                              color: Colors.black87,
-                              fontSize: 25.sp,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          "Get the opportunity to stay at incredible \n place at economical prices.",
-                          style: TextStyle(
-                            // letterSpacing: 2.w,
-                            fontWeight: FontWeight.w200,
-                            fontFamily: "Poppins",
-                            decoration: TextDecoration.none,
-                            color: Colors.black38,
-                            fontSize: 14.sp,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 5.h),
-                        DotsIndicator(
-                          position: widget.index ?? 1,
-                          dotsCount: 3,
-                          decorator: DotsDecorator(
-                            size: const Size(9, 7),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            color: const Color.fromARGB(100, 158, 158, 158),
-                            activeColor: const Color.fromARGB(255, 0, 239, 209),
-                            activeShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            activeSize: Size(
-                              40.w,
-                              ScreenDetails.ScreenHeight * 0.0105,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Material(
-                          child: GestureDetector(
-                            onTap: () {
-                              // Get.to(
-                              //   () => Phone(),
-                              //   transition: Transition.fadeIn,
-                              //   curve: Curves.easeIn,
-                              //   duration: Duration(milliseconds: 600),
-                              // );
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Phone();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10.h),
-                              height: 42.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5.r),
-                                ),
-                                border: Border.all(
-                                  width: 1.w,
-                                  color: Colors.black38,
-                                ),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    "assets/loginPage/Phone.png",
-                                    width: 20.h,
-                                    height: 20.h,
-                                    fit: BoxFit.contain,
-                                  ),
-
-                                  // This keeps text centered irrespective of icon size
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        "Sign In with Phone Number",
-                                        style: TextStyle(
-                                          fontFamily: "Ag Body 1",
-                                          fontSize: 15.sp,
-                                          color: Colors.black,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                      ),
+                      Expanded(
+                        child: Align(
+                          child: SizedBox(
+                            height: 20.h,
+                            child: const FittedBox(
+                              child: Text(
+                                "Sign In with Phone Number",
+                                style: TextStyle(fontFamily: "Ag button"),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 15),
-                        Material(
-                          child: InkWell(
-                            onTap: () async {
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.h),
+              InkWell(
+                onTap: () async {
                               setState(() {
                                 isLoading = true;
                               });
@@ -187,162 +223,153 @@ class _LoginPageState extends State<LoginPage> {
                                 isLoading = false;
                               });
                             },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10.h),
-                              height: 42.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5.r),
-                                ),
-                                border: Border.all(
-                                  width: 1.w,
-                                  color: Colors.black38,
-                                ),
-                              ),
-                              // padding: EdgeInsets.only(left: 10.w),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    "assets/loginPage/google.png",
-                                    width: 20.h,
-                                    height: 20.h,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: isLoading
-                                          ? Align(
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 15,
-                                                    height: 15,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text(
-                                                    "Please wait..",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          : Text(
-                                              "Sign In with Google",
-                                              style: TextStyle(
-                                                fontFamily: "Ag Body 1",
-                                                fontSize:
-                                                    ScreenDetails.ScreenHeight *
-                                                    0.0178,
-                                                color: const Color.fromARGB(
-                                                  255,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ],
+                child: Container(
+                  height: 48.h,
+                  width: 346.w,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 255, 255, 0.81),
+                    border: Border.all(color: const Color(0XFFE5E5E5)),
+                    borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 32.h,
+                        width: 32.w,
+                        padding: EdgeInsets.only(left: 5.w),
+                        child: Image.asset(
+                          "assets/loginPage/google.png",
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          child: SizedBox(
+                            height: 20.h,
+                            child: FittedBox(
+                              child: Text(
+                                !isLoading ? "Sign In with Google": "Please wait",
+                                style: TextStyle(fontFamily: "Ag button"),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 15),
-                        Material(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10.h),
-                            height: 42.h,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5.r),
-                              ),
-                              border: Border.all(
-                                width: 1.w,
-                                color: Colors.black38,
-                              ),
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  "assets/loginPage/apple.png",
-                                  width: 20.h,
-                                  height: 20.h,
-                                  fit: BoxFit.contain,
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      "Sign In with Apple",
-                                      style: TextStyle(
-                                        fontFamily: "Ag Body 1",
-                                        fontSize:
-                                            ScreenDetails.ScreenHeight * 0.0178,
-                                        color: const Color.fromARGB(
-                                          255,
-                                          0,
-                                          0,
-                                          0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.h),
+              Container(
+                height: 48.h,
+                width: 346.w,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 255, 255, 0.81),
+                  border: Border.all(color: const Color(0XFFE5E5E5)),
+                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 32.h,
+                      width: 32.w,
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Image.asset(
+                        "assets/loginPage/apple.png",
+                      ),
+                    ),
+                    Expanded(
+                      child: Align(
+                        child: SizedBox(
+                          height: 20.h,
+                          child: const FittedBox(
+                            child: Text(
+                              "Sign In with Apple",
+                              style: TextStyle(fontFamily: "Ag button"),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Material(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                () => const WelcomeScreen4(),
-                                transition: Transition.fadeIn,
-                                curve: Curves.easeIn,
-                                duration: const Duration(milliseconds: 600),
-                              );
-                            },
-                            child: Container(
-                              height: ScreenDetails.ScreenHeight * 0.05832,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 0, 239, 209),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.r),
-                                ),
-                              ),
-                              width: ScreenDetails.ScreenWidth * 0.8,
-                              child: Align(
-                                child: Text(
-                                  "Sign up",
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontFamily: "Poppins",
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 15.h),
+              GestureDetector(
+                onTap: () {
+                  Get.to(
+                    () => const WelcomeScreen4(),
+                    transition: Transition.fadeIn,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeIn,
+                  );
+                },
+                child: Container(
+                  height: 54.h,
+                  width: 347.w,
+                  decoration: BoxDecoration(
+                    color: const Color(0XFF00EFD1),
+                    border: Border.all(color: const Color(0XFF00EFD1)),
+                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                  ),
+                  child: Align(
+                    child: SizedBox(
+                      height: 25.h,
+                      child: FittedBox(
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+              SizedBox(height: 10.h),
+              SizedBox(
+                // color: Colors.red,
+                height: 20.h,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 3.5.h,
+                      child: FittedBox(
+                        child: Text(
+                          "Already Have an account? ",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: const Color(0xFF000000),
+                            letterSpacing: 0.015,
+                            height: 0.24,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.5.h,
+                      child: FittedBox(
+                        child: Text(
+                          "Sign In ",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: const Color(0xFF00EFD1),
+                            letterSpacing: 0.015,
+                            height: 0.24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -6,13 +6,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/apartment.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/compare.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/profile.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/payable.dart';
-import 'package:on_campus/temps/clipper.dart';
 
 class Payment extends StatefulWidget {
   final User user;
@@ -32,8 +27,8 @@ class _PaymentState extends State<Payment> {
   List<Hostels> pendingHostels = [];
   User? user = FirebaseAuth.instance.currentUser;
 
-  String StructureDate(String hyphen_date) {
-    String inputDate = hyphen_date; // format: dd-MM-yyyy
+  String StructureDate(String hyphenDate) {
+    String inputDate = hyphenDate; // format: dd-MM-yyyy
     DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
@@ -193,7 +188,6 @@ class _PaymentState extends State<Payment> {
                                             bookedHostel = hostel;
                                           }
                                         }
-                                        ;
                                         return Column(
                                           children: [
                                             GestureDetector(
@@ -958,7 +952,7 @@ class _PaymentState extends State<Payment> {
                                                                                       SizedBox(
                                                                                         height: 30,
                                                                                       ),
-                                                                                      Container(
+                                                                                      SizedBox(
                                                                                         height: 60.h,
                                                                                         width: MediaQuery.sizeOf(
                                                                                           context,
@@ -1043,7 +1037,7 @@ class _PaymentState extends State<Payment> {
                                                                                                                         SizedBox(
                                                                                                                           height: 25,
                                                                                                                         ),
-                                                                                                                        Container(
+                                                                                                                        SizedBox(
                                                                                                                           width: MediaQuery.of(
                                                                                                                             context,
                                                                                                                           ).size.width,
@@ -1146,7 +1140,7 @@ class _PaymentState extends State<Payment> {
                                                                                         ),
                                                                                       ),
 
-                                                                                      Container(
+                                                                                      SizedBox(
                                                                                         height: 60.h,
                                                                                         width: MediaQuery.sizeOf(
                                                                                           context,

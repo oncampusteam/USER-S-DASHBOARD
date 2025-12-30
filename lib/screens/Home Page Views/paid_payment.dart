@@ -1,16 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/apartment.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/compare.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/profile.dart';
-import 'package:on_campus/screens/payable.dart';
-import 'package:on_campus/temps/clipper.dart';
 
 class PaidPayment extends StatefulWidget {
   final User user;
@@ -29,8 +22,8 @@ class _PaidPaymentState extends State<PaidPayment> {
   List<Hostels> paidHostels = [];
   User? user = FirebaseAuth.instance.currentUser;
 
-  String StructureDate(String hyphen_date) {
-    String inputDate = hyphen_date; // format: dd-MM-yyyy
+  String StructureDate(String hyphenDate) {
+    String inputDate = hyphenDate; // format: dd-MM-yyyy
     DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
@@ -189,7 +182,6 @@ class _PaidPaymentState extends State<PaidPayment> {
                                             bookedHostel = hostel;
                                           }
                                         }
-                                        ;
                                         return Column(
                                           children: [
                                             GestureDetector(

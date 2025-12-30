@@ -4,13 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_5.dart';
 
 //  UserModel? usermodel;
@@ -247,6 +243,7 @@ class FirestoreDb {
         );
       }
     } catch (e) {
+      debugPrint("$e");
       if (e is SocketException) {
         // No internet (general device network failure)
         Get.snackbar(
@@ -448,16 +445,15 @@ class FirestoreDb {
     }
   }
 
-  Future<Hostels> getHostelsByName(String hostel_name) async {
+  Future<Hostels> getHostelsByName(String hostelName) async {
     late Hostels hostelByName;
     try {
       final querySnapshot = await db
           .collectionGroup("Private Hostels")
-          .where("name", isEqualTo: hostel_name)
+          .where("name", isEqualTo: hostelName)
           .get();
 
-      DocumentSnapshot<Map<String, dynamic>> query =
-          await querySnapshot.docs.first;
+      DocumentSnapshot<Map<String, dynamic>> query = querySnapshot.docs.first;
       hostelByName = Hostels.fromJson(query.data()!);
       String fullPath = query.reference.path;
 

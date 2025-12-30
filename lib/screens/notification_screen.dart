@@ -21,7 +21,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           height: 24.h,
           width: 24.w,
           child: Icon(Icons.chevron_left, color: Color(0xFF323232))),
-        title: Container(
+        title: SizedBox(
             height: 22.h,
             child: FittedBox(
               child: Text(
@@ -36,7 +36,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         actions: [
           Switch(
               activeTrackColor: const Color(0xFF00EFD1),
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               value: turnOn,
               onChanged: (value) {
                 setState(() {

@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/paid_payment.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
-import 'package:on_campus/screens/pending_payment.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -245,16 +243,16 @@ class _HistoryState extends State<History> {
 
   Widget Pending({required Key key}) {
     return isLoading
-        ? Container(
+        ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
             child: Center(child: CircularProgressIndicator()),
           )
         : pendingHostels.isEmpty
-        ? Container(
+        ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
             child: Center(child: Text("There are no pending hostels")),
           )
-        : Container(
+        : SizedBox(
             key: key,
             height: 800,
             child: ListView.builder(
@@ -268,7 +266,6 @@ class _HistoryState extends State<History> {
                     bookedHostel = hostel;
                   }
                 }
-                ;
                 return GestureDetector(
                   onTap: () async {
                     Get.to(() => Payment(user: user!));
@@ -281,7 +278,7 @@ class _HistoryState extends State<History> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 15),
-                            child: Container(
+                            child: SizedBox(
                               width: 330.w.clamp(0, 330),
 
                               child: Column(
@@ -548,7 +545,7 @@ class _HistoryState extends State<History> {
                                                     ),
                                                     Text(" - "),
                                                     Text(
-                                                      "${formatDate(bookedHostel.move_out ?? "")}",
+                                                      formatDate(bookedHostel.move_out ?? ""),
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -596,16 +593,16 @@ class _HistoryState extends State<History> {
 
   Widget Paid({required Key key}) {
     return isLoading
-        ? Container(
+        ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
             child: Center(child: CircularProgressIndicator()),
           )
         : paidHostels.isEmpty
-        ? Container(
+        ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
             child: Center(child: Text("There are no paid hostels")),
           )
-        : Container(
+        : SizedBox(
             key: key,
             height: 800,
             child: ListView.builder(
@@ -632,7 +629,7 @@ class _HistoryState extends State<History> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 15),
-                            child: Container(
+                            child: SizedBox(
                               width: 330.w.clamp(0, 330),
 
                               child: Column(

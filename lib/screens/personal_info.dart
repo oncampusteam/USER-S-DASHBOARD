@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/customStepper.dart';
-import 'package:on_campus/screens/university_info.dart';
 
 class PersonalInfo extends StatefulWidget {
   const PersonalInfo({super.key});
@@ -20,6 +17,7 @@ class PersonalInfo extends StatefulWidget {
 class _PersonalInfoState extends State<PersonalInfo> {
   User? user = FirebaseAuth.instance.currentUser;
 
+  @override
   void initState() {
     super.initState();
   }
@@ -76,7 +74,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Text("*", style: TextStyle(color: Colors.red)),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customTextForm(
                   controller: firstName,
@@ -97,7 +95,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Text("*", style: TextStyle(color: Colors.red)),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customTextForm(
                   controller: surName,
@@ -118,7 +116,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Text("*", style: TextStyle(color: Colors.red)),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customEmailForm(
                   controller: email,
@@ -139,7 +137,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Text("*", style: TextStyle(color: Colors.red)),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customNumberForm(
                   controller: mobileNumber,
@@ -160,7 +158,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Text("*", style: TextStyle(color: Colors.red)),
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 40,
                 child: DropdownMenu<String>(
                   width: double.infinity,
@@ -213,7 +211,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
             children: [
               SizedBox(height: 17),
               Text("Program of study", style: TextStyle(height: 2)),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customTextForm(
                   controller: program,
@@ -222,7 +220,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               ),
               SizedBox(height: 20),
               Text("Year", style: TextStyle(height: 2)),
-              Container(
+              SizedBox(
                 height: 40,
                 child: DropdownMenu<int>(
                   width: double.infinity,
@@ -276,7 +274,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
             children: [
               SizedBox(height: 17),
               Text("Guardian name", style: TextStyle(height: 2)),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customTextForm(
                   controller: guardian,
@@ -285,7 +283,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               ),
               SizedBox(height: 20),
               Text("Emergency contact (1)", style: TextStyle(height: 2)),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customNumberForm(
                   controller: emergency1,
@@ -294,7 +292,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               ),
               SizedBox(height: 20),
               Text("Emergency contact (2)", style: TextStyle(height: 2)),
-              Container(
+              SizedBox(
                 height: 60,
                 child: customNumberForm(
                   controller: emergency2,
@@ -339,6 +337,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
         if (value == "" || value == null || value.isEmpty) {
           return 'Please fill in required field';
         }
+        return null;
       },
     );
   }
@@ -377,6 +376,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
         if (!emailRegex.hasMatch(value)) {
           return 'Enter a valid email address';
         }
+        return null;
       },
     );
   }
@@ -414,6 +414,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
         if (value.length < 10) {
           return "Number must be up to 10 digits";
         }
+        return null;
       },
     );
   }
@@ -541,7 +542,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                       // if (currentStep < steps.length )
                                       Align(
                                         alignment: Alignment.center,
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 50,
                                           width:
                                               MediaQuery.of(
@@ -584,7 +585,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                                 } catch (e) {
                                                   Get.snackbar(
                                                     "Error",
-                                                    "${e.toString()}",
+                                                    e.toString(),
                                                     snackPosition:
                                                         SnackPosition.BOTTOM,
                                                   );

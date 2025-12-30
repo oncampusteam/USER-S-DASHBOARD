@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/firebase/classes.dart';
@@ -490,7 +488,7 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                       ),
                                                     ),
                                                     SizedBox(height: 7),
-                                                    Container(
+                                                    SizedBox(
                                                       width: 300.w.clamp(
                                                         0,
                                                         300,
@@ -588,15 +586,15 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                           scrollDirection: Axis.vertical,
                           itemCount: searchList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            Hostels search_hostel = searchList[index];
-                            String? string = search_hostel.hostel_images?[0];
+                            Hostels searchHostel = searchList[index];
+                            String? string = searchHostel.hostel_images?[0];
                             print(string);
-                            print(search_hostel.name);
+                            print(searchHostel.name);
                             return GestureDetector(
                               onTap: () {
                                 Get.to(
                                   () => HostelDetails(
-                                    hostel: search_hostel,
+                                    hostel: searchHostel,
                                   ),
                                   transition: Transition.fadeIn,
                                   duration: const Duration(milliseconds: 800),
@@ -677,13 +675,13 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                   CrossAxisAlignment.start,
                                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   height: 16.h,
                                                   child: FittedBox(
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      search_hostel.name,
+                                                      searchHostel.name,
                                                       style: TextStyle(
                                                         fontFamily: "Roboto",
                                                         fontWeight:
@@ -697,7 +695,7 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     alignment:
@@ -730,7 +728,7 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                   ),
                                                 ),
                                                 FittedBox(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     // color: Colors.red,
                                                     height: 20.h,
                                                     // width: 120.w,
@@ -751,13 +749,13 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5.h),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     child: Row(
                                                       children: [
                                                         Text(
-                                                          "${search_hostel.rate}.0",
+                                                          "${searchHostel.rate}.0",
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 "Roboto",
@@ -775,7 +773,7 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                           width: 60,
                                                           child: ListView.builder(
                                                             itemCount:
-                                                                search_hostel
+                                                                searchHostel
                                                                     .rate,
                                                             scrollDirection:
                                                                 Axis.horizontal,
@@ -807,7 +805,7 @@ class _PrivateHostelCategoryState extends State<PrivateHostelCategory> {
                                                               ),
                                                             ),
                                                             Text(
-                                                              " ${search_hostel.available_rooms} Slots available",
+                                                              " ${searchHostel.available_rooms} Slots available",
                                                               style: TextStyle(
                                                                 color:
                                                                     const Color.fromARGB(

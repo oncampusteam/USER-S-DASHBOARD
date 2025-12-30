@@ -470,7 +470,7 @@ class _ViewRoomDetailsState extends State<ViewRoomDetails> {
                 SizedBox(height: 20),
                 Row(
                   children: [
-                    Container(
+                    SizedBox(
                       width: MediaQuery.sizeOf(context).width * 0.45,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -571,7 +571,7 @@ class _ViewRoomDetailsState extends State<ViewRoomDetails> {
                         ],
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.sizeOf(context).width * 0.45,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -1331,7 +1331,7 @@ class _ViewRoomDetailsState extends State<ViewRoomDetails> {
                             _receit = false;
                           });
                         },
-                        child: Container(
+                        child: SizedBox(
                           // color: Colors.transparent,
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.15,

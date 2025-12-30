@@ -9,8 +9,6 @@ import 'package:on_campus/screens/Home%20Page%20Views/bookings.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
 
 import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
-import 'package:on_campus/screens/bottom_nav.dart';
-import 'package:on_campus/screens/payable.dart';
 import 'package:on_campus/screens/user_information.dart';
 
 import 'package:on_campus/screens/personal_info.dart';

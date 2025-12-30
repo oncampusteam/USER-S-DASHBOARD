@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -262,7 +261,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   CrossAxisAlignment.start,
                                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   height: 16.h,
                                                   child: FittedBox(
                                                     alignment:
@@ -282,7 +281,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     alignment:
@@ -315,7 +314,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   ),
                                                 ),
                                                 FittedBox(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     // color: Colors.red,
                                                     height: 20.h,
                                                     // width: 120.w,
@@ -336,7 +335,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5.h),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     child: Row(
@@ -480,12 +479,12 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                           scrollDirection: Axis.vertical,
                           itemCount: searchList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            Hostels search_hostel = searchList[index];
-                            print(search_hostel.name);
+                            Hostels searchHostel = searchList[index];
+                            print(searchHostel.name);
                             return GestureDetector(
                               onTap: () {
                                 Get.to(
-                                  () => HostelDetails(hostel: search_hostel),
+                                  () => HostelDetails(hostel: searchHostel),
                                   transition: Transition.fadeIn,
                                   duration: const Duration(milliseconds: 800),
                                   curve: Curves.easeIn,
@@ -552,13 +551,13 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   CrossAxisAlignment.start,
                                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   height: 16.h,
                                                   child: FittedBox(
                                                     alignment:
                                                         Alignment.centerLeft,
                                                     child: Text(
-                                                      search_hostel.name,
+                                                      searchHostel.name,
                                                       style: TextStyle(
                                                         fontFamily: "Roboto",
                                                         fontWeight:
@@ -572,7 +571,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     alignment:
@@ -588,7 +587,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                           width: 8.77.w,
                                                         ),
                                                         Text(
-                                                          "${search_hostel.university}, ${search_hostel.region} region",
+                                                          "${searchHostel.university}, ${searchHostel.region} region",
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 "Roboto",
@@ -605,7 +604,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   ),
                                                 ),
                                                 FittedBox(
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     // color: Colors.red,
                                                     height: 20.h,
                                                     // width: 120.w,
@@ -626,13 +625,13 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5.h),
-                                                Container(
+                                                SizedBox(
                                                   height: 12.h,
                                                   child: FittedBox(
                                                     child: Row(
                                                       children: [
                                                         Text(
-                                                          "${search_hostel.rate}",
+                                                          "${searchHostel.rate}",
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 "Roboto",
@@ -650,7 +649,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                           width: 60,
                                                           child: ListView.builder(
                                                             itemCount:
-                                                                search_hostel
+                                                                searchHostel
                                                                     .rate,
                                                             scrollDirection:
                                                                 Axis.horizontal,
@@ -682,10 +681,10 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                               ),
                                                             ),
                                                             Text(
-                                                              search_hostel
+                                                              searchHostel
                                                                           .available_rooms !=
                                                                       null
-                                                                  ? "${search_hostel.available_rooms} Slots available"
+                                                                  ? "${searchHostel.available_rooms} Slots available"
                                                                   : " No Slots available",
                                                               style: TextStyle(
                                                                 color:

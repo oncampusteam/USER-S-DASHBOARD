@@ -9,32 +9,41 @@ class WelcomeScreen1 extends StatefulWidget {
 }
 
 class _WelcomeScreen1State extends State<WelcomeScreen1> {
+
+  
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: SizedBox(
-          child: SizedBox(
-        child: Stack(
-          children: [
-            Image.asset(
-              "assets/welcome_screen_1/welcomeImage_1.jpg",
-              fit: BoxFit.cover,
-              height: double.infinity,
+    Size constant = MediaQuery.of(context).size;
+    return Material(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+              body: SizedBox(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+      child: Stack(
+        children: [
+          Image.asset(
+            "assets/welcome_screen_1/welcomeImage_1.jpg",
+            fit: BoxFit.fitHeight,
+            height: double.infinity,
+            width: MediaQuery.of(context).size.width,
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.72,
+            child: SizedBox(
+              height: constant.height * 0.28,
+              // height: 100.h,
               width: MediaQuery.of(context).size.width,
-            ),
-            Positioned(
-              top: 450.h,
-              child: SizedBox(
-                // height: 100.h,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      // height: 40.h,
-                      // color: Colors.red,
-                      width: double.infinity,
-                      child: Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    // height: 40.h,
+                    // color: Colors.red,
+                    width: MediaQuery.of(context).size.width,
+                    child: SizedBox(
+                      height: constant.height * 0.045,
+                      
+                      child: FittedBox(
                         child: Text(
                           "Stress-Free Student Living",
                           textAlign: TextAlign.center,
@@ -49,11 +58,11 @@ class _WelcomeScreen1State extends State<WelcomeScreen1> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
+                  ),
+                  SizedBox(
+                    width: constant.width* 0.8,
+                    height: constant.height * 0.06,
+                    child: FittedBox(
                       child: Text(
                           "Book in flash, save your cash! find the perfect\n spot without hassle",
                           textAlign: TextAlign.center,
@@ -66,13 +75,15 @@ class _WelcomeScreen1State extends State<WelcomeScreen1> {
                             fontSize: 18.sp.clamp(0, 18),
                           )),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      )),
-    ));
+          ),
+        ],
+      ),
+              )),
+            ),
+    );
   }
 }

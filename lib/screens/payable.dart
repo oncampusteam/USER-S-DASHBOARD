@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
-import 'dart:math';
 import 'package:paystack_for_flutter/paystack_for_flutter.dart';
 
 class Payable extends StatefulWidget {
@@ -83,22 +80,22 @@ class _PayableState extends State<Payable> {
                               height: 20,
                             ),
                             SizedBox(width: 5),
-                            Container(
+                            SizedBox(
                               height: 22,
                               width: 50,
 
                               child: FilledButton(
+                                onPressed: () {},
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: Color(0xFF00EFD1),
+                                  padding: EdgeInsets.symmetric(vertical: 0),
+                                ),
                                 child: Text(
                                   "Room",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                   ),
-                                ),
-                                onPressed: () {},
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Color(0xFF00EFD1),
-                                  padding: EdgeInsets.symmetric(vertical: 0),
                                 ),
                               ),
                             ),

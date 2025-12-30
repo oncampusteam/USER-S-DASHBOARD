@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:on_campus/classes/classes.dart';
-import 'package:on_campus/classes/hostel.dart';
-import 'package:on_campus/customscroll.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
 import 'package:get/get.dart';
@@ -495,7 +492,7 @@ class _SearchState extends State<Search> {
                                                 ),
                                               ),
                                               SizedBox(height: 10),
-                                              Container(
+                                              SizedBox(
                                                 width: 220.w.clamp(0, 220),
                                                 height: 25,
                                                 child: ListView.builder(
@@ -824,7 +821,7 @@ class _SearchState extends State<Search> {
                                               ),
                                             ),
                                             SizedBox(height: 10),
-                                            Container(
+                                            SizedBox(
                                               width: 220.w.clamp(0, 220),
                                               height: 25,
                                               child: ListView.builder(
@@ -910,7 +907,7 @@ class _SearchState extends State<Search> {
           ],
         ),
       ),
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         width: 90,
         child: ElevatedButton(
           onPressed: () {},

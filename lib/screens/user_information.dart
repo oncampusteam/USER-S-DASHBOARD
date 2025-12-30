@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/profile.dart';
 import 'package:on_campus/screens/personal_info.dart';
 
 class UserInformation extends StatefulWidget {
@@ -135,7 +133,7 @@ class _UserInformationState extends State<UserInformation> {
                         SizedBox(height: 35),
                         Align(
                           alignment: Alignment.center,
-                          child: Container(
+                          child: SizedBox(
                             width: 150,
                             height: 50,
                             child: ElevatedButton(

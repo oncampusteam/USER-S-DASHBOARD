@@ -46,7 +46,7 @@ class _Initialpage0State extends State<Initialpage0>
         imageWidth = 25.h;
         radius = 50.r;
         duration = const Duration(milliseconds: 800);
-        padding = MediaQuery.of(context).size.height * 0.45;
+        padding = MediaQuery.of(context).size.height * 0.5;
       });
 
       // Continue calling the function to rebuild again after the delay
@@ -109,7 +109,7 @@ class _Initialpage0State extends State<Initialpage0>
     if (mounted) {
       Get.to(
         () => user == null
-            ? Initialpage1()
+            ? Material(child: Initialpage1())
             : BottomNav(username: user!.displayName!),
         transition: Transition.fadeIn,
         curve: Curves.easeIn,
@@ -131,55 +131,53 @@ class _Initialpage0State extends State<Initialpage0>
   Curve curve = Curves.bounceOut;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Builder(
-        builder: (context) {
-          return AnimatedContainer(
-            onEnd: () {
-              setState(() {
-                padding = noPadding
-                    ? padding
-                    : MediaQuery.of(context).size.height * 0.4;
-              });
-            },
-            curve: curve,
-            color: Colors.white,
-            padding: EdgeInsets.only(top: padding),
-            duration: duration,
-            alignment: Alignment.topCenter,
-            child: image
-                ? AnimatedContainer(
-                    duration: duration,
-                    curve: curve,
-                    height: height,
-                    width: width,
-                    alignment: Alignment.topCenter,
-                    decoration: BoxDecoration(
-                      shape: shape,
-                      borderRadius: borderRadius,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
-                      ),
+    return Builder(
+      builder: (context) {
+        return AnimatedContainer(
+          onEnd: () {
+            setState(() {
+              padding = noPadding
+                  ? padding
+                  : MediaQuery.of(context).size.height * 0.4;
+            });
+          },
+          curve: curve,
+          color: Colors.white,
+          padding: EdgeInsets.only(top: padding),
+          duration: duration,
+          alignment: Alignment.topCenter,
+          child: image
+              ? AnimatedContainer(
+                  duration: duration,
+                  curve: curve,
+                  height: height,
+                  width: width,
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                    shape: shape,
+                    borderRadius: borderRadius,
+                    gradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
                     ),
-                    child: Center(
-                      child: Image.asset(
-                        "assets/initialPage0/on.png",
-                        fit: BoxFit.cover,
-                        height: imageHeight,
-                        width: imageWidth,
-                      ),
-                    ),
-                  )
-                : Image.asset(
-                    "assets/initialPage0/onCampus.png",
-                    height: 97.h,
-                    width: 285.w,
                   ),
-          );
-        },
-      ),
+                  child: Center(
+                    child: Image.asset(
+                      "assets/initialPage0/on.png",
+                      fit: BoxFit.cover,
+                      height: imageHeight,
+                      width: imageWidth,
+                    ),
+                  ),
+                )
+              : Image.asset(
+                  "assets/initialPage0/onCampus.png",
+                  height: 97.h,
+                  width: 285.w,
+                ),
+        );
+      },
     );
   }
 }

@@ -52,6 +52,8 @@ dependencies:
   intl: ^0.20.2
   
 
+  paystack_for_flutter: any
+  http: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -62,7 +64,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  paystack_for_flutter: ^1.0.4
   
   
 
@@ -116,7 +117,7 @@ flutter:
     - assets/user_interface_icons/security_and_safety_icons/
     - assets/user_interface_icons/bills_icons/
     - assets/user_interface_icons/amenities_icons/
-    - assets/user_interface_icons/specific_room_icons/
+    # - assets/user_interface_icons/specific_room_icons/
     - assets/user_interface_icons/payment_process_icons/
     - assets/user_interface_icons/apartment_screens/
     - assets/user_interface_icons/profile_screen/

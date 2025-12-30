@@ -11,6 +11,7 @@ class WelcomeScreen2 extends StatefulWidget {
 class _WelcomeScreen2State extends State<WelcomeScreen2> {
   @override
   Widget build(BuildContext context) {
+    Size constant = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
       body: SizedBox(
@@ -24,40 +25,47 @@ class _WelcomeScreen2State extends State<WelcomeScreen2> {
               width: MediaQuery.of(context).size.width,
             ),
             Positioned(
-              top: 490.h,
+              top: constant.height * 0.72,
               child: SizedBox(
-                // color: Colors.green,
-                // height: 80.h,
+                height: constant.height * 0.28,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
-                    Text(
-                      "100% Verified Listing",
-                      textAlign: TextAlign.center,
-                      // overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          letterSpacing: 1.5.w,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 35.sp.clamp(0, 35),
-                          // fontStyle: FontStyle.normal
-                          fontFamily: "Poppins"),
+                    SizedBox(
+                      height: constant.height * 0.045,
+                      child: FittedBox(
+                        child: Text(
+                          "100% Verified Listing",
+                          textAlign: TextAlign.center,
+                          // overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              decoration: TextDecoration.none,
+                              letterSpacing: 1.5.w,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 35.sp.clamp(0, 35),
+                              // fontStyle: FontStyle.normal
+                              fontFamily: "Poppins"),
+                        ),
+                      ),
                     ),
                     SizedBox(
-                      height: 10.h,
-                    ),
-                    Text(
-                      "we promise to deliver what you see on the app",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          letterSpacing: 0.15.w,
-                          decoration: TextDecoration.none,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18.sp.clamp(0, 18),
-                          // fontStyle: FontStyle.normal
-                          fontFamily: "Poppins"),
+                      width: constant.width* 0.8,
+                      height: constant.height * 0.06,
+                      child: FittedBox(
+                        child: Text(
+                          "we guarantee that what you see on our app is\nwhat you get.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              letterSpacing: 0.15.w,
+                              decoration: TextDecoration.none,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp.clamp(0, 18),
+                              // fontStyle: FontStyle.normal
+                              fontFamily: "Poppins"),
+                        ),
+                      ),
                     ),
                   ],
                 ),

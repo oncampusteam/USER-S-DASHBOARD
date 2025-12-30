@@ -12,6 +12,7 @@ class WelcomeScreen6 extends StatefulWidget {
 class _WelcomeScreen6State extends State<WelcomeScreen6> {
   @override
   Widget build(BuildContext context) {
+    Size constant = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
       body: SizedBox(
@@ -25,17 +26,17 @@ class _WelcomeScreen6State extends State<WelcomeScreen6> {
               width: MediaQuery.of(context).size.width,
             ),
             Positioned(
-              top: 490.h,
+              top: constant.height * 0.72,
               child: SizedBox(
-                // height: 100.h,
+                height: constant.height * 0.28,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
                     SizedBox(
-                      // height: 40.h,
+                      height: constant.height * 0.045,
                       // color: Colors.red,
-                      width: double.infinity,
-                      child: Expanded(
+                      width: constant.width,
+                      child: FittedBox(
                         child: Text("Refer & Earn",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -49,21 +50,21 @@ class _WelcomeScreen6State extends State<WelcomeScreen6> {
                       ),
                     ),
                     SizedBox(
-                      height: 10.h,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                          "Invite friends to book with us and get rewards\n The more you refer the more you earn",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            letterSpacing: 0.15.w,
-                            decoration: TextDecoration.none,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Poppins",
-                            fontSize: 18.sp.clamp(0, 18),
-                          )),
+                      width: constant.width * 0.8,
+                      height: constant.height * 0.06,
+                      child: FittedBox(
+                        child: Text(
+                            "Invite friends to book with us and get rewards\nThe more you refer the more you earn",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              letterSpacing: 0.15.w,
+                              decoration: TextDecoration.none,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: "Poppins",
+                              fontSize: 18.sp.clamp(0, 18),
+                            )),
+                      ),
                     ),
                   ],
                 ),

@@ -553,7 +553,7 @@ class _ApartmentHistoryState extends State<ApartmentHistory> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   height: 15.h,
                                                   // color: Colors.red,
                                                   child: FittedBox(
@@ -601,7 +601,7 @@ class _ApartmentHistoryState extends State<ApartmentHistory> {
                                                 ),
                                               ],
                                             ),
-                                            Container(
+                                            SizedBox(
                                               height: 10.h,
                                               child: Row(
                                                 children: [
@@ -637,7 +637,7 @@ class _ApartmentHistoryState extends State<ApartmentHistory> {
                                               ),
                                             ),
                                             // SizedBox(height: 2.h),
-                                            Container(
+                                            SizedBox(
                                               // color: Colors.blue,
                                               height: 10.h,
                                               child: FittedBox(
@@ -673,7 +673,7 @@ class _ApartmentHistoryState extends State<ApartmentHistory> {
                                               ),
                                             ),
                                             // SizedBox(height: 2.h),
-                                            Container(
+                                            SizedBox(
                                               height: 10.h,
                                               child: FittedBox(
                                                 alignment: Alignment.centerLeft,
@@ -708,7 +708,7 @@ class _ApartmentHistoryState extends State<ApartmentHistory> {
                                               ),
                                             ),
                                             // SizedBox(height: 2.h),
-                                            Container(
+                                            SizedBox(
                                               height: 10.h,
                                               child: FittedBox(
                                                 child: Row(

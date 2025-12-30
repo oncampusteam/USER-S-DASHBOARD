@@ -5,7 +5,7 @@ class CustomStepper extends StatelessWidget {
   final ValueChanged<int>? onStepTapped;
   final List<String> stepTitles;
 
-  const CustomStepper({
+  const CustomStepper({super.key, 
     required this.currentStep,
     this.onStepTapped,
     required this.stepTitles,

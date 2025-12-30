@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:on_campus/classes/classes.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
-import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
 import 'package:on_campus/screens/enquire.dart';
 import 'package:on_campus/screens/get_icon.dart';
 import 'package:intl/intl.dart';
@@ -258,10 +257,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (duration >= 2)
+                        if (duration >= 2) {
                           setModalState(() {
                             duration--;
                           });
+                        }
                       },
                       child: Container(
                         height: 30.h,
@@ -413,9 +413,9 @@ class _HostelDetailsState extends State<HostelDetails> {
 
   Widget book(
     StateSetter setModalState,
-    TextEditingController num_people,
+    TextEditingController numPeople,
     TextEditingController name,
-    TextEditingController email_address,
+    TextEditingController emailAddress,
     List<TextEditingController> occupantEmails,
     List<TextEditingController> occupantNames,
   ) {
@@ -559,7 +559,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       }
                     },
                     enabled: isChecked,
-                    controller: num_people,
+                    controller: numPeople,
                     cursorColor: Colors.black,
                     style: const TextStyle(color: Colors.grey),
                     inputFormatters: [
@@ -593,6 +593,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       if (num == null || num < 1 || num > 4) {
                         return 'Enter a number between 1 and 4';
                       }
+                      return null;
                     },
                   ),
                   Padding(
@@ -649,6 +650,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your name';
                                 }
+                                return null;
                               },
                             ),
 
@@ -690,6 +692,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 if (!emailRegex.hasMatch(value)) {
                                   return 'Enter a valid email address';
                                 }
+                                return null;
                               },
                             ),
 
@@ -722,7 +725,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 occupantNames: occupantNames,
                                 occupantEmails: occupantEmails,
                               );
-                              num_people.text = "1";
+                              numPeople.text = "1";
                             }
                           });
                         },
@@ -776,10 +779,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 'hostel_name': widget.hostel.name,
                                 'paid': false,
                                 'isDone': false,
-                                'people_booking': int.parse(num_people.text),
+                                'people_booking': int.parse(numPeople.text),
                                 'name': name.text,
                                 'occupants': occupants,
-                                'email': email_address.text,
+                                'email': emailAddress.text,
                               }, SetOptions(merge: true));
                           setModalState(() {
                             isLoading = false;
@@ -981,7 +984,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                 ),
               ),
               7.verticalSpace,
-              Container(
+              SizedBox(
                 height: 60,
                 child: TextFormField(
                   controller: dateController_movein,
@@ -1022,6 +1025,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     if (value == null || value.isEmpty) {
                       return 'Please pick a date';
                     }
+                    return null;
                   },
                 ),
               ),
@@ -1041,7 +1045,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                 ),
               ),
               SizedBox(height: 7.h),
-              Container(
+              SizedBox(
                 height: 60,
                 child: TextFormField(
                   controller: dateController_moveout,
@@ -2353,7 +2357,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                     horizontal: 4,
                                                     vertical: 8,
                                                   ),
-                                              child: Container(
+                                              child: SizedBox(
                                                 height: 30,
                                                 child: ElevatedButton(
                                                   style:
@@ -2398,7 +2402,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       horizontal: 4,
                                                       vertical: 8,
                                                     ),
-                                                child: Container(
+                                                child: SizedBox(
                                                   height: 30,
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
@@ -2429,7 +2433,6 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                 ),
                                               );
-                                              ;
                                             }),
                                           ],
                                         ),
@@ -2951,16 +2954,16 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 child: ElevatedButton(
                                                                   onPressed: () {
                                                                     TextEditingController
-                                                                    num_people =
+                                                                    numPeople =
                                                                         TextEditingController();
                                                                     TextEditingController
                                                                     name =
                                                                         TextEditingController();
                                                                     TextEditingController
-                                                                    phone_num =
+                                                                    phoneNum =
                                                                         TextEditingController();
                                                                     TextEditingController
-                                                                    email_address =
+                                                                    emailAddress =
                                                                         TextEditingController();
                                                                     List<
                                                                       TextEditingController
@@ -3007,8 +3010,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                           child: book(
                                                                                             setModalState,
                                                                                             name,
-                                                                                            phone_num,
-                                                                                            email_address,
+                                                                                            phoneNum,
+                                                                                            emailAddress,
                                                                                             occupantNames,
                                                                                             occupantEmails,
                                                                                           ),
@@ -3018,7 +3021,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               );
                                                                             },
                                                                       ).whenComplete(() {
-                                                                        num_people
+                                                                        numPeople
                                                                             .dispose();
 
                                                                         setState(() {
@@ -3030,12 +3033,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             in occupantNames) {
                                                                           c.dispose();
                                                                         }
-                                                                        ;
                                                                         for (var c
                                                                             in occupantEmails) {
                                                                           c.dispose();
                                                                         }
-                                                                        ;
                                                                       });
                                                                     } else {
                                                                       Get.snackbar(
@@ -3532,7 +3533,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 150.w,
                           height: 40,
                           child: OutlinedButton(
@@ -3540,10 +3541,6 @@ class _HostelDetailsState extends State<HostelDetails> {
                               // await FirestoreDb.instance.createVariables();
                               _scrollToSection("Room type");
                             },
-                            child: Text(
-                              "View Rooms",
-                              style: TextStyle(color: Color(0xFF00EFD1)),
-                            ),
                             style: OutlinedButton.styleFrom(
                               backgroundColor: Color(
                                 0xFF00EFD1,
@@ -3555,6 +3552,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
+                            ),
+                            child: Text(
+                              "View Rooms",
+                              style: TextStyle(color: Color(0xFF00EFD1)),
                             ),
                           ),
                         ),

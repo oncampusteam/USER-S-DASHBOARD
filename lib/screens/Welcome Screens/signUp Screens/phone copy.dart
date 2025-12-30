@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/otp.dart';
 
 class Phone extends StatefulWidget {
   const Phone({super.key});
@@ -13,7 +11,7 @@ class Phone extends StatefulWidget {
 class _PhoneState extends State<Phone> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   String _verificationId = '';
   bool _codeSent = false;
 
@@ -33,12 +31,12 @@ class _PhoneState extends State<Phone> {
           _verificationId = verificationId;
           _codeSent = true;
           // Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){Otp();}));
-          Get.to(
-            () => Otp(),
-            transition: Transition.fadeIn,
-            curve: Curves.easeIn,
-            duration: Duration(milliseconds: 600),
-          );
+          // Get.to(
+          //   () => Otp(),
+          //   transition: Transition.fadeIn,
+          //   curve: Curves.easeIn,
+          //   duration: Duration(milliseconds: 600),
+          // );
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {

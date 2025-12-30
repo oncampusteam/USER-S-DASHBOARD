@@ -7,10 +7,12 @@ class GetIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final normalizedText =
-        text.toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' ');
+    final normalizedText = text.toLowerCase().trim().replaceAll(
+      RegExp(r'\s+'),
+      ' ',
+    );
     if (normalizedText == "bed") {
-      return Icon(Icons.bed);
+      return SvgPicture.asset("assets/home/bed.svg");
     } else if (normalizedText.contains("bathroom")) {
       return SvgPicture.asset(
         'assets/user_interface_icons/amenities_icons/Water heater.svg',
@@ -283,13 +285,13 @@ class GetIcon extends StatelessWidget {
   }
 }
 
-Widget getIcon({
-  required String text,
-}) {
-  final normalizedText =
-      text.toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' ');
+Widget getIcon({required String text}) {
+  final normalizedText = text.toLowerCase().trim().replaceAll(
+    RegExp(r'\s+'),
+    ' ',
+  );
   if (normalizedText == "bed") {
-    return Icon(Icons.bed);
+    return SvgPicture.asset("assets/home/bed.svg");
   } else if (normalizedText.contains("bathroom")) {
     return SvgPicture.asset(
       'assets/user_interface_icons/amenities_icons/Water heater.svg',

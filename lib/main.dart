@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:on_campus/classes/screen_details.dart';
@@ -7,23 +8,30 @@ import 'package:on_campus/screens/initialPage_0.dart';
 import 'package:on_campus/screens/initial_page.dart';
 import 'package:on_campus/firebase_options.dart';
 
-
-
 void main() async {
   // DependencyInjection.init();
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.blue,
+  //     statusBarIconBrightness: Brightness.dark,
+  //   ),
+  // );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
+double screenHeight = 0;
+double screenWidth = 0;
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); 
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-      "${MediaQuery.of(context).size.height}, ${MediaQuery.of(context).size.width}",
-    );
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+
     return GetMaterialApp(
       // title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,6 +39,16 @@ class MyApp extends StatelessWidget {
         fontFamily: "Poppins",
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        // scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+        ),
       ),
       home: const StartupScreen(),
       debugShowCheckedModeBanner: false,
@@ -62,23 +80,19 @@ class _StartupScreenState extends State<StartupScreen> {
       screenHeight: MediaQuery.of(context).size.height,
     );
     return ScreenUtilInit(
-      designSize: const Size(390, 690),
+      designSize: const Size(430, 932),
       minTextAdapt: true,
       builder: (BuildContext context, widget) {
-        return SafeArea(
-          child: FutureBuilder(
-            future: future,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const InitialPage();
-              }
-              return const Initialpage0();
-            },
-          ),
+        return FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Material(child: const InitialPage());
+            }
+            return Material(child: const Initialpage0());
+          },
         );
       },
     );
   }
 }
-
-

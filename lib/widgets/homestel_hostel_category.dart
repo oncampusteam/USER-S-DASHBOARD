@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/hostel.dart';
 import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
@@ -465,7 +463,7 @@ class _HomestelHostelCategoryState extends State<HomestelHostelCategory> {
                                                     ),
                                                   ),
                                                   SizedBox(height: 7),
-                                                  Container(
+                                                  SizedBox(
                                                     width: 300.w.clamp(0, 300),
                                                     height: 25,
                                                     child: ListView.builder(

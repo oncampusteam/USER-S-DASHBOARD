@@ -14,9 +14,9 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   final TextEditingController _otpController = TextEditingController();
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool _codeSent = false;
+  final bool _codeSent = false;
 
   @override
   Widget build(BuildContext context) {

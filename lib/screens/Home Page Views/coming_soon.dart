@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ComingSoon extends StatefulWidget {
-  const ComingSoon({Key? key}) : super(key: key);
+  const ComingSoon({super.key});
 
   @override
   State<ComingSoon> createState() => _ComingSoonState();
@@ -100,16 +100,10 @@ class _ComingSoonState extends State<ComingSoon> {
               ],
             ),
             SizedBox(height: 40.h),
-            Container(
+            SizedBox(
               width: 250,
               height: 45,
               child: ElevatedButton(
-                child: Text(
-                  "Notify me",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
@@ -118,6 +112,12 @@ class _ComingSoonState extends State<ComingSoon> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   backgroundColor: Color(0xFF00EFD1),
+                ),
+                child: Text(
+                  "Notify me",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
