@@ -28,7 +28,7 @@ Widget HostelCard({
     // width: MediaQuery.of(context).size.width,
     width: Constant.width,
     child: ListView.builder(
-      physics: const BouncingScrollPhysics(),
+      physics: !variant ?const BouncingScrollPhysics(): NeverScrollableScrollPhysics(),
       scrollDirection: !variant ?Axis.horizontal: Axis.vertical,
       itemCount: seeAllPopular ? hostels.length : 5,
       itemBuilder: (context, index) {
@@ -474,6 +474,8 @@ Widget hostelGestureCard({
                         ),
                       ),
                     ),
+                    if(variant && index == value.length -1)
+                    SizedBox(width: 25.h)
                   ],
                 );
               },

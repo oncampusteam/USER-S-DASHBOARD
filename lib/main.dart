@@ -89,7 +89,22 @@ class _StartupScreenState extends State<StartupScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Material(child: const InitialPage());
             }
-            return Material(child: const Initialpage0());
+            return 
+            Material(child: const Initialpage0());
+            // return Material(child:Scaffold(
+            //   body: Center(
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height : 200.h),
+            //         Text("this is a"),
+            //         Container(
+            //             padding: EdgeInsets.symmetric(horizontal: 10.h),
+            //             height: 60,
+            //             child: CustomBottomNavBar(height: 60, dip: 50))
+            //       ],
+            //     ),
+            //   ),
+            // ));
           },
         );
       },

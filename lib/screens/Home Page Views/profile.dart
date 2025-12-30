@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
     setState(() {
       userInfo = userInformation;
     });
-    print("hey: ${userInfo!.userInfoDone}");
+    debugPrint("hey: ${userInfo?.userInfoDone}?? """);
 
     setState(() {
       isLoading = false;

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +58,8 @@ class _HomeState extends State<Home> {
       topFavoriteBools = List.generate(topHostels.length, (index) {
         return false;
       });
+      // topHostelsLength =
+      //   (seeAllTop ? topHostels.length : topHostels.length / 2.ceil()).toInt();
       //   for (int i = 0; i <= hostels.length - 1; i++) {
       //   favoritebools.add(false);
       //   debugPrint("");
@@ -82,13 +83,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    int topHostelsLength = (seeAllTop
-        ? topHostels.length
-        : topHostels.length / 2.ceil()).toInt();
     return PopScope(
       canPop: false,
       child: Scaffold(
-        // backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         body: Stack(
           children: [
             Positioned(
@@ -487,593 +485,6 @@ class _HomeState extends State<Home> {
                                 setState(() {});
                               },
                             ),
-                      //  Container(
-                      //     // color: Colors.pink,
-                      //     height: Constant.height * 0.4,
-                      //     // width: MediaQuery.of(context).size.width,
-                      //     width: Constant.width,
-                      //     child: ListView.builder(
-                      //       physics: const BouncingScrollPhysics(),
-                      //       scrollDirection: Axis.horizontal,
-                      //       itemCount: seeAllPopular ? hostels.length : 5,
-                      //       itemBuilder: (context, index) {
-                      //         Hostels hostel = hostels[index];
-                      //         String? string = hostel.hostel_images?[0];
-                      //         return Row(
-                      //           children: [
-                      //             if (index == 0) SizedBox(width: 25.h),
-                      //             GestureDetector(
-                      //               onTap: () {
-                      //                 Get.to(
-                      //                   () => HostelDetails(hostel: hostel),
-                      //                   transition: Transition.fadeIn,
-                      //                   duration: const Duration(
-                      //                     milliseconds: 800,
-                      //                   ),
-                      //                   curve: Curves.easeIn,
-                      //                 );
-                      //               },
-                      //               child: Container(
-                      //                 height: Constant.height * 0.4,
-                      //                 decoration: BoxDecoration(
-                      //                   border: Border.all(
-                      //                     color: Color(0xFFD9D9D9),
-                      //                   ),
-                      //                   borderRadius: BorderRadius.circular(
-                      //                     8.r,
-                      //                   ),
-                      //                   color: Colors.white,
-                      //                   boxShadow: [
-                      //                     BoxShadow(
-                      //                       offset: Offset(0, 12),
-                      //                       blurRadius: 28,
-                      //                       spreadRadius: 0,
-                      //                       color: Color.fromRGBO(
-                      //                         0,
-                      //                         0,
-                      //                         0,
-                      //                         0.06,
-                      //                       ),
-                      //                     ),
-                      //                   ],
-                      //                 ),
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.start,
-                      //                   children: [
-                      //                     Container(
-                      //                       // margin: EdgeInsets.only(right: 10.h),
-                      //                       height: Constant.height * 0.25,
-                      //                       width: Constant.width * 0.85,
-                      //                       decoration: BoxDecoration(
-                      //                         // color: Colors.black,
-                      //                         borderRadius:
-                      //                             BorderRadius.only(
-                      //                               topLeft:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                               topRight:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                               // bottomLeft:
-                      //                               //     Radius.circular(
-                      //                               //       12.r,
-                      //                               //     ),
-                      //                               // bottomRight:
-                      //                               //     Radius.circular(
-                      //                               //       12.r,
-                      //                               //     ),
-                      //                             ),
-                      //                       ),
-                      //                       child: Stack(
-                      //                         children: [
-                      //                           Positioned(
-                      //                             top: 0,
-                      //                             right: 0,
-                      //                             left: 0,
-                      //                             child: ClipRRect(
-                      //                               borderRadius: BorderRadius.only(
-                      //                                 topLeft:
-                      //                                     Radius.circular(
-                      //                                       8.r,
-                      //                                     ),
-                      //                                 topRight:
-                      //                                     Radius.circular(
-                      //                                       8.r,
-                      //                                     ),
-                      //                                 // bottomLeft:
-                      //                                 //     Radius.circular(
-                      //                                 //       12.r,
-                      //                                 //     ),
-                      //                                 // bottomRight:
-                      //                                 //     Radius.circular(
-                      //                                 //       12.r,
-                      //                                 //     ),
-                      //                               ),
-                      //                               child: CachedNetworkImage(
-                      //                                 imageUrl:
-                      //                                     string ?? "",
-                      //                                 height:
-                      //                                     Constant.height *
-                      //                                     0.25,
-
-                      //                                 fit: BoxFit.cover,
-                      //                                 placeholder:
-                      //                                     (
-                      //                                       context,
-                      //                                       url,
-                      //                                     ) => SpinKitThreeBounce(
-                      //                                       color:
-                      //                                           const Color.fromARGB(
-                      //                                             255,
-                      //                                             0,
-                      //                                             239,
-                      //                                             209,
-                      //                                           ),
-                      //                                       size: 50.0,
-                      //                                     ),
-                      //                                 errorWidget:
-                      //                                     (
-                      //                                       context,
-                      //                                       url,
-                      //                                       error,
-                      //                                     ) => Icon(
-                      //                                       Icons.error,
-                      //                                     ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           Positioned(
-                      //                             top: 5.h,
-                      //                             right: 5.h,
-                      //                             // left: 0,
-                      //                             child: GestureDetector(
-                      //                               onTap: () {
-                      //                                 setState(() {});
-                      //                               },
-                      //                               child: Container(
-                      //                                 height: 35.h,
-                      //                                 width: 35.w,
-                      //                                 decoration:
-                      //                                     const BoxDecoration(
-                      //                                       color: Colors
-                      //                                           .white,
-                      //                                       shape: BoxShape
-                      //                                           .circle,
-                      //                                     ),
-                      //                                 child: GestureDetector(
-                      //                                   onTap: () {
-                      //                                     setState(() {
-                      //                                       // favoritebools[index] =
-                      //                                       //     !favoritebools[index];
-                      //                                       favorite =
-                      //                                           !favorite;
-                      //                                     });
-                      //                                   },
-                      //                                   child: Icon(
-                      //                                     size: 20.h,
-                      //                                     favorite
-                      //                                         ? Icons
-                      //                                               .favorite
-                      //                                         : Icons
-                      //                                               .favorite_border_outlined,
-                      //                                     color:
-                      //                                         const Color.fromARGB(
-                      //                                           255,
-                      //                                           0,
-                      //                                           239,
-                      //                                           209,
-                      //                                         ),
-                      //                                   ),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           Positioned(
-                      //                             top: 0,
-                      //                             left: 0,
-                      //                             child: hostel.ispopular!
-                      //                                 ? Container(
-                      //                                     padding:
-                      //                                         EdgeInsets.only(
-                      //                                           left: 5,
-                      //                                           right: 5,
-                      //                                         ),
-                      //                                     height:
-                      //                                         Constant
-                      //                                             .height *
-                      //                                         0.03,
-                      //                                     // width: 45.w,
-                      //                                     decoration: BoxDecoration(
-                      //                                       color:
-                      //                                           const Color(
-                      //                                             0xFF00EFD1,
-                      //                                           ),
-                      //                                       borderRadius: BorderRadius.only(
-                      //                                         bottomRight:
-                      //                                             Radius.circular(
-                      //                                               12.r,
-                      //                                             ),
-                      //                                         topLeft:
-                      //                                             Radius.circular(
-                      //                                               8.r,
-                      //                                             ),
-                      //                                       ),
-                      //                                     ),
-                      //                                     child: Align(
-                      //                                       child: SizedBox(
-                      //                                         height:
-                      //                                             Constant
-                      //                                                 .height *
-                      //                                             0.02,
-                      //                                         child: FittedBox(
-                      //                                           child: Text(
-                      //                                             "Males only",
-                      //                                             style: TextStyle(
-                      //                                               fontSize: 12
-                      //                                                   .sp
-                      //                                                   .clamp(
-                      //                                                     0,
-                      //                                                     12,
-                      //                                                   ),
-                      //                                               fontWeight:
-                      //                                                   FontWeight.w500,
-                      //                                               fontFamily:
-                      //                                                   "Roboto",
-                      //                                               color: Colors
-                      //                                                   .white,
-                      //                                             ),
-                      //                                           ),
-                      //                                         ),
-                      //                                       ),
-                      //                                     ),
-                      //                                   )
-                      //                                 : Container(),
-                      //                           ),
-                      //                           Positioned(
-                      //                             left: 10.h,
-                      //                             bottom: 5.h,
-                      //                             child: Container(
-                      //                               padding:
-                      //                                   EdgeInsets.symmetric(
-                      //                                     horizontal: 6.h,
-                      //                                     vertical: 2.h,
-                      //                                   ),
-                      //                               decoration: BoxDecoration(
-                      //                                 borderRadius:
-                      //                                     BorderRadius.circular(
-                      //                                       10.r,
-                      //                                     ),
-                      //                                 color: Color.fromRGBO(
-                      //                                   255,
-                      //                                   255,
-                      //                                   255,
-                      //                                   0.5,
-                      //                                 ),
-                      //                               ),
-                      //                               height:
-                      //                                   Constant.height *
-                      //                                   0.025,
-                      //                               child: Align(
-                      //                                 child: SizedBox(
-                      //                                   height:
-                      //                                       Constant
-                      //                                           .height *
-                      //                                       0.025,
-                      //                                   child: FittedBox(
-                      //                                     child: Row(
-                      //                                       children: [
-                      //                                         Icon(
-                      //                                           Icons
-                      //                                               .star_border_outlined,
-                      //                                           color: Color(
-                      //                                             0xFF00EFD1,
-                      //                                           ),
-                      //                                         ),
-                      //                                         Text(
-                      //                                           "4.5",
-                      //                                           style: TextStyle(
-                      //                                             fontFamily:
-                      //                                                 "Poppins",
-                      //                                             fontSize:
-                      //                                                 12.sp,
-                      //                                             fontWeight:
-                      //                                                 FontWeight
-                      //                                                     .w500,
-                      //                                             color: Color(
-                      //                                               0xFF111111,
-                      //                                             ),
-                      //                                           ),
-                      //                                         ),
-                      //                                       ],
-                      //                                     ),
-                      //                                   ),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                     ),
-                      //                     Container(
-                      //                       padding: EdgeInsets.symmetric(
-                      //                         horizontal: 5.h,
-                      //                       ),
-                      //                       height: Constant.height * 0.067,
-                      //                       width: Constant.width * 0.85,
-                      //                       child: Row(
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment
-                      //                                 .spaceBetween,
-                      //                         children: [
-                      //                           Column(
-                      //                             crossAxisAlignment:
-                      //                                 CrossAxisAlignment
-                      //                                     .start,
-                      //                             children: [
-                      //                               SizedBox(
-                      //                                 height:
-                      //                                     (Constant.height *
-                      //                                         0.08) *
-                      //                                     0.48,
-                      //                                 width:
-                      //                                     Constant.width *
-                      //                                     0.6,
-                      //                                 child: FittedBox(
-                      //                                   alignment: Alignment
-                      //                                       .centerLeft,
-                      //                                   child: Text(
-                      //                                     hostel.name,
-                      //                                     style: TextStyle(
-                      //                                       fontFamily:
-                      //                                           "Poppins",
-                      //                                       fontWeight:
-                      //                                           FontWeight
-                      //                                               .w600,
-                      //                                       fontSize: 20.sp
-                      //                                           .clamp(
-                      //                                             0,
-                      //                                             22,
-                      //                                           ),
-                      //                                     ),
-                      //                                   ),
-                      //                                 ),
-                      //                               ),
-                      //                               SizedBox(
-                      //                                 // color: Colors.green,
-                      //                                 child: Row(
-                      //                                   mainAxisAlignment:
-                      //                                       MainAxisAlignment
-                      //                                           .spaceBetween,
-                      //                                   children: [
-                      //                                     Row(
-                      //                                       children: [
-                      //                                         SizedBox(
-                      //                                           // color: Colors.yellow,
-                      //                                           height:
-                      //                                               (Constant.height *
-                      //                                                   0.08) *
-                      //                                               0.35,
-                      //                                           width:
-                      //                                               Constant
-                      //                                                   .width *
-                      //                                               0.6,
-                      //                                           child: FittedBox(
-                      //                                             alignment:
-                      //                                                 Alignment
-                      //                                                     .topLeft,
-                      //                                             child: Text(
-                      //                                               "${hostel.city}, ${hostel.region}",
-                      //                                               style: TextStyle(
-                      //                                                 fontSize: 15.sp.clamp(
-                      //                                                   0,
-                      //                                                   18,
-                      //                                                 ),
-                      //                                                 fontFamily:
-                      //                                                     "Poppins",
-                      //                                                 fontWeight:
-                      //                                                     FontWeight.w600,
-                      //                                                 letterSpacing:
-                      //                                                     0.15.w,
-                      //                                                 color: const Color(
-                      //                                                   0xFF7A7A7A,
-                      //                                                 ),
-                      //                                               ),
-                      //                                             ),
-                      //                                           ),
-                      //                                         ),
-                      //                                       ],
-                      //                                     ),
-                      //                                     SizedBox(
-                      //                                       width: 5,
-                      //                                     ),
-                      //                                   ],
-                      //                                 ),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                           Align(
-                      //                             alignment:
-                      //                                 Alignment.topRight,
-                      //                             child: SizedBox(
-                      //                               height:
-                      //                                   Constant.height *
-                      //                                   0.065,
-                      //                               width:
-                      //                                   Constant.width *
-                      //                                   0.20,
-                      //                               child: Column(
-                      //                                 crossAxisAlignment:
-                      //                                     CrossAxisAlignment
-                      //                                         .end,
-                      //                                 mainAxisAlignment:
-                      //                                     MainAxisAlignment
-                      //                                         .start,
-                      //                                 children: [
-                      //                                   SizedBox(
-                      //                                     height:
-                      //                                         Constant
-                      //                                             .height *
-                      //                                         0.02,
-                      //                                     child: FittedBox(
-                      //                                       child: Text(
-                      //                                         "From",
-                      //                                         style: TextStyle(
-                      //                                           fontWeight:
-                      //                                               FontWeight
-                      //                                                   .w500,
-                      //                                           fontSize: 12
-                      //                                               .sp
-                      //                                               .clamp(
-                      //                                                 0,
-                      //                                                 12,
-                      //                                               ),
-                      //                                           color: const Color(
-                      //                                             0xFF323232,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ),
-                      //                                     ),
-                      //                                   ),
-                      //                                   SizedBox(
-                      //                                     height:
-                      //                                         Constant
-                      //                                             .height *
-                      //                                         0.025,
-                      //                                     child: FittedBox(
-                      //                                       child: Text(
-                      //                                         "GHS ${hostel.amt_per_year} ",
-                      //                                         style: TextStyle(
-                      //                                           fontWeight:
-                      //                                               FontWeight
-                      //                                                   .w600, // Only "GHS" is bold
-                      //                                           fontSize: 12
-                      //                                               .sp
-                      //                                               .clamp(
-                      //                                                 0,
-                      //                                                 12,
-                      //                                               ),
-                      //                                           color: const Color(
-                      //                                             0xFF323232,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ),
-                      //                                     ),
-                      //                                   ),
-                      //                                   SizedBox(
-                      //                                     height:
-                      //                                         Constant
-                      //                                             .height *
-                      //                                         0.02,
-                      //                                     child: FittedBox(
-                      //                                       child: Text(
-                      //                                         "per year",
-                      //                                         style: TextStyle(
-                      //                                           fontWeight:
-                      //                                               FontWeight
-                      //                                                   .w500, // Only "GHS" is bold
-                      //                                           fontSize: 12
-                      //                                               .sp
-                      //                                               .clamp(
-                      //                                                 0,
-                      //                                                 12,
-                      //                                               ),
-                      //                                           color: const Color(
-                      //                                             0xFF323232,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ),
-                      //                                     ),
-                      //                                   ),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                     ),
-                      //                     SizedBox(height: 10.h),
-                      //                     SizedBox(
-                      //                       width: Constant.width * 0.85,
-                      //                       height: 25,
-                      //                       child: ListView.builder(
-                      //                         scrollDirection:
-                      //                             Axis.horizontal,
-                      //                         itemCount:
-                      //                             hostel.amenities!.length,
-                      //                         itemBuilder: (context, index) {
-                      //                           return Container(
-                      //                             margin: EdgeInsets.only(
-                      //                               left: 5.h,
-                      //                               right: 5.w,
-                      //                             ),
-                      //                             padding: EdgeInsets.only(
-                      //                               left: 5.w,
-                      //                               top: 5.h,
-                      //                               bottom: 5.h,
-                      //                               right: 10.w,
-                      //                             ),
-                      //                             height:
-                      //                                 Constant.height *
-                      //                                 0.035,
-                      //                             decoration: BoxDecoration(
-                      //                               borderRadius:
-                      //                                   BorderRadius.circular(
-                      //                                     5.r,
-                      //                                   ),
-                      //                               border: Border.all(
-                      //                                 color: Color(
-                      //                                   0xFF7A7A7A,
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                             // width: 40,
-                      //                             // height: 20,
-                      //                             child: Align(
-                      //                               alignment: Alignment
-                      //                                   .centerLeft,
-                      //                               child: FittedBox(
-                      //                                 child: SizedBox(
-                      //                                   height:
-                      //                                       Constant
-                      //                                           .height *
-                      //                                       0.03,
-                      //                                   child: Row(
-                      //                                     children: [
-                      //                                       GetIcon(
-                      //                                         text:
-                      //                                             hostel
-                      //                                                 .amenities![index] ??
-                      //                                             "noicon",
-                      //                                       ),
-                      //                                       SizedBox(
-                      //                                         width: 3,
-                      //                                       ),
-                      //                                       Text(
-                      //                                         hostel.amenities![index] ??
-                      //                                             "none",
-                      //                                       ),
-                      //                                     ],
-                      //                                   ),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           );
-                      //                         },
-                      //                       ),
-                      //                     ),
-                      //                   ],
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //             const SizedBox(width: 20),
-                      //           ],
-                      //         );
-                      //       },
-                      //     ),
-                      //   ),
                       SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
@@ -1146,433 +557,33 @@ class _HomeState extends State<Home> {
                                 size: 50.0,
                               ),
                             )
-                          : Container(
-                              color: Colors.blue,
-                              height:
-                                  Constant.height *
-                                  0.45 *topHostelsLength,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 0.h),
-                                child: HostelCard(
-                                  hostels: topHostels,
-                                  seeAllPopular: seeAllTop,
-                                  favoriteBools: topFavoriteBools,
-                                  onFavoriteTap: () {
-                                    setState(() {});
-                                  },
-                                  variant: true,
-                                ),
-                              ),
+                          : Builder(
+                              builder: (context) {
+                                debugPrint(
+                                  "topHostels length : ${topHostels.length}",
+                                );
+                                return SizedBox(
+                                  height:
+                                      Constant.height *
+                                      0.46 *
+                                      (seeAllTop ? topHostels.length : 5),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 0.h,
+                                    ),
+                                    child: HostelCard(
+                                      hostels: topHostels,
+                                      seeAllPopular: seeAllTop,
+                                      favoriteBools: topFavoriteBools,
+                                      onFavoriteTap: () {
+                                        setState(() {});
+                                      },
+                                      variant: true,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                      // SingleChildScrollView(
-                      //     child: Column(
-                      //       children: List.generate(seeAllTop ? topHostels.length : 5, (
-                      //         index,
-                      //       ) {
-                      //         Hostels topHostel = topHostels[index];
-                      //         String? string =
-                      //             topHostels[index].hostel_images?[0];
-                      //         return GestureDetector(
-                      //           onTap: () {
-                      //             Get.to(
-                      //               () => HostelDetails(hostel: topHostel),
-                      //               transition: Transition.fadeIn,
-                      //               duration: const Duration(
-                      //                 milliseconds: 800,
-                      //               ),
-                      //               curve: Curves.easeIn,
-                      //             );
-                      //           },
-                      //           child: ListTile(
-                      //             title: Center(
-                      //               child: Container(
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.start,
-                      //                   children: [
-                      //                     Container(
-                      //                       // margin: EdgeInsets.only(right: 10.h),
-                      //                       height: 145,
-                      //                       width: 330.w.clamp(0, 330),
-                      //                       decoration: BoxDecoration(
-                      //                         // color: Colors.black,
-                      //                         borderRadius:
-                      //                             BorderRadius.only(
-                      //                               topLeft:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                               topRight:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                               bottomLeft:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                               bottomRight:
-                      //                                   Radius.circular(
-                      //                                     12.r,
-                      //                                   ),
-                      //                             ),
-                      //                       ),
-                      //                       child: Stack(
-                      //                         children: [
-                      //                           Positioned(
-                      //                             top: 0,
-                      //                             right: 0,
-                      //                             left: 0,
-                      //                             child: ClipRRect(
-                      //                               borderRadius: BorderRadius.only(
-                      //                                 topLeft:
-                      //                                     Radius.circular(
-                      //                                       12.r,
-                      //                                     ),
-                      //                                 topRight:
-                      //                                     Radius.circular(
-                      //                                       12.r,
-                      //                                     ),
-                      //                                 bottomLeft:
-                      //                                     Radius.circular(
-                      //                                       12.r,
-                      //                                     ),
-                      //                                 bottomRight:
-                      //                                     Radius.circular(
-                      //                                       12.r,
-                      //                                     ),
-                      //                               ),
-                      //                               child: CachedNetworkImage(
-                      //                                 imageUrl:
-                      //                                     string ?? "",
-                      //                                 height: 145,
-                      //                                 width: 330.w.clamp(
-                      //                                   0,
-                      //                                   330,
-                      //                                 ),
-                      //                                 fit: BoxFit.cover,
-                      //                                 placeholder:
-                      //                                     (
-                      //                                       context,
-                      //                                       url,
-                      //                                     ) => SpinKitThreeBounce(
-                      //                                       color:
-                      //                                           const Color.fromARGB(
-                      //                                             255,
-                      //                                             0,
-                      //                                             239,
-                      //                                             209,
-                      //                                           ),
-                      //                                       size: 50.0,
-                      //                                     ),
-                      //                                 errorWidget:
-                      //                                     (
-                      //                                       context,
-                      //                                       url,
-                      //                                       error,
-                      //                                     ) => Icon(
-                      //                                       Icons.error,
-                      //                                     ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           Positioned(
-                      //                             top: 5.h,
-                      //                             right: 5.h,
-                      //                             // left: 0,
-                      //                             child: GestureDetector(
-                      //                               onTap: () {
-                      //                                 setState(() {});
-                      //                               },
-                      //                               child: Container(
-                      //                                 height: 35.h,
-                      //                                 width: 35.w,
-                      //                                 decoration:
-                      //                                     const BoxDecoration(
-                      //                                       color: Colors
-                      //                                           .white,
-                      //                                       shape: BoxShape
-                      //                                           .circle,
-                      //                                     ),
-                      //                                 child: Icon(
-                      //                                   size: 20.h,
-                      //                                   topHostel.ispopular!
-                      //                                       ? Icons
-                      //                                             .favorite_outlined
-                      //                                       : Icons
-                      //                                             .favorite_border_outlined,
-                      //                                   color:
-                      //                                       const Color.fromARGB(
-                      //                                         255,
-                      //                                         0,
-                      //                                         239,
-                      //                                         209,
-                      //                                       ),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                           Positioned(
-                      //                             top: 0,
-                      //                             left: 0,
-                      //                             child: Container(
-                      //                               padding:
-                      //                                   EdgeInsets.only(
-                      //                                     left: 5,
-                      //                                     right: 5,
-                      //                                   ),
-                      //                               height: 16.h,
-                      //                               // width: 45.w,
-                      //                               decoration: BoxDecoration(
-                      //                                 color:
-                      //                                     const Color.fromRGBO(
-                      //                                       50,
-                      //                                       50,
-                      //                                       50,
-                      //                                       0.5,
-                      //                                     ),
-                      //                                 borderRadius:
-                      //                                     BorderRadius.only(
-                      //                                       bottomRight:
-                      //                                           Radius.circular(
-                      //                                             12.r,
-                      //                                           ),
-                      //                                       topLeft:
-                      //                                           Radius.circular(
-                      //                                             12.r,
-                      //                                           ),
-                      //                                     ),
-                      //                               ),
-                      //                               child: Text(
-                      //                                 topHostel.ispopular!
-                      //                                     ? "popular"
-                      //                                     : "",
-                      //                                 style: TextStyle(
-                      //                                   fontSize: 12.sp
-                      //                                       .clamp(0, 12),
-                      //                                   fontWeight:
-                      //                                       FontWeight.w500,
-                      //                                   fontFamily:
-                      //                                       "Roboto",
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                     ),
-                      //                     SizedBox(height: 20),
-                      //                     SizedBox(
-                      //                       width: 330.w.clamp(0, 330),
-                      //                       child: Row(
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment
-                      //                                 .spaceBetween,
-                      //                         children: [
-                      //                           Column(
-                      //                             crossAxisAlignment:
-                      //                                 CrossAxisAlignment
-                      //                                     .start,
-                      //                             children: [
-                      //                               Text(
-                      //                                 topHostel.name,
-                      //                                 style: TextStyle(
-                      //                                   fontFamily:
-                      //                                       "Poppins",
-                      //                                   fontWeight:
-                      //                                       FontWeight.w600,
-                      //                                   fontSize: 20.sp
-                      //                                       .clamp(0, 22),
-                      //                                 ),
-                      //                               ),
-                      //                               Row(
-                      //                                 mainAxisAlignment:
-                      //                                     MainAxisAlignment
-                      //                                         .spaceBetween,
-                      //                                 children: [
-                      //                                   Row(
-                      //                                     children: [
-                      //                                       Text(
-                      //                                         "${topHostel.city}, ${topHostel.region}",
-                      //                                         style: TextStyle(
-                      //                                           fontSize: 15
-                      //                                               .sp
-                      //                                               .clamp(
-                      //                                                 0,
-                      //                                                 18,
-                      //                                               ),
-                      //                                           fontFamily:
-                      //                                               "Poppins",
-                      //                                           fontWeight:
-                      //                                               FontWeight
-                      //                                                   .w500,
-                      //                                           letterSpacing:
-                      //                                               0.15.w,
-                      //                                           color: const Color(
-                      //                                             0xFF323232,
-                      //                                           ),
-                      //                                         ),
-                      //                                       ),
-                      //                                     ],
-                      //                                   ),
-                      //                                   SizedBox(width: 5),
-                      //                                 ],
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                           Expanded(
-                      //                             child: Container(
-                      //                               // color: Colors.red,
-                      //                               child: Column(
-                      //                                 crossAxisAlignment:
-                      //                                     CrossAxisAlignment
-                      //                                         .end,
-                      //                                 children: [
-                      //                                   Align(
-                      //                                     alignment:
-                      //                                         Alignment
-                      //                                             .topRight,
-                      //                                     child: Text.rich(
-                      //                                       TextSpan(
-                      //                                         children: [
-                      //                                           TextSpan(
-                      //                                             text:
-                      //                                                 "From\n",
-                      //                                             style: TextStyle(
-                      //                                               fontWeight:
-                      //                                                   FontWeight.w500,
-                      //                                               fontSize: 12
-                      //                                                   .sp
-                      //                                                   .clamp(
-                      //                                                     0,
-                      //                                                     12,
-                      //                                                   ),
-                      //                                               color: const Color(
-                      //                                                 0xFF323232,
-                      //                                               ),
-                      //                                             ),
-                      //                                           ),
-                      //                                           TextSpan(
-                      //                                             text:
-                      //                                                 "GHS ${topHostel.amt_per_year} ",
-                      //                                             style: TextStyle(
-                      //                                               fontWeight:
-                      //                                                   FontWeight.bold, // Only "GHS" is bold
-                      //                                               fontSize: 12
-                      //                                                   .sp
-                      //                                                   .clamp(
-                      //                                                     0,
-                      //                                                     12,
-                      //                                                   ),
-                      //                                               color: const Color(
-                      //                                                 0xFF323232,
-                      //                                               ),
-                      //                                             ),
-                      //                                           ),
-                      //                                           TextSpan(
-                      //                                             text:
-                      //                                                 "\nper year",
-                      //                                             style: TextStyle(
-                      //                                               fontWeight:
-                      //                                                   FontWeight.w500,
-                      //                                               fontSize: 12
-                      //                                                   .sp
-                      //                                                   .clamp(
-                      //                                                     0,
-                      //                                                     12,
-                      //                                                   ),
-                      //                                               color: const Color(
-                      //                                                 0xFF323232,
-                      //                                               ),
-                      //                                             ),
-                      //                                           ),
-                      //                                         ],
-                      //                                       ),
-                      //                                       textAlign: TextAlign
-                      //                                           .right, // Aligns all text to the right
-                      //                                     ),
-                      //                                   ),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                     ),
-                      //                     SizedBox(height: 15),
-                      //                     SizedBox(
-                      //                       width: 330.w.clamp(0, 330),
-                      //                       height: 25,
-                      //                       child: ListView.builder(
-                      //                         scrollDirection:
-                      //                             Axis.horizontal,
-                      //                         itemCount: topHostel
-                      //                             .amenities!
-                      //                             .length,
-                      //                         itemBuilder: (context, index) {
-                      //                           return Container(
-                      //                             child: Padding(
-                      //                               padding:
-                      //                                   const EdgeInsets.symmetric(
-                      //                                     horizontal: 4.0,
-                      //                                     vertical: 0,
-                      //                                   ),
-                      //                               child: OutlinedButton(
-                      //                                 style: OutlinedButton.styleFrom(
-                      //                                   padding:
-                      //                                       EdgeInsets.symmetric(
-                      //                                         horizontal:
-                      //                                             10,
-                      //                                         vertical: 3,
-                      //                                       ),
-                      //                                   foregroundColor:
-                      //                                       Colors.black,
-                      //                                   shape: RoundedRectangleBorder(
-                      //                                     borderRadius:
-                      //                                         BorderRadius.circular(
-                      //                                           5,
-                      //                                         ),
-                      //                                   ),
-                      //                                 ),
-                      //                                 onPressed: () {},
-                      //                                 child: Container(
-                      //                                   // width: 40,
-                      //                                   // height: 20,
-                      //                                   child: Row(
-                      //                                     children: [
-                      //                                       GetIcon(
-                      //                                         text:
-                      //                                             topHostel
-                      //                                                 .amenities![index] ??
-                      //                                             "noicon",
-                      //                                       ),
-                      //                                       SizedBox(
-                      //                                         width: 3,
-                      //                                       ),
-                      //                                       Text(
-                      //                                         topHostel
-                      //                                                 .amenities![index] ??
-                      //                                             "none",
-                      //                                       ),
-                      //                                     ],
-                      //                                   ),
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           );
-                      //                         },
-                      //                       ),
-                      //                     ),
-                      //                   ],
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         );
-                      //       }),
-
-                      //       // if (topHostels[index].gender == "male") {
-                      //     ),
-                      //   ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25.w),
                         child: RichText(
@@ -1609,7 +620,7 @@ class _HomeState extends State<Home> {
                           : SizedBox(
                               // margin: EdgeInsets.only(bottom: 5.h),
                               // color: Colors.red,
-                              height: 320,
+                              height: Constant.height * 0.4,
                               // width: 225.w,
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
@@ -1619,7 +630,7 @@ class _HomeState extends State<Home> {
                                 itemBuilder: (context, index) {
                                   return Row(
                                     children: [
-                                      SizedBox(width: 25.w),
+                                      if (index == 0) SizedBox(width: 20.w),
                                       GestureDetector(
                                         onTap: () {
                                           Get.to(
@@ -1637,6 +648,7 @@ class _HomeState extends State<Home> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
                                             // height: 215.h,
+                                            width: Constant.width * 0.65,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(28.r),
@@ -1664,7 +676,7 @@ class _HomeState extends State<Home> {
                                               children: [
                                                 SizedBox(
                                                   height: 166,
-                                                  width: 245.w.clamp(0, 245),
+                                                  width: Constant.width * 0.65,
                                                   child: Stack(
                                                     children: [
                                                       Positioned(
@@ -1737,7 +749,66 @@ class _HomeState extends State<Home> {
                                                         ),
                                                       ),
                                                       Positioned(
-                                                        child: Text(""),
+                                                        left: 10.h,
+                                                        bottom: 5.h,
+                                                        child: Container(
+                                                          padding:
+                                                              EdgeInsets.symmetric(
+                                                                horizontal: 6.h,
+                                                                vertical: 2.h,
+                                                              ),
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  10.r,
+                                                                ),
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                  255,
+                                                                  255,
+                                                                  255,
+                                                                  0.5,
+                                                                ),
+                                                          ),
+                                                          height:
+                                                              Constant.height *
+                                                              0.025,
+                                                          child: Align(
+                                                            child: SizedBox(
+                                                              height:
+                                                                  Constant
+                                                                      .height *
+                                                                  0.025,
+                                                              child: FittedBox(
+                                                                child: Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .star_border_outlined,
+                                                                      color: Color(
+                                                                        0xFF00EFD1,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      "4.5",
+                                                                      style: TextStyle(
+                                                                        fontFamily:
+                                                                            "Poppins",
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        color: Color(
+                                                                          0xFF111111,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -1753,109 +824,149 @@ class _HomeState extends State<Home> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(
-                                                        hostels[index].name,
-                                                        style: TextStyle(
-                                                          color:
-                                                              const Color.fromARGB(
-                                                                150,
-                                                                0,
-                                                                0,
-                                                                0,
-                                                              ),
-                                                          fontSize: 18.sp.clamp(
-                                                            0,
-                                                            18,
-                                                          ),
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily: "Poppins",
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        hostels[index].city ??
-                                                            "",
-                                                        style: TextStyle(
-                                                          fontSize: 13.sp.clamp(
-                                                            0,
-                                                            18,
-                                                          ),
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontFamily: "Poppins",
-                                                          color: const Color(
-                                                            0xFF323232,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 10),
-                                                      Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                              text: "From",
+                                                      SizedBox(
+                                                        height:
+                                                            Constant.height *
+                                                            0.03,
+                                                        child: FittedBox(
+                                                          child: Text(
+                                                            hostels[index].name,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  const Color(
+                                                                    0xFF111111,
+                                                                  ),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  "Poppins",
                                                             ),
-                                                            TextSpan(
-                                                              text:
-                                                                  "GHS ${hostels[index].amt_per_year}/",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: SizedBox(
+                                                          height:
+                                                              Constant.height *
+                                                              0.02,
+                                                          width:
+                                                              Constant.width *
+                                                              0.8,
+                                                          child: FittedBox(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                            "${hostels[index].university}" ==  "null"? 
+                                                            "University, ${hostels[index].city}, ${hostels[index].region?? {"region"}}":
+                                                            "${hostels[index].university}, ${hostels[index].city}, ${hostels[index].region ?? {"region"}}",
                                                               style: TextStyle(
+                                                                fontSize: 13.sp
+                                                                    .clamp(
+                                                                      0,
+                                                                      18,
+                                                                    ),
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold,
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    "Poppins",
+                                                                color:
+                                                                    const Color(
+                                                                      0xFF7A7A7A,
+                                                                    ),
                                                               ),
                                                             ),
-                                                            TextSpan(
-                                                              text: "year",
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
                                                       ),
-                                                      SizedBox(height: 10),
+                                                      SizedBox(height: 5.h),
                                                       SizedBox(
-                                                        width: 220.w.clamp(
-                                                          0,
-                                                          220,
+                                                        height:
+                                                            Constant.height *
+                                                            0.025,
+                                                        child: FittedBox(
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                  text: "From ",
+                                                                ),
+                                                                TextSpan(
+                                                                  text:
+                                                                      "GHS ${hostels[index].amt_per_year}/",
+                                                                  style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                                TextSpan(
+                                                                  text: "year",
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
+                                                      ),
+                                                      SizedBox(height: 8),
+                                                      SizedBox(
+                                                        width:
+                                                            Constant.width *
+                                                            0.65,
                                                         height: 25,
                                                         child: ListView.builder(
                                                           scrollDirection:
                                                               Axis.horizontal,
                                                           itemCount:
-                                                              hostels[index]
-                                                                  .amenities!
-                                                                  .length,
+                                                              (hostels[index]
+                                                                          .amenities!
+                                                                          .length /
+                                                                      2)
+                                                                  .ceil(),
                                                           itemBuilder: (context, index2) {
                                                             return Container(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.only(
-                                                                      left: 0,
-                                                                      right:
-                                                                          4.0,
-                                                                    ),
-                                                                child: OutlinedButton(
-                                                                  style: OutlinedButton.styleFrom(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          10,
-                                                                      vertical:
-                                                                          3,
-                                                                    ),
-                                                                    foregroundColor:
-                                                                        Colors
-                                                                            .black,
-                                                                    shape: RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            5,
-                                                                          ),
-                                                                    ),
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    left: 0,
+                                                                    right: 5.w,
                                                                   ),
-                                                                  onPressed:
-                                                                      () {},
-                                                                  child: Container(
-                                                                    // width: 40,
-                                                                    // height: 20,
+                                                              padding:
+                                                                  EdgeInsets.only(
+                                                                    left: 5.w,
+                                                                    top: .5.h,
+                                                                    bottom:
+                                                                        .5.h,
+                                                                    right: 10.w,
+                                                                  ),
+                                                              height:
+                                                                  Constant
+                                                                      .height *
+                                                                  0.04,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      5.r,
+                                                                    ),
+                                                                border: Border.all(
+                                                                  color: Color(
+                                                                    0xFF7A7A7A,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              // width: 40,
+                                                              // height: 20,
+                                                              child: Align(
+                                                                alignment: Alignment
+                                                                    .centerLeft,
+                                                                child: FittedBox(
+                                                                  child: SizedBox(
+                                                                    height:
+                                                                        Constant
+                                                                            .height *
+                                                                        0.035,
                                                                     child: Row(
                                                                       children: [
                                                                         GetIcon(
@@ -1865,11 +976,130 @@ class _HomeState extends State<Home> {
                                                                         ),
                                                                         SizedBox(
                                                                           width:
-                                                                              3,
+                                                                              10,
                                                                         ),
                                                                         Text(
-                                                                          hostels[index].amenities![index2] ??
+                                                                          hostels[index].amenities![index2]?.capitalize ??
                                                                               "none",
+                                                                          style: TextStyle(
+                                                                            fontFamily:
+                                                                                "Work Sans",
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                13.sp,
+                                                                            color: Color(
+                                                                              0xFF555555,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 8),
+                                                      SizedBox(
+                                                        width:
+                                                            Constant.width *
+                                                            0.65,
+                                                        height: 25,
+                                                        child: ListView.builder(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount:
+                                                              hostels[index]
+                                                                  .amenities!
+                                                                  .length -
+                                                              ((hostels[index]
+                                                                          .amenities!
+                                                                          .length /
+                                                                      2)
+                                                                  .ceil()),
+                                                          itemBuilder: (context, index3) {
+                                                            int i =
+                                                                hostels[index]
+                                                                    .amenities!
+                                                                    .length -
+                                                                ((hostels[index]
+                                                                            .amenities!
+                                                                            .length /
+                                                                        2)
+                                                                    .ceil());
+                                                            int offset = i + 1;
+                                                            return Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    left: 0,
+                                                                    right: 5.w,
+                                                                  ),
+                                                              padding:
+                                                                  EdgeInsets.only(
+                                                                    left: 5.w,
+                                                                    top: .5.h,
+                                                                    bottom:
+                                                                        .5.h,
+                                                                    right: 10.w,
+                                                                  ),
+                                                              height:
+                                                                  Constant
+                                                                      .height *
+                                                                  0.04,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      5.r,
+                                                                    ),
+                                                                border: Border.all(
+                                                                  color: Color(
+                                                                    0xFF7A7A7A,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              // width: 40,
+                                                              // height: 20,
+                                                              child: Align(
+                                                                alignment: Alignment
+                                                                    .centerLeft,
+                                                                child: FittedBox(
+                                                                  child: SizedBox(
+                                                                    height:
+                                                                        Constant
+                                                                            .height *
+                                                                        0.035,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        GetIcon(
+                                                                          text:
+                                                                              hostels[index].amenities![index3 +
+                                                                                  offset] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                          hostels[index]
+                                                                                  .amenities![index3 +
+                                                                                      offset]
+                                                                                  ?.capitalize ??
+                                                                              "none",
+                                                                          style: TextStyle(
+                                                                            fontFamily:
+                                                                                "Work Sans",
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                13.sp,
+                                                                            color: Color(
+                                                                              0xFF555555,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ),
@@ -1924,7 +1154,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 5.h),
+                      SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25.h),
                         // padding: EdgeInsets.symmetric(horizontal: 5.h),
@@ -1936,9 +1166,10 @@ class _HomeState extends State<Home> {
                           width: 252.w,
                         ),
                       ),
+                      SizedBox(height : 20.h),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 40.h),
-                        width: 380.w,
+                        // width: 380.w,
                         // height: 40.h,
                         // color: Colors.amber,
                         child: RichText(
@@ -1966,125 +1197,168 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15.h),
+                      SizedBox(height: 25.h),
                       Container(
-                        margin: EdgeInsets.only(left: 30.h, right: 35.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/home/adviceIcon.png",
-                                  height: 22.h,
-                                  width: 22.w,
-                                ),
-                                Text(
-                                  "  Free Advice",
-                                  style: TextStyle(
-                                    fontSize: 16.sp.clamp(0, 16),
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.15.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/home/Wechat.png",
-                                  height: 30.h,
-                                  width: 30.w,
-                                ),
-                                Text(
-                                  "  Quick Response",
-                                  style: TextStyle(
-                                    fontSize: 16.sp.clamp(0, 16),
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.15.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 25.h, right: 25.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/home/customer service.png",
-                                  height: 30.h,
-                                  width: 30.w,
-                                ),
-                                Text(
-                                  "  24/7 support",
-                                  style: TextStyle(
-                                    fontSize: 16.sp.clamp(0, 16),
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.15.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "assets/home/helpIcon.png",
-                                  height: 30.h,
-                                  width: 30.w,
-                                ),
-                                Text(
-                                  "  Helped 2M+ students",
-                                  style: TextStyle(
-                                    fontSize: 16.sp.clamp(0, 16),
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0.15.w,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 40.h),
+                        // color: Colors.red,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 7),
-                              height: 35.h,
+                              width: Constant.width*0.5,
+                              height: Constant.height * 0.03,
+                              padding: EdgeInsets.only(left: 25.h),
+                              // color: Colors.green,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/home/advice icon.png",
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                  SizedBox(
+                                    height: Constant.height * 0.025,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "  Free Advice",
+                                        style: TextStyle(
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: Constant.width*0.5,
+                              height: Constant.height * 0.03,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/home/quick response.png",
+                                    fit: BoxFit.contain
+                                  ),
+                                  SizedBox(
+                                    height: Constant.height * 0.025,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "  Quick Response",
+                                        style: TextStyle(
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15.h),
+                      Container(
+                        // color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: Constant.width*0.5,
+                              height: Constant.height * 0.03,
+                              padding: EdgeInsets.only(left: 25.h),
+                              // color: Colors.green,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/home/247 support.png",
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                  SizedBox(
+                                    height: Constant.height * 0.025,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "  24/7 support",
+                                        style: TextStyle(
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: Constant.width*0.5,
+                              height: Constant.height * 0.03,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/home/help.png",
+                                    fit: BoxFit.contain
+                                  ),
+                                  SizedBox(
+                                    height: Constant.height * 0.025,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "  Helped 1k+ students",
+                                        style: TextStyle(
+                                          fontSize: 16.sp.clamp(0, 16),
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                     SizedBox(height: 35.h),
+                      Container(
+                        margin: EdgeInsets.only(left: 30.h, right: 50.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 30.h),
+                              height: Constant.height * 0.045,
                               // width: 130.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                border: Border.all(
-                                  width: 1.5.w,
-                                  color: Colors.black,
-                                ),
+                                borderRadius: BorderRadius.circular(20.r),
+                                color: Color(0xFF00EFD1)
                               ),
                               child: Align(
                                 child: Row(
                                   children: [
-                                    Image.asset(
-                                      "assets/home/whatsAppIcon.png",
-                                      height: 20.h,
-                                      width: 20.w,
+                                    SizedBox(
+                                      child: Image.asset(
+                                        "assets/home/whatsapp icon.png",
+                                        height: 20.h,
+                                        width: 20.w,
+                                      ),
                                     ),
-                                    Text(
-                                      " whatsapp Us",
-                                      style: TextStyle(
-                                        fontFamily: "Work Sans",
-                                        fontSize: 14.sp.clamp(0, 14),
-                                        fontWeight: FontWeight.w600,
+                                    SizedBox(
+                                      height: Constant.height * 0.022,
+                                      child: FittedBox(
+                                        child: Text(
+                                          " Whatsapp Us",
+                                          style: TextStyle(
+                                            fontFamily: "Plus Jakarta Sans",
+                                            fontSize: 14.sp.clamp(0, 14),
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -2092,30 +1366,34 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 3.h),
-                              height: 35.h,
+                              padding: EdgeInsets.symmetric(horizontal: 15.h),
+                              height: Constant.height * 0.045,
                               // width: 130.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                border: Border.all(
-                                  width: 1.5.w,
-                                  color: Colors.black,
-                                ),
+                                borderRadius: BorderRadius.circular(20.r),
+                                color: Color(0xFFEDEDED)
                               ),
                               child: Align(
                                 child: Row(
                                   children: [
-                                    Image.asset(
-                                      "assets/home/speakIcon.png",
-                                      height: 20.h,
-                                      width: 20.w,
+                                    SizedBox(
+                                      child: Image.asset(
+                                        "assets/home/customer-service.png",
+                                        height: 20.h,
+                                        width: 20.w,
+                                      ),
                                     ),
-                                    Text(
-                                      " Speak to an Expert",
-                                      style: TextStyle(
-                                        fontFamily: "Work Sans",
-                                        fontSize: 14.sp.clamp(0, 14),
-                                        fontWeight: FontWeight.w600,
+                                    SizedBox(
+                                      height: Constant.height * 0.02,
+                                      child: FittedBox(
+                                        child: Text(
+                                          " Speak to an Expert",
+                                          style: TextStyle(
+                                            fontFamily: "Plus Jakarta Sans",
+                                            fontSize: 14.sp.clamp(0, 14),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
