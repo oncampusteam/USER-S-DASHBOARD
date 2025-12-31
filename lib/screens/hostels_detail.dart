@@ -1,21 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:on_campus/classes/constants.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/classes.dart';
-import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
-import 'package:on_campus/screens/enquire.dart';
-import 'package:on_campus/screens/get_icon.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:on_campus/classes/classes.dart';
+import 'package:on_campus/screens/enquire.dart';
+import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/screens/get_icon.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 class HostelDetails extends StatefulWidget {
   final Hostels hostel;
@@ -41,6 +41,21 @@ class _HostelDetailsState extends State<HostelDetails> {
   final Map<String, GlobalKey> _sectionKeys = {};
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
+
+  String roomTypeText(String string) {
+    if (string == "2in1") return "2 in a";
+    if (string == "1in1") return "1 in a";
+    if (string == "3in1") return "3 in a";
+    if (string == "4in1") return "4 in a";
+    if (string == "5in1") return "5 in a";
+    if (string == "6in1") return "6 in a";
+    if (string == "7in1") return "7 in a";
+    if (string == "8in1") return "8 in a";
+    if (string == "9in1") return "9 in a";
+    if (string == "10in1") return "10 in a";
+
+    return "";
+  }
 
   Future<void> getRoomTypes() async {
     setState(() {
@@ -1318,7 +1333,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               children: [
                                                 Container(
                                                   // color: Colors.green,
-                                                  height: Constant.height * 0.05,
+                                                  height:
+                                                      Constant.height * 0.05,
                                                   width: Constant.width * 0.65,
                                                   child: FittedBox(
                                                     alignment:
@@ -1345,7 +1361,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       // SizedBox(height: 5.h),
                                                       Row(
@@ -1356,7 +1373,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           Container(
                                                             // color: Colors.pink,
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.09,
                                                             width:
                                                                 Constant.width *
@@ -1378,12 +1396,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     children: [
                                                                       SizedBox(
                                                                         height:
-                                                                            Constant
-                                                                                .height *
+                                                                            Constant.height *
                                                                             0.04,
                                                                         width:
-                                                                            Constant
-                                                                                .width *
+                                                                            Constant.width *
                                                                             0.06,
                                                                         child: Image.asset(
                                                                           "assets/hostels_detail/location_white.png",
@@ -1393,19 +1409,15 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       ),
                                                                       SizedBox(
                                                                         height:
-                                                                            Constant
-                                                                                .height *
+                                                                            Constant.height *
                                                                             0.02,
                                                                         child: FittedBox(
                                                                           child: Text(
                                                                             "${widget.hostel.city}, ${widget.hostel.region} Region",
                                                                             style: TextStyle(
-                                                                              fontFamily:
-                                                                                  "Roboto",
-                                                                              fontWeight:
-                                                                                  FontWeight.w500,
-                                                                              color:
-                                                                                  Colors.white,
+                                                                              fontFamily: "Roboto",
+                                                                              fontWeight: FontWeight.w500,
+                                                                              color: Colors.white,
                                                                               fontSize: 12.sp.clamp(
                                                                                 0,
                                                                                 12,
@@ -1474,8 +1486,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               0.045,
                                                                           child: Image.asset(
                                                                             "assets/hostels_detail/University_white.png",
-                                                                            fit: BoxFit
-                                                                                .contain,
+                                                                            fit:
+                                                                                BoxFit.contain,
                                                                           ),
                                                                         ),
                                                                         SizedBox(
@@ -1510,17 +1522,20 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                         children: [
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.03,
                                                             child: const Icon(
                                                               Icons
                                                                   .directions_walk_sharp,
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                           ),
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.025,
                                                             child: FittedBox(
                                                               child: Text(
@@ -1534,7 +1549,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           .w500,
                                                                   color: Colors
                                                                       .white,
-                                                                  fontSize: 12.sp
+                                                                  fontSize: 12
+                                                                      .sp
                                                                       .clamp(
                                                                         0,
                                                                         12,
@@ -1546,7 +1562,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           10.horizontalSpace,
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.025,
                                                             child: Image.asset(
                                                               "assets/hostels_detail/driving.png",
@@ -1556,7 +1573,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           ),
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.025,
                                                             child: FittedBox(
                                                               child: Text(
@@ -1564,7 +1582,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 style: TextStyle(
                                                                   color: Colors
                                                                       .white,
-                                                                  fontSize: 11.sp
+                                                                  fontSize: 11
+                                                                      .sp
                                                                       .clamp(
                                                                         0,
                                                                         11,
@@ -1576,7 +1595,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           10.horizontalSpace,
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.025,
                                                             child: FittedBox(
                                                               child: Image.asset(
@@ -1588,7 +1608,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           ),
                                                           SizedBox(
                                                             height:
-                                                                Constant.height *
+                                                                Constant
+                                                                    .height *
                                                                 0.025,
                                                             child: FittedBox(
                                                               child: Text(
@@ -1596,7 +1617,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 style: TextStyle(
                                                                   color: Colors
                                                                       .white,
-                                                                  fontSize: 11.sp
+                                                                  fontSize: 11
+                                                                      .sp
                                                                       .clamp(
                                                                         0,
                                                                         11,
@@ -1853,7 +1875,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   color: const Color(0xFFF5F8FF),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color.fromRGBO(158, 158, 158, 0.5),
+                                      color: const Color.fromRGBO(
+                                        158,
+                                        158,
+                                        158,
+                                        0.5,
+                                      ),
                                       spreadRadius: 3.r,
                                       blurRadius: 8.r,
                                       // offset: Offset(0, 2),
@@ -1978,539 +2005,577 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 ),
                               ),
                               SizedBox(height: 20.h),
+
+                              /// Amenities
+                              ///  &
+                              /// Bills & Utilities
+                              /// &
+                              /// Security
                               Container(
-                                color: const Color.fromRGBO(255, 255, 255, 1),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 30.w,
-                                    vertical: 10.h,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        key: _sectionKeys["Amenities"],
-                                        child: Text(
-                                          "Amenities",
-                                          style: TextStyle(
-                                            fontSize: 20.sp.clamp(0, 20),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      // Row()
-                                      SingleChildScrollView(
-                                        child: GridView.count(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 1,
-                                          childAspectRatio: 4.0,
-                                          children: [
-                                            ...List.generate(3, (index) {
-                                              return Row(
-                                                children: [
-                                                  GetIcon(
-                                                    text:
-                                                        widget
-                                                            .hostel
-                                                            .amenities![index] ??
-                                                        "noicon",
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text(
-                                                    widget
-                                                            .hostel
-                                                            .amenities![index] ??
-                                                        "",
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                            GestureDetector(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Container(
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(
-                                                          bottom: MediaQuery.of(
-                                                            context,
-                                                          ).viewInsets.bottom,
-                                                        ),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            Container(
-                                                              height: 4,
-                                                              width: 30,
-                                                              margin:
-                                                                  EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        15,
-                                                                  ),
-                                                              decoration: BoxDecoration(
-                                                                color:
-                                                                    const Color.fromARGB(
-                                                                      255,
-                                                                      75,
-                                                                      74,
-                                                                      74,
-                                                                    ),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      2,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              "Amenities",
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        8.0,
-                                                                    horizontal:
-                                                                        30,
-                                                                  ),
-                                                              child: Divider(
-                                                                height: 10,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          30.0,
-                                                                      vertical:
-                                                                          10,
-                                                                    ),
-                                                                child: GridView.count(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  mainAxisSpacing:
-                                                                      1,
-                                                                  physics:
-                                                                      NeverScrollableScrollPhysics(),
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  childAspectRatio:
-                                                                      4.0,
-                                                                  children: List.generate(
-                                                                    widget
-                                                                        .hostel
-                                                                        .amenities!
-                                                                        .length,
-                                                                    (index) {
-                                                                      return Row(
-                                                                        children: [
-                                                                          getIcon(
-                                                                            text:
-                                                                                widget.hostel.amenities![index] ??
-                                                                                "noicon",
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                5,
-                                                                          ),
-                                                                          Text(
-                                                                            widget.hostel.amenities![index]?.capitalize ??
-                                                                                "",
-                                                                          ),
-                                                                        ],
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text("More"),
-                                                ],
-                                              ),
+                                // color: const Color.fromRGBO(255, 255, 255, 1),
+                                // color: Colors.green,
+                                padding: EdgeInsets.symmetric(horizontal: 25.h),
+                                child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      key: _sectionKeys["Amenities"],
+                                      child: SizedBox(
+                                        height: Constant.height * 0.035,
+                                        child: FittedBox(
+                                          child: Text(
+                                            "Amenities",
+                                            style: TextStyle(
+                                              fontSize: 20.sp.clamp(0, 20),
+                                              fontWeight: FontWeight.w600,
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "Bills & Utilities",
-                                          style: TextStyle(
-                                            letterSpacing: 0.15.w,
-                                            fontSize: 16.sp.clamp(0, 16),
-                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-
-                                      SizedBox(height: 10.h),
-                                      SingleChildScrollView(
-                                        child: GridView.count(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 1,
-                                          childAspectRatio: 4.0,
-                                          // padding: EdgeInsets.zero,
-                                          children: [
-                                            ...List.generate(3, (index) {
-                                              return Row(
-                                                children: [
-                                                  GetIcon(
-                                                    text:
-                                                        widget
-                                                            .hostel
-                                                            .bills_utilities![index] ??
-                                                        "noicon",
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text(
-                                                    widget
-                                                            .hostel
-                                                            .bills_utilities![index]?.capitalize??
-                                                        "",
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                            GestureDetector(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Container(
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(
-                                                          bottom: MediaQuery.of(
-                                                            context,
-                                                          ).viewInsets.bottom,
-                                                        ),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            Container(
-                                                              height: 4,
-                                                              width: 30,
-                                                              margin:
-                                                                  EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        15,
-                                                                  ),
-                                                              decoration: BoxDecoration(
-                                                                color:
-                                                                    const Color.fromARGB(
-                                                                      255,
-                                                                      75,
-                                                                      74,
-                                                                      74,
-                                                                    ),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      2,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              "Bills & Utilities",
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        8.0,
-                                                                    horizontal:
-                                                                        30,
-                                                                  ),
-                                                              child: Divider(
-                                                                height: 10,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          30.0,
-                                                                      vertical:
-                                                                          10,
-                                                                    ),
-                                                                child: GridView.count(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  mainAxisSpacing:
-                                                                      1,
-                                                                  physics:
-                                                                      NeverScrollableScrollPhysics(),
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  childAspectRatio:
-                                                                      4.0,
-                                                                  children: List.generate(
-                                                                    widget
-                                                                        .hostel
-                                                                        .bills_utilities!
-                                                                        .length,
-                                                                    (index) {
-                                                                      return Row(
-                                                                        children: [
-                                                                          getIcon(
-                                                                            text:
-                                                                                widget.hostel.bills_utilities![index] ??
-                                                                                "noicon",
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                5,
-                                                                          ),
-                                                                          Text(
-                                                                            widget.hostel.bills_utilities![index] ??
-                                                                                "",
-                                                                          ),
-                                                                        ],
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text("More"),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 10.h),
-
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "Security & Safety",
-                                          style: TextStyle(
-                                            fontSize: 16.sp.clamp(0, 16),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      SingleChildScrollView(
-                                        child: GridView.count(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 1,
-                                          childAspectRatio: 4.0,
-                                          // padding: EdgeInsets.zero,
-                                          children: [
-                                            ...List.generate(3, (index) {
-                                              return Row(
-                                                children: [
-                                                  GetIcon(
-                                                    text:
-                                                        widget
-                                                            .hostel
-                                                            .security_safety![index] ??
-                                                        "noicon",
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Expanded(
-                                                    child: Text(
+                                    ),
+                                    // SizedBox(height: 10.h),
+                                    // Row()
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
                                                       widget
-                                                              .hostel
-                                                              .security_safety![index]?.capitalize??
-                                                          "",
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                            GestureDetector(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Container(
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(
-                                                          bottom: MediaQuery.of(
-                                                            context,
-                                                          ).viewInsets.bottom,
-                                                        ),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            Container(
-                                                              height: 4,
-                                                              width: 30,
-                                                              margin:
-                                                                  EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        15,
+                                                          .hostel
+                                                          .amenities![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  widget
+                                                          .hostel
+                                                          .amenities![index]
+                                                          ?.capitalize ??
+                                                      "",
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Container(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom,
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            height: 4,
+                                                            width: 30,
+                                                            margin:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical: 15,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  const Color.fromARGB(
+                                                                    255,
+                                                                    75,
+                                                                    74,
+                                                                    74,
                                                                   ),
-                                                              decoration: BoxDecoration(
-                                                                color:
-                                                                    const Color.fromARGB(
-                                                                      255,
-                                                                      75,
-                                                                      74,
-                                                                      74,
-                                                                    ),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      2,
-                                                                    ),
-                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    2,
+                                                                  ),
                                                             ),
-                                                            Text(
-                                                              "Security & Safety",
-                                                              style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
+                                                          ),
+                                                          Text(
+                                                            "Amenities",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                             ),
-                                                            Padding(
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  vertical: 8.0,
+                                                                  horizontal:
+                                                                      30,
+                                                                ),
+                                                            child: Divider(
+                                                              height: 10,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
                                                               padding:
                                                                   const EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        8.0,
                                                                     horizontal:
-                                                                        30,
+                                                                        30.0,
+                                                                    vertical:
+                                                                        10,
                                                                   ),
-                                                              child: Divider(
-                                                                height: 10,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          30.0,
-                                                                      vertical:
-                                                                          10,
-                                                                    ),
-                                                                child: GridView.count(
-                                                                  crossAxisCount:
-                                                                      2,
-                                                                  mainAxisSpacing:
-                                                                      1,
-                                                                  physics:
-                                                                      NeverScrollableScrollPhysics(),
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  childAspectRatio:
-                                                                      4.0,
-                                                                  children: List.generate(
-                                                                    widget
-                                                                        .hostel
-                                                                        .security_safety!
-                                                                        .length,
-                                                                    (index) {
-                                                                      return Row(
-                                                                        children: [
-                                                                          getIcon(
-                                                                            text:
-                                                                                widget.hostel.security_safety![index] ??
-                                                                                "noicon",
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                5,
-                                                                          ),
-                                                                          Expanded(
+                                                              child: GridView.count(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                mainAxisSpacing:
+                                                                    1,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                shrinkWrap:
+                                                                    true,
+                                                                childAspectRatio:
+                                                                    4.0,
+                                                                children: List.generate(
+                                                                  widget
+                                                                      .hostel
+                                                                      .amenities!
+                                                                      .length,
+                                                                  (index) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        getIcon(
+                                                                          text:
+                                                                              widget.hostel.amenities![index] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              Constant.height *
+                                                                              0.025,
+                                                                          child: FittedBox(
                                                                             child: Text(
-                                                                              widget.hostel.security_safety![index]?.capitalize ??
+                                                                              widget.hostel.amenities![index]?.capitalize ??
                                                                                   "",
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      );
-                                                                    },
-                                                                  ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
                                                                 ),
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text("More"),
-                                                ],
-                                              ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
                                             ),
-                                          ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: SizedBox(
+                                        height: Constant.height * 0.032,
+                                        child: FittedBox(
+                                          child: Text(
+                                            "Bills & Utilities",
+                                            style: TextStyle(
+                                              letterSpacing: 0.15.w,
+                                              fontSize: 16.sp.clamp(0, 16),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ),
+                                    ),
 
-                                      SizedBox(height: 10.h),
-                                    ],
-                                  ),
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        // padding: EdgeInsets.zero,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
+                                                      widget
+                                                          .hostel
+                                                          .bills_utilities![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                SizedBox(
+                                                  height:
+                                                      Constant.height * 0.025,
+                                                  child: Text(
+                                                    widget
+                                                            .hostel
+                                                            .bills_utilities![index]
+                                                            ?.capitalize ??
+                                                        "",
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Container(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom,
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            height: 4,
+                                                            width: 30,
+                                                            margin:
+                                                                EdgeInsets.symmetric(
+                                                                  vertical: 15,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              color:
+                                                                  const Color.fromARGB(
+                                                                    255,
+                                                                    75,
+                                                                    74,
+                                                                    74,
+                                                                  ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    2,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Bills & Utilities",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  vertical: 8.0,
+                                                                  horizontal:
+                                                                      30,
+                                                                ),
+                                                            child: Divider(
+                                                              height: 10,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        30.0,
+                                                                    vertical:
+                                                                        10,
+                                                                  ),
+                                                              child: GridView.count(
+                                                                crossAxisCount:
+                                                                    2,
+                                                                mainAxisSpacing:
+                                                                    1,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                shrinkWrap:
+                                                                    true,
+                                                                childAspectRatio:
+                                                                    4.0,
+                                                                children: List.generate(
+                                                                  widget
+                                                                      .hostel
+                                                                      .bills_utilities!
+                                                                      .length,
+                                                                  (index) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        getIcon(
+                                                                          text:
+                                                                              widget.hostel.bills_utilities![index] ??
+                                                                              "noicon",
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              Constant.height *
+                                                                              0.025,
+                                                                          child: FittedBox(
+                                                                            child: Text(
+                                                                              widget.hostel.bills_utilities![index]?.capitalize ??
+                                                                                  "",
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h),
+
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: SizedBox(
+                                        height: Constant.height * 0.033,
+                                        child: FittedBox(
+                                          child: Text(
+                                            "Security & Safety",
+                                            style: TextStyle(
+                                              fontSize: 16.sp.clamp(0, 16),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // SizedBox(height: 10.h),
+                                    SingleChildScrollView(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 1,
+                                        childAspectRatio: 4.0,
+                                        // padding: EdgeInsets.zero,
+                                        children: [
+                                          ...List.generate(3, (index) {
+                                            return Row(
+                                              children: [
+                                                GetIcon(
+                                                  text:
+                                                      widget
+                                                          .hostel
+                                                          .security_safety![index] ??
+                                                      "noicon",
+                                                ),
+                                                SizedBox(width: 5),
+                                                SizedBox(
+                                                  height:
+                                                      Constant.height * 0.025,
+                                                  child: FittedBox(
+                                                    child: Text(
+                                                      widget
+                                                              .hostel
+                                                              .security_safety![index]
+                                                              ?.capitalize ??
+                                                          "",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(
+                                                      bottom: MediaQuery.of(
+                                                        context,
+                                                      ).viewInsets.bottom,
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Container(
+                                                          height: 4,
+                                                          width: 30,
+                                                          margin:
+                                                              EdgeInsets.symmetric(
+                                                                vertical: 15,
+                                                              ),
+                                                          decoration: BoxDecoration(
+                                                            color:
+                                                                const Color.fromARGB(
+                                                                  255,
+                                                                  75,
+                                                                  74,
+                                                                  74,
+                                                                ),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  2,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Security & Safety",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                vertical: 8.0,
+                                                                horizontal: 30,
+                                                              ),
+                                                          child: Divider(
+                                                            height: 10,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      30.0,
+                                                                  vertical: 10,
+                                                                ),
+                                                            child: GridView.count(
+                                                              crossAxisCount: 2,
+                                                              mainAxisSpacing:
+                                                                  1,
+                                                              physics:
+                                                                  NeverScrollableScrollPhysics(),
+                                                              shrinkWrap: true,
+                                                              childAspectRatio:
+                                                                  4.0,
+                                                              children: List.generate(
+                                                                widget
+                                                                    .hostel
+                                                                    .security_safety!
+                                                                    .length,
+                                                                (index) {
+                                                                  return Row(
+                                                                    children: [
+                                                                      getIcon(
+                                                                        text:
+                                                                            widget.hostel.security_safety![index] ??
+                                                                            "noicon",
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            Constant.height *
+                                                                            0.025,
+                                                                        child: FittedBox(
+                                                                          child: Text(
+                                                                            widget.hostel.security_safety![index]?.capitalize ??
+                                                                                "",
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                  width: 20,
+                                                  height: 20,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text("More"),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.h),
+                                  ],
                                 ),
                               ),
+
+                              // /// Amenities
+                              ///  &
+                              /// Bills & Utilities
+                              /// &
+                              /// Security
+                              ///
+                              ///
                               SizedBox(height: 20.h),
                               Container(
                                 color: Colors.white,
@@ -2526,11 +2591,16 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "Room Types(${roomTypes.length})",
-                                          style: TextStyle(
-                                            fontSize: 20.sp.clamp(0, 20),
-                                            fontWeight: FontWeight.w600,
+                                        SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "Room Types(${roomTypes.length})",
+                                              style: TextStyle(
+                                                fontSize: 20.sp.clamp(0, 20),
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(height: 5.h),
@@ -2602,12 +2672,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                         foregroundColor:
                                                             Colors.black,
                                                         backgroundColor:
-                                                            Color.fromARGB(
-                                                              255,
+                                                            Color.fromRGBO(
                                                               223,
                                                               224,
                                                               224,
-                                                            ).withOpacity(0.4),
+                                                              0.4,
+                                                            ),
                                                       ),
                                                       onPressed: () {
                                                         _scrollToSection(
@@ -2615,7 +2685,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                         );
                                                       },
                                                       child: Text(
-                                                        "${rooms.type} Room",
+                                                        "${roomTypeText(rooms.type ?? "")} Room",
                                                       ),
                                                     ),
                                                   ),
@@ -2649,17 +2719,24 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           return Column(
                                             children: [
                                               Container(
+                                                color: Colors.red,
                                                 key: _sectionKeys[room.type],
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 30.w,
-                                                    vertical: 20.h,
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                // color: Colors.white,
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 30.w,
+                                                  // vertical: 20.h,
+                                                ),
+                                                margin: EdgeInsets.symmetric(
+                                                  vertical: 20.h,
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      // color: Colors.green,
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           ClipRRect(
                                                             borderRadius:
@@ -2667,13 +2744,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   20,
                                                                 ).r,
                                                             child: SizedBox(
-                                                              height: Constant.height * 0.12,
-                                                              width: Constant.width * 0.25,
+                                                              height:
+                                                                  Constant
+                                                                      .height *
+                                                                  0.1,
+                                                              width:
+                                                                  Constant
+                                                                      .width *
+                                                                  0.25,
                                                               child: FittedBox(
                                                                 child: Image.asset(
                                                                   "assets/hostels_detail/roomTypeImage.png",
-                                                                  
-                                                                  fit: BoxFit.cover,
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                 ),
                                                               ),
                                                             ),
@@ -2686,11 +2769,15 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       .start,
                                                               children: [
                                                                 SizedBox(
-                                                                  width: Constant.width * 0.65,
+                                                                  // width:
+                                                                  //     Constant
+                                                                  //         .width *
+                                                                  //     0.7,
                                                                   child: FittedBox(
                                                                     child: Text(
-                                                                      "${room.type} Room Bedroom Apartment",
-                                                                      maxLines: 2,
+                                                                      "${roomTypeText(room.type ?? "")} Room Bedroom Apartment",
+                                                                      maxLines:
+                                                                          2,
                                                                       style: TextStyle(
                                                                         fontSize: 16
                                                                             .sp
@@ -2700,8 +2787,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             ),
                                                                         // letterSpacing: 0.2.w,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
+                                                                            FontWeight.w600,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -2710,31 +2796,45 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   height: 5.h,
                                                                 ),
                                                                 SizedBox(
-                                                                  height: Constant.height * 0.03,
+                                                                  height:
+                                                                      Constant
+                                                                          .height *
+                                                                      0.03,
                                                                   child: FittedBox(
                                                                     child: SizedBox(
                                                                       child: Row(
                                                                         children: [
                                                                           Text(
-                                                                            "¢${room.price}/",
+                                                                            "From ",
                                                                             style: TextStyle(
-                                                                              fontSize: 18
-                                                                                  .sp
-                                                                                  .clamp(
-                                                                                    0,
-                                                                                    18,
-                                                                                  ),
+                                                                              fontSize: 12.sp.clamp(
+                                                                                0,
+                                                                                12,
+                                                                              ),
+                                                                              fontFamily: "Inter",
+                                                                              fontWeight: FontWeight.w500,
                                                                             ),
                                                                           ),
                                                                           Text(
-                                                                            "Academic Year",
+                                                                            "¢${room.price}",
                                                                             style: TextStyle(
-                                                                              fontSize: 12
-                                                                                  .sp
-                                                                                  .clamp(
-                                                                                    0,
-                                                                                    12,
-                                                                                  ),
+                                                                              fontSize: 18.sp.clamp(
+                                                                                0,
+                                                                                18,
+                                                                              ),
+                                                                              fontFamily: "Poppins",
+                                                                              fontWeight: FontWeight.w600,
+                                                                            ),
+                                                                          ),
+                                                                          Text(
+                                                                            "/ year",
+                                                                            style: TextStyle(
+                                                                              fontSize: 11.sp.clamp(
+                                                                                0,
+                                                                                11,
+                                                                              ),
+                                                                              fontFamily: "Poppins",
+                                                                              fontWeight: FontWeight.w500,
                                                                             ),
                                                                           ),
                                                                         ],
@@ -2775,8 +2875,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           )
                                                                         : Container(
                                                                             decoration: BoxDecoration(
-                                                                              color:
-                                                                                  const Color.fromRGBO(35, 162, 109, 1),
+                                                                              color: const Color.fromRGBO(
+                                                                                35,
+                                                                                162,
+                                                                                109,
+                                                                                1,
+                                                                              ),
                                                                               borderRadius: BorderRadius.circular(
                                                                                 15.r,
                                                                               ),
@@ -2809,126 +2913,17 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           // Image.asset("assets/hostels_detail/bed.jpeg"),
                                                         ],
                                                       ),
-                                                      SizedBox(height: 10.h),
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.4,
-                                                            child: Row(
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/hostels_detail/home.png",
-                                                                  height: 24.h,
-                                                                  width: 24.w,
-                                                                ),
-                                                                Container(
-                                                                  margin:
-                                                                      EdgeInsets.only(
-                                                                        top:
-                                                                            5.h,
-                                                                      ),
-                                                                  child: Text(
-                                                                    " Bedroom 1",
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                          "Work Sans",
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      color: const Color(
-                                                                        0xFF323232,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              Image.asset(
-                                                                "assets/hostels_detail/bathtub.png",
-                                                                height: 24.h,
-                                                                width: 24.w,
-                                                              ),
-                                                              Container(
-                                                                margin:
-                                                                    EdgeInsets.only(
-                                                                      top: 5.h,
-                                                                    ),
-                                                                child: Text(
-                                                                  " Bathroom 1",
-                                                                  style: TextStyle(
-                                                                    fontFamily:
-                                                                        "Work Sans",
-                                                                    fontSize: 14
-                                                                        .sp
-                                                                        .clamp(
-                                                                          0,
-                                                                          14,
-                                                                        ),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: const Color(
-                                                                      0xFF323232,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 20.h),
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.4,
-                                                            child: Row(
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/hostels_detail/bed.png",
-                                                                  height: 24.h,
-                                                                  width: 24.w,
-                                                                ),
-                                                                Text(
-                                                                  " 2 Beds",
-                                                                  style: TextStyle(
-                                                                    fontFamily:
-                                                                        "Work Sans",
-                                                                    color: const Color(
-                                                                      0xFF323232,
-                                                                    ),
-                                                                    fontSize: 14
-                                                                        .sp
-                                                                        .clamp(
-                                                                          0,
-                                                                          14,
-                                                                        ),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Row(
+                                                    ),
+                                                    SizedBox(height: 10.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Row(
                                                             children: [
                                                               Image.asset(
                                                                 "assets/hostels_detail/home.png",
@@ -2941,7 +2936,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       top: 5.h,
                                                                     ),
                                                                 child: Text(
-                                                                  " Private Bedroom",
+                                                                  " Bedroom 1",
                                                                   style: TextStyle(
                                                                     fontFamily:
                                                                         "Work Sans",
@@ -2954,65 +2949,103 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
+                                                                    color: const Color(
+                                                                      0xFF323232,
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 20.h),
-                                                      Row(
-                                                        children: [
-                                                          Container(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.35,
-                                                            child: Container(
-                                                              height: 55.h,
-                                                              decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      16.r,
-                                                                    ),
-                                                                border: Border.all(
-                                                                  width: 1,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                              ),
-                                                              child: Center(
-                                                                child: SizedBox(
-                                                                  width: Constant.width * 0.3,
-                                                                  child: FittedBox(
-                                                                    child: Text(
-                                                                      "View more details",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/bathtub.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    top: 5.h,
+                                                                  ),
+                                                              child: Text(
+                                                                " Bathroom 1",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Work Sans",
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
                                                                       ),
-                                                                    ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: const Color(
+                                                                    0xFF323232,
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          SizedBox(width: 40.h),
-                                                          Row(
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Row(
                                                             children: [
                                                               Image.asset(
-                                                                "assets/hostels_detail/kitchen.png",
+                                                                "assets/hostels_detail/bed.png",
                                                                 height: 24.h,
                                                                 width: 24.w,
                                                               ),
                                                               Text(
-                                                                " Private Kitchen",
+                                                                " 2 Beds",
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Work Sans",
+                                                                  color: const Color(
+                                                                    0xFF323232,
+                                                                  ),
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/home.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                    top: 5.h,
+                                                                  ),
+                                                              child: Text(
+                                                                " Private Bedroom",
                                                                 style: TextStyle(
                                                                   fontFamily:
                                                                       "Work Sans",
@@ -3027,266 +3060,351 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           .w500,
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 20.h),
-                                                      Divider(
-                                                        color:
-                                                            const Color.fromRGBO(
-                                                              120,
-                                                              120,
-                                                              120,
-                                                              0.7,
                                                             ),
-                                                        height: .2.h,
-                                                      ),
-                                                      SizedBox(height: 20.h),
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.4,
-                                                            child: Text(
-                                                              "Academic Year",
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.35,
+                                                          child: Container(
+                                                            height: 55.h,
+                                                            decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    16.r,
+                                                                  ),
+                                                              border: Border.all(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            child: Center(
+                                                              child: SizedBox(
+                                                                width:
+                                                                    Constant
+                                                                        .width *
+                                                                    0.3,
+                                                                child: FittedBox(
+                                                                  child: Text(
+                                                                    "View more details",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 40.h),
+                                                        Row(
+                                                          children: [
+                                                            Image.asset(
+                                                              "assets/hostels_detail/kitchen.png",
+                                                              height: 24.h,
+                                                              width: 24.w,
+                                                            ),
+                                                            Text(
+                                                              " Private Kitchen",
                                                               style: TextStyle(
-                                                                fontSize: 15.sp
+                                                                fontFamily:
+                                                                    "Work Sans",
+                                                                fontSize: 14.sp
                                                                     .clamp(
                                                                       0,
-                                                                      15,
+                                                                      14,
                                                                     ),
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w600,
+                                                                        .w500,
                                                               ),
                                                             ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Divider(
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                            120,
+                                                            120,
+                                                            120,
+                                                            0.7,
                                                           ),
-                                                          Text(
-                                                            "Move in: 08 Aug 2024",
+                                                      height: .2.h,
+                                                    ),
+                                                    SizedBox(height: 20.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Text(
+                                                            "Academic Year",
                                                             style: TextStyle(
-                                                              fontSize: 13.sp
-                                                                  .clamp(0, 13),
-                                                              color:
-                                                                  const Color(
-                                                                    0xFF323232,
-                                                                  ),
+                                                              fontSize: 15.sp
+                                                                  .clamp(0, 15),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 15.h),
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.4,
+                                                        ),
+                                                        Text(
+                                                          "Move in: 08 Aug 2024",
+                                                          style: TextStyle(
+                                                            fontSize: 13.sp
+                                                                .clamp(0, 13),
+                                                            color: const Color(
+                                                              0xFF323232,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 15.h),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.4,
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Column(
+                                                              children: [
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
+                                                                  child: Text(
+                                                                    "Price Estimate",
+                                                                    style: TextStyle(
+                                                                      fontSize: 12
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
+                                                                      letterSpacing:
+                                                                          0.2.w,
+                                                                      color: const Color(
+                                                                        0xFF787878,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                // SizedBox(
+                                                                //   height:
+                                                                //       10.h,
+                                                                // ),
+                                                                SizedBox(
+                                                                  height:
+                                                                      Constant
+                                                                          .height *
+                                                                      0.04,
+                                                                  width:
+                                                                      Constant
+                                                                          .width *
+                                                                      0.3,
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height:
+                                                                            Constant.height *
+                                                                            0.025,
+                                                                        child: FittedBox(
+                                                                          child: Text(
+                                                                            "¢${room.price}/",
+                                                                            style: TextStyle(
+                                                                              fontSize: 18.sp.clamp(
+                                                                                0,
+                                                                                18,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        child: FittedBox(
+                                                                          child: Text(
+                                                                            "year",
+                                                                            style: TextStyle(
+                                                                              fontSize: 12.sp.clamp(
+                                                                                0,
+                                                                                12,
+                                                                              ),
+                                                                              color: const Color(
+                                                                                0xFF787878,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              MediaQuery.sizeOf(
+                                                                context,
+                                                              ).width *
+                                                              0.3,
+                                                          child: Center(
                                                             child: Align(
                                                               alignment:
                                                                   Alignment
-                                                                      .topLeft,
-                                                              child: Column(
-                                                                children: [
-                                                                  Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topLeft,
-                                                                    child: Text(
-                                                                      "Price Estimate",
-                                                                      style: TextStyle(
-                                                                        fontSize: 12
-                                                                            .sp
-                                                                            .clamp(
-                                                                              0,
-                                                                              12,
-                                                                            ),
-                                                                        letterSpacing:
-                                                                            0.2.w,
-                                                                        color: const Color(
-                                                                          0xFF787878,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  // SizedBox(
-                                                                  //   height:
-                                                                  //       10.h,
-                                                                  // ),
-                                                                  SizedBox(
-                                                                      height: Constant.height * 0.04,
-                                                                        width: Constant.width * 0.3,
-                                                                    child: Row(
-                                                                      mainAxisAlignment: MainAxisAlignment.start,,
-                                                                      children: [
-                                                                       SizedBox(
-                                                                        height: Constant.height * 0.025,
-                                                                        child: FittedBox(
-                                                                          child:  Text(
-                                                                          "¢${room.price}/",
-                                                                          style: TextStyle(
-                                                                            fontSize: 18.sp.clamp(
-                                                                              0,
-                                                                              18,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        )
-                                                                       ),
-                                                                        SizedBox(
-                                                                          child: FittedBox(child:Text(
-                                                                          "year",
-                                                                          style: TextStyle(
-                                                                            fontSize: 12.sp.clamp(
-                                                                              0,
-                                                                              12,
-                                                                            ),
-                                                                            color: const Color(
-                                                                              0xFF787878,
-                                                                            ),
-                                                                          ),
-                                                                        ), ),)
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width *
-                                                                0.3,
-                                                            child: Center(
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: SizedBox(
-                                                                  width: 110.w,
-                                                                  height: 40.h,
-                                                                  child: ElevatedButton(
-                                                                    onPressed: () {
+                                                                      .center,
+                                                              child: SizedBox(
+                                                                width: 110.w,
+                                                                height: 40.h,
+                                                                child: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    TextEditingController
+                                                                    numPeople =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    name =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    phoneNum =
+                                                                        TextEditingController();
+                                                                    TextEditingController
+                                                                    emailAddress =
+                                                                        TextEditingController();
+                                                                    List<
                                                                       TextEditingController
-                                                                      numPeople =
-                                                                          TextEditingController();
+                                                                    >
+                                                                    occupantNames = [
+                                                                      TextEditingController(),
+                                                                    ];
+                                                                    List<
                                                                       TextEditingController
-                                                                      name =
-                                                                          TextEditingController();
-                                                                      TextEditingController
-                                                                      phoneNum =
-                                                                          TextEditingController();
-                                                                      TextEditingController
-                                                                      emailAddress =
-                                                                          TextEditingController();
-                                                                      List<
-                                                                        TextEditingController
-                                                                      >
-                                                                      occupantNames = [
-                                                                        TextEditingController(),
-                                                                      ];
-                                                                      List<
-                                                                        TextEditingController
-                                                                      >
-                                                                      occupantEmails = [
-                                                                        TextEditingController(),
-                                                                      ];
+                                                                    >
+                                                                    occupantEmails = [
+                                                                      TextEditingController(),
+                                                                    ];
 
-                                                                      if (user !=
-                                                                          null) {
-                                                                        Get.snackbar(
-                                                                          'Success',
-                                                                          'Task saved!',
-                                                                        );
-                                                                        showModalBottomSheet(
-                                                                          context:
+                                                                    if (user !=
+                                                                        null) {
+                                                                      Get.snackbar(
+                                                                        'Success',
+                                                                        'Task saved!',
+                                                                      );
+                                                                      showModalBottomSheet(
+                                                                        context:
+                                                                            context,
+                                                                        isScrollControlled:
+                                                                            true,
+                                                                        builder:
+                                                                            (
+                                                                              BuildContext
                                                                               context,
-                                                                          isScrollControlled:
-                                                                              true,
-                                                                          builder:
-                                                                              (
-                                                                                BuildContext
-                                                                                context,
-                                                                              ) {
-                                                                                return StatefulBuilder(
-                                                                                  builder:
-                                                                                      (
-                                                                                        BuildContext context,
-                                                                                        StateSetter setModalState,
-                                                                                      ) {
-                                                                                        return Padding(
-                                                                                          padding: EdgeInsets.only(
-                                                                                            bottom: MediaQuery.of(
-                                                                                              context,
-                                                                                            ).viewInsets.bottom,
+                                                                            ) {
+                                                                              return StatefulBuilder(
+                                                                                builder:
+                                                                                    (
+                                                                                      BuildContext context,
+                                                                                      StateSetter setModalState,
+                                                                                    ) {
+                                                                                      return Padding(
+                                                                                        padding: EdgeInsets.only(
+                                                                                          bottom: MediaQuery.of(
+                                                                                            context,
+                                                                                          ).viewInsets.bottom,
+                                                                                        ),
+                                                                                        child: IntrinsicHeight(
+                                                                                          child: book(
+                                                                                            setModalState,
+                                                                                            name,
+                                                                                            phoneNum,
+                                                                                            emailAddress,
+                                                                                            occupantNames,
+                                                                                            occupantEmails,
                                                                                           ),
-                                                                                          child: IntrinsicHeight(
-                                                                                            child: book(
-                                                                                              setModalState,
-                                                                                              name,
-                                                                                              phoneNum,
-                                                                                              emailAddress,
-                                                                                              occupantNames,
-                                                                                              occupantEmails,
-                                                                                            ),
-                                                                                          ),
-                                                                                        );
-                                                                                      },
-                                                                                );
-                                                                              },
-                                                                        ).whenComplete(() {
-                                                                          numPeople
-                                                                              .dispose();
-
-                                                                          setState(
-                                                                            () {
-                                                                              isChecked = false;
+                                                                                        ),
+                                                                                      );
+                                                                                    },
+                                                                              );
                                                                             },
-                                                                          );
+                                                                      ).whenComplete(() {
+                                                                        numPeople
+                                                                            .dispose();
 
-                                                                          for (var c
-                                                                              in occupantNames) {
-                                                                            c.dispose();
-                                                                          }
-                                                                          for (var c
-                                                                              in occupantEmails) {
-                                                                            c.dispose();
-                                                                          }
+                                                                        setState(() {
+                                                                          isChecked =
+                                                                              false;
                                                                         });
-                                                                      } else {
-                                                                        Get.snackbar(
-                                                                          'Error',
-                                                                          'Please sign in to continue.',
-                                                                        );
-                                                                      }
-                                                                    },
-                                                                    style: ElevatedButton.styleFrom(
-                                                                      elevation:
-                                                                          0,
-                                                                      shape: ContinuousRectangleBorder(
-                                                                        side: BorderSide
-                                                                            .none,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                              30.r,
-                                                                            ),
-                                                                      ),
-                                                                      backgroundColor:
-                                                                          const Color.fromARGB(
-                                                                            255,
-                                                                            33,
-                                                                            243,
-                                                                            201,
+
+                                                                        for (var c
+                                                                            in occupantNames) {
+                                                                          c.dispose();
+                                                                        }
+                                                                        for (var c
+                                                                            in occupantEmails) {
+                                                                          c.dispose();
+                                                                        }
+                                                                      });
+                                                                    } else {
+                                                                      Get.snackbar(
+                                                                        'Error',
+                                                                        'Please sign in to continue.',
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    elevation:
+                                                                        0,
+                                                                    shape: ContinuousRectangleBorder(
+                                                                      side: BorderSide
+                                                                          .none,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            30.r,
                                                                           ),
                                                                     ),
-                                                                    child: Center(
+                                                                    backgroundColor:
+                                                                        const Color.fromARGB(
+                                                                          255,
+                                                                          33,
+                                                                          243,
+                                                                          201,
+                                                                        ),
+                                                                  ),
+                                                                  child: SizedBox(
+                                                                    height:
+                                                                        Constant
+                                                                            .height *
+                                                                        0.025,
+                                                                    child: FittedBox(
                                                                       child: Text(
                                                                         "Book now",
                                                                         textAlign:
@@ -3308,10 +3426,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                               ),
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                               SizedBox(height: 20.h),
@@ -3735,7 +3853,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: const Color.fromRGBO(158, 158, 158, 0.5),
                           spreadRadius: 3.r,
                           blurRadius: 12.r,
                           offset: const Offset(0, 2),
@@ -3754,33 +3872,48 @@ class _HostelDetailsState extends State<HostelDetails> {
                         children: [
                           SizedBox(
                             width: 150.w,
-                            height: 40,
-                            child: OutlinedButton(
+                            height: Constant.height * 0.05,
+                            child: ElevatedButton(
                               onPressed: () async {
-                                // await FirestoreDb.instance.createVariables();
-                                _scrollToSection("Room type");
+                                Get.to(
+                                  () => Enquire(hostel: widget.hostel),
+                                  transition: Transition.fadeIn,
+                                  duration: const Duration(milliseconds: 800),
+                                  curve: Curves.easeIn,
+                                );
                               },
-                              style: OutlinedButton.styleFrom(
-                                backgroundColor: Color(
-                                  0xFF00EFD1,
-                                ).withOpacity(0.1),
-                                side: BorderSide(
-                                  color: Color(0xFF00EFD1).withOpacity(0.5),
-                                  width: 1.5,
-                                ),
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: Color(0xFF00EFD1)),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                backgroundColor: const Color.fromRGBO(
+                                  0,
+                                  239,
+                                  209,
+                                  0.1,
                                 ),
                               ),
-                              child: Text(
-                                "View Rooms",
-                                style: TextStyle(color: Color(0xFF00EFD1)),
+                              child: SizedBox(
+                                height: Constant.height * 0.025,
+                                child: FittedBox(
+                                  child: Text(
+                                    "View Rooms",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFF00EFD1),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.sp.clamp(0, 14),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                           SizedBox(
                             width: 150.w,
-                            height: 40,
+                            height: Constant.height * 0.05,
                             child: ElevatedButton(
                               onPressed: () async {
                                 Get.to(
@@ -3794,18 +3927,21 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(5.r),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 backgroundColor: const Color(0xFF00EFD1),
                               ),
-                              child: Center(
-                                child: Text(
-                                  "Enquire now",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp.clamp(0, 14),
+                              child: SizedBox(
+                                height: Constant.height * 0.025,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Enquire now",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.sp.clamp(0, 14),
+                                    ),
                                   ),
                                 ),
                               ),
