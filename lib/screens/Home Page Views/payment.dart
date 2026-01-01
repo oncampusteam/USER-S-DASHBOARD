@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
@@ -32,7 +33,7 @@ class _PaymentState extends State<Payment> {
     DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
-    print(formattedDate); // Output: July 10, 2025
+    debugPrint(formattedDate); // Output: July 10, 2025
     return (formattedDate);
   }
 
@@ -98,11 +99,18 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: SafeArea(
-        child: Scaffold(
-          // appBar: AppBar(),
-          body: Stack(
-            children: [
+      child: Scaffold(
+        // appBar: AppBar(),
+        body: Column(
+          children: [
+            Container(
+              // color: Colors.red,
+              height: Constant.height * 0.06,
+            ),
+            SizedBox(
+              height: Constant.height * 0.94,
+              child: Stack(
+                        children: [
               Positioned(
                 top: 0,
                 right: 0,
@@ -112,7 +120,6 @@ class _PaymentState extends State<Payment> {
                   child: Container(
                     child: Column(
                       children: [
-                        SizedBox(height: 10.h),
                         Row(
                           children: [
                             Container(
@@ -202,276 +209,273 @@ class _PaymentState extends State<Payment> {
                                                 margin: EdgeInsets.symmetric(
                                                   horizontal: 10.h,
                                                 ),
-                                                child: Card(
-                                                  color: Colors.white,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                          horizontal: 15.h,
-                                                          vertical: 10.h,
-                                                        ),
-                                                    child: Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 100.w,
-                                                          height: 90.h,
-                                                          child: Stack(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 100.w,
-                                                                height: 90.h,
-                                                                child: Image.asset(
-                                                                  "assets/payment/paymentImage.png",
-                                                                  fit: BoxFit
-                                                                      .cover,
+                                                child: Container(
+                                                  padding:
+                                                      EdgeInsets.symmetric(
+                                                        horizontal: 15.h,
+                                                        vertical: 10.h,
+                                                      ),
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 100.w,
+                                                        height: 90.h,
+                                                        child: Stack(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 100.w,
+                                                              height: 90.h,
+                                                              child: Image.asset(
+                                                                "assets/payment/paymentImage.png",
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsets.all(
+                                                                      5.0.r,
+                                                                    ),
+                                                                child: Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          50.r,
+                                                                        ),
+                                                                  ),
+                                                                  child: Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                          2.0.r,
+                                                                        ),
+                                                                    child: const Icon(
+                                                                      Icons
+                                                                          .favorite_border,
+                                                                      size:
+                                                                          17,
+                                                                      color: Color.fromARGB(
+                                                                        255,
+                                                                        33,
+                                                                        243,
+                                                                        201,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                              Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topRight,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      EdgeInsets.all(
-                                                                        5.0.r,
-                                                                      ),
-                                                                  child: Container(
-                                                                    decoration: BoxDecoration(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            50.r,
-                                                                          ),
-                                                                    ),
-                                                                    child: Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                            2.0.r,
-                                                                          ),
-                                                                      child: const Icon(
-                                                                        Icons
-                                                                            .favorite_border,
-                                                                        size:
-                                                                            17,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                left: 5.0.w,
+                                                              ),
+                                                          child: SizedBox(
+                                                            // height: 90.h,
+                                                            // width: MediaQuery.sizeOf(context).width,
+                                                            // color: Colors.red,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      bookedHostel.hostel_name ??
+                                                                          "",
+                                                                      style: TextStyle(
+                                                                        fontSize: 16.sp.clamp(
+                                                                          0,
+                                                                          18,
+                                                                        ),
+                                                                        fontFamily:
+                                                                            "Roboto",
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                        letterSpacing:
+                                                                            0.15.w,
                                                                         color: Color.fromARGB(
                                                                           255,
-                                                                          33,
-                                                                          243,
-                                                                          201,
+                                                                          58,
+                                                                          48,
+                                                                          74,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                  left: 5.0.w,
-                                                                ),
-                                                            child: SizedBox(
-                                                              // height: 90.h,
-                                                              // width: MediaQuery.sizeOf(context).width,
-                                                              // color: Colors.red,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Text(
-                                                                        bookedHostel.hostel_name ??
-                                                                            "",
-                                                                        style: TextStyle(
-                                                                          fontSize: 16.sp.clamp(
+                                                                    Row(
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons.star,
+                                                                          size: 15.sp.clamp(
                                                                             0,
-                                                                            18,
+                                                                            17,
                                                                           ),
-                                                                          fontFamily:
-                                                                              "Roboto",
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          letterSpacing:
-                                                                              0.15.w,
-                                                                          color: Color.fromARGB(
+                                                                          color: const Color.fromARGB(
                                                                             255,
-                                                                            58,
-                                                                            48,
-                                                                            74,
+                                                                            33,
+                                                                            243,
+                                                                            201,
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Row(
-                                                                        children: [
-                                                                          Icon(
-                                                                            Icons.star,
-                                                                            size: 15.sp.clamp(
+                                                                        Text(
+                                                                          "${pendingHostel.rate}",
+                                                                          style: TextStyle(
+                                                                            fontFamily: "Roboto",
+                                                                            color: const Color(
+                                                                              0xFF323232,
+                                                                            ),
+                                                                            fontSize: 13.sp.clamp(
                                                                               0,
-                                                                              17,
+                                                                              15,
                                                                             ),
-                                                                            color: const Color.fromARGB(
-                                                                              255,
-                                                                              33,
-                                                                              243,
-                                                                              201,
-                                                                            ),
+                                                                            fontWeight: FontWeight.w500,
                                                                           ),
-                                                                          Text(
-                                                                            "${pendingHostel.rate}",
-                                                                            style: TextStyle(
-                                                                              fontFamily: "Roboto",
-                                                                              color: const Color(
-                                                                                0xFF323232,
-                                                                              ),
-                                                                              fontSize: 13.sp.clamp(
-                                                                                0,
-                                                                                15,
-                                                                              ),
-                                                                              fontWeight: FontWeight.w500,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Icon(
-                                                                        Icons
-                                                                            .location_on_outlined,
-                                                                        size: 10
-                                                                            .sp
-                                                                            .clamp(
-                                                                              0,
-                                                                              12,
-                                                                            ),
-                                                                      ),
-                                                                      Text(
-                                                                        "${pendingHostel.city},  ${pendingHostel.region}",
-                                                                        style: TextStyle(
-                                                                          fontFamily:
-                                                                              "Roboto",
-                                                                          color: const Color(
-                                                                            0xFF333333,
-                                                                          ),
-                                                                          fontSize: 10.sp.clamp(
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .location_on_outlined,
+                                                                      size: 10
+                                                                          .sp
+                                                                          .clamp(
                                                                             0,
                                                                             12,
                                                                           ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 2.h,
-                                                                  ),
-                                                                  Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topLeft,
-                                                                    child: SizedBox(
-                                                                      width:
-                                                                          MediaQuery.sizeOf(
-                                                                            context,
-                                                                          ).width *
-                                                                          0.5.w,
-                                                                      child: SizedBox(
-                                                                        child: Text(
-                                                                          "    Wifi • Shower • Kitchen • Security •\n Parking • Balcony • Friendly Environment",
-                                                                          overflow:
-                                                                              TextOverflow.visible,
-                                                                          style: TextStyle(
-                                                                            fontSize: 9.sp.clamp(
-                                                                              0,
-                                                                              11,
-                                                                            ),
-                                                                            fontFamily:
-                                                                                "Roboto",
-                                                                            color: const Color(
-                                                                              0xFF1D1B20,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 2.h,
-                                                                  ),
-                                                                  Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topLeft,
-                                                                    child: Text(
-                                                                      "Price Estimate",
+                                                                    Text(
+                                                                      "${pendingHostel.city},  ${pendingHostel.region}",
                                                                       style: TextStyle(
                                                                         fontFamily:
-                                                                            "Poppins",
-                                                                        fontSize: 12
-                                                                            .sp
-                                                                            .clamp(
-                                                                              0,
-                                                                              14,
-                                                                            ),
+                                                                            "Roboto",
                                                                         color: const Color(
-                                                                          0xFF323232,
+                                                                          0xFF333333,
                                                                         ),
-                                                                        letterSpacing:
-                                                                            0.15.w,
+                                                                        fontSize: 10.sp.clamp(
+                                                                          0,
+                                                                          12,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 2.h,
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
+                                                                  child: SizedBox(
+                                                                    width:
+                                                                        MediaQuery.sizeOf(
+                                                                          context,
+                                                                        ).width *
+                                                                        0.5.w,
+                                                                    child: SizedBox(
+                                                                      child: Text(
+                                                                        "    Wifi • Shower • Kitchen • Security •\n Parking • Balcony • Friendly Environment",
+                                                                        overflow:
+                                                                            TextOverflow.visible,
+                                                                        style: TextStyle(
+                                                                          fontSize: 9.sp.clamp(
+                                                                            0,
+                                                                            11,
+                                                                          ),
+                                                                          fontFamily:
+                                                                              "Roboto",
+                                                                          color: const Color(
+                                                                            0xFF1D1B20,
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        "GHS ${pendingHostel.amt_per_year}/",
-                                                                        style: TextStyle(
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          fontSize: 18.sp.clamp(
-                                                                            0,
-                                                                            20,
-                                                                          ),
-                                                                          color: const Color(
-                                                                            0xFF323232,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        "Academic Year",
-                                                                        style: TextStyle(
-                                                                          fontFamily:
-                                                                              "Poppins",
-                                                                          fontSize: 12.sp.clamp(
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 2.h,
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
+                                                                  child: Text(
+                                                                    "Price Estimate",
+                                                                    style: TextStyle(
+                                                                      fontFamily:
+                                                                          "Poppins",
+                                                                      fontSize: 12
+                                                                          .sp
+                                                                          .clamp(
                                                                             0,
                                                                             14,
                                                                           ),
-                                                                          color: const Color(
-                                                                            0xFF323232,
-                                                                          ),
+                                                                      color: const Color(
+                                                                        0xFF323232,
+                                                                      ),
+                                                                      letterSpacing:
+                                                                          0.15.w,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      "GHS ${pendingHostel.amt_per_year}/",
+                                                                      style: TextStyle(
+                                                                        fontFamily:
+                                                                            "Poppins",
+                                                                        fontSize: 18.sp.clamp(
+                                                                          0,
+                                                                          20,
+                                                                        ),
+                                                                        color: const Color(
+                                                                          0xFF323232,
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                    ),
+                                                                    Text(
+                                                                      "Academic Year",
+                                                                      style: TextStyle(
+                                                                        fontFamily:
+                                                                            "Poppins",
+                                                                        fontSize: 12.sp.clamp(
+                                                                          0,
+                                                                          14,
+                                                                        ),
+                                                                        color: const Color(
+                                                                          0xFF323232,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
@@ -988,7 +992,7 @@ class _PaymentState extends State<Payment> {
                                                                                                   isLoadingButton = false;
                                                                                                 },
                                                                                               );
-
+                    
                                                                                               showModalBottomSheet(
                                                                                                 context: context,
                                                                                                 isScrollControlled: true,
@@ -1139,7 +1143,7 @@ class _PaymentState extends State<Payment> {
                                                                                           ),
                                                                                         ),
                                                                                       ),
-
+                    
                                                                                       SizedBox(
                                                                                         height: 60.h,
                                                                                         width: MediaQuery.sizeOf(
@@ -1217,16 +1221,18 @@ class _PaymentState extends State<Payment> {
                                   ),
                           ],
                         ),
-
+                    
                         SizedBox(height: 100.h),
                       ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
+                        ],
+                      ),
+            ),
+          ],
+        )
       ),
     );
   }
