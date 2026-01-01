@@ -87,4 +87,5 @@ class DefaultFirebaseOptions {
     authDomain: 'on-campus-d0cb6.firebaseapp.com',
     storageBucket: 'on-campus-d0cb6.firebasestorage.app',
   );
+
 }
