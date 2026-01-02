@@ -4,10 +4,7 @@ import 'package:on_campus/firebase/classes.dart';
 
 class Enquire extends StatelessWidget {
   final Hostels hostel;
-  Enquire({
-    super.key,
-    required this.hostel,
-  });
+  Enquire({super.key, required this.hostel});
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -18,26 +15,22 @@ class Enquire extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: const Text(
-              "Enquire Now",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 21,
-              ),
+          backgroundColor: Colors.white,
+          title: const Text(
+            "Enquire Now",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 21),
+          ),
+          elevation: 1,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close, size: 15),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            elevation: 1,
-            automaticallyImplyLeading: false,
-            actions: [
-              IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                    size: 15,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  })
-            ]),
+          ],
+        ),
         body: Container(
           color: Color.fromARGB(255, 124, 241, 225).withOpacity(0.1),
           child: Padding(
@@ -84,7 +77,7 @@ class Enquire extends StatelessWidget {
                                 children: [
                                   TextSpan(text: "From "),
                                   TextSpan(
-                                    text: "GHS${hostel.amt_per_year}/",
+                                    text: "GH₵${hostel.amt_per_year}/",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -94,39 +87,29 @@ class Enquire extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 const Text.rich(
-                  style: TextStyle(
-                    height: 2,
-                  ),
+                  style: TextStyle(height: 2),
                   TextSpan(
                     children: [
                       TextSpan(
                         text: "Great choice at the perfect moment! ",
-                        style: TextStyle(
-                          color: Color(0xFF00EFD1),
-                        ),
+                        style: TextStyle(color: Color(0xFF00EFD1)),
                       ),
                       TextSpan(
                         text:
                             "Feel free to make an enquiry-it's completely free",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
+                SizedBox(height: 15),
                 customTextField(controller: nameController),
                 SizedBox(height: 15),
                 customTextField(controller: emailController),
@@ -143,10 +126,7 @@ class Enquire extends StatelessWidget {
                     child: Column(
                       children: [
                         Text("I agree with all terms and privacy of oncampus"),
-                        ElevatedButton(
-                          child: Text("Submit"),
-                          onPressed: () {},
-                        )
+                        ElevatedButton(child: Text("Submit"), onPressed: () {}),
                       ],
                     ),
                   ),
@@ -162,30 +142,31 @@ class Enquire extends StatelessWidget {
 
 Widget customTextField({required TextEditingController controller}) {
   return TextField(
-      //   onChanged: (){},
-      //   focusNode:,
-      controller: controller,
-      obscureText: false,
-      enableSuggestions: true,
-      autocorrect: false,
-      cursorColor: Colors.white,
-      style: const TextStyle(color: Colors.grey),
-      decoration: InputDecoration(
-        labelText: "Your Full Name",
-        labelStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.white,
-        // prefixIcon: Icon(widget.icon),
+    //   onChanged: (){},
+    //   focusNode:,
+    controller: controller,
+    obscureText: false,
+    enableSuggestions: true,
+    autocorrect: false,
+    cursorColor: Colors.white,
+    style: const TextStyle(color: Colors.grey),
+    decoration: InputDecoration(
+      labelText: "Your Full Name",
+      labelStyle: const TextStyle(color: Colors.grey),
+      filled: true,
+      fillColor: Colors.white,
 
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            width: 1,
-            style: BorderStyle.none,
-            color: Colors.grey.withOpacity(0.3),
-          ),
+      // prefixIcon: Icon(widget.icon),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          width: 1,
+          style: BorderStyle.none,
+          color: Colors.grey.withOpacity(0.3),
         ),
       ),
-      keyboardType: TextInputType.visiblePassword);
+    ),
+    keyboardType: TextInputType.visiblePassword,
+  );
 }

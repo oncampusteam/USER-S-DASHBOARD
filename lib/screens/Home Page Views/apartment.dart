@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/apartment_history.dart';
 import 'view_room_details.dart';
 
@@ -34,12 +35,12 @@ class _ApartmentState extends State<Apartment> {
               left: 0,
               bottom: 0,
               child: Container(
-                
+                padding: EdgeInsets.only(top: Constant.height * 0.06),
                 // color: Colors.blue,
                 foregroundDecoration: BoxDecoration(
                   color: _width ? Colors.black.withOpacity(0.5) : null,
                 ),
-                padding: EdgeInsets.only(top: 20.h),
+                // padding: EdgeInsets.only(top: 20.h),
                 decoration: const BoxDecoration(
                   
                     image: DecorationImage(
@@ -57,46 +58,52 @@ class _ApartmentState extends State<Apartment> {
                           Container(
                             height: 40.h,
                             width: 40.w,
-                            foregroundDecoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.10),
-                                borderRadius: BorderRadius.circular(8.r)),
+                            // foregroundDecoration: BoxDecoration(
+                            //     color: Colors.black.withOpacity(0.10),
+                            //     borderRadius: BorderRadius.circular(8.r)),
                             decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.3),
+                                color: const Color.fromRGBO(255, 255, 255, 0.3),
                                 borderRadius: BorderRadius.circular(8.r)),
                             child: Icon(Icons.chevron_left,
                                 color: Colors.black, size: 24.w.clamp(0, 26)),
                           ),
                           // My Apartment Text Widget
-                          Container(
-                            child: Text("My Apartment",
-                                style: TextStyle(
-                                  fontFamily: "Poppins-Bold",
-                                  fontSize: 22.sp.clamp(0, 24),
-                                  letterSpacing: 0.15.w,
-                                  color: Colors.white,
-                                )),
+                          SizedBox(
+                            height: Constant.height * 0.04,
+                            child: FittedBox(
+                              child: Text("My Apartment",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins-Bold",
+                                    fontSize: 22.sp.clamp(0, 24),
+                                    letterSpacing: 0.15.w,
+                                    color: Colors.white,
+                                  )),
+                            ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                width =
-                                    MediaQuery.of(context).size.width * 0.85;
-                                _width = true;
-                              });
+                              // ScaffoldMessenger.of(context).
+                              // setState(() {
+                              //   width =
+                              //       MediaQuery.of(context).size.width * 0.85;
+                              //   _width = false;
+                              // });
                             },
                             child: Container(
                               height: 40.h,
                               width: 40.w,
-                              foregroundDecoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.10),
-                                  borderRadius: BorderRadius.circular(8.r)),
+                              // foregroundDecoration: BoxDecoration(
+                              //     color: const Color.fromRGBO(0, 0, 0, 0.1),
+                              //     borderRadius: BorderRadius.circular(8.r)),
                               decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.30),
+                                  color: const Color.fromRGBO(255, 255, 255, 0.3),
                                   borderRadius: BorderRadius.circular(8.r)),
-                              child: Image.asset(
-                                "assets/apartment/menu.png",
-                                height: 14.h,
-                                width: 14.w,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.r),
+                                child: Image.asset(
+                                  "assets/apartment/menu.png",
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -104,12 +111,13 @@ class _ApartmentState extends State<Apartment> {
                       ),
                     ),
                     Container(
-                      height: 140.h,
-                      margin: EdgeInsets.only(top: 400.h),
+                      // height: Constant.height * 0.06,
+                      margin: EdgeInsets.only(top: Constant.height * 0.6),
                       child: Column(
                         children: [
                           Container(
-                            width: 320.w,
+                            width: Constant.width * 0.8,
+                            height: Constant.height * 0.06,
                             // height: 40.h,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -123,17 +131,19 @@ class _ApartmentState extends State<Apartment> {
                                     duration:
                                         const Duration(milliseconds: 600));
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 6.h,
+                              child: Align(
+                                child: SizedBox(
+                                  height: Constant.height * 0.03,
+                                  child: FittedBox(
+                                    child: Text("View Room detail",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp.clamp(0, 20),
+                                            color: const Color(0xFF00EFD1))),
+                                  ),
                                 ),
-                                child: Text("View Room detail",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20.sp.clamp(0, 20),
-                                        color: const Color(0xFF00EFD1))),
                               ),
                             ),
                           ),
@@ -141,7 +151,8 @@ class _ApartmentState extends State<Apartment> {
                             height: 15.h,
                           ),
                           Container(
-                            width: 320.w,
+                            width: Constant.width * 0.8,
+                            height: Constant.height * 0.06,
                             // height: 40,
                             decoration: BoxDecoration(
                               color: const Color(0xFF00EFD1),
@@ -157,19 +168,26 @@ class _ApartmentState extends State<Apartment> {
                                     duration:
                                         const Duration(milliseconds: 600));
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 6.h,
+                              child: Align(
+                                child: Container(
+                                  // color: Colors.brown,
+                                  height: Constant.height * 0.03,
+                                  width: Constant.width * 0.35,
+                                  child: Row(children: [
+                                    Image.asset("assets/apartment/room chat.png", fit: BoxFit.cover),
+                                    FittedBox(
+                                      child: Text(" Room Chat",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20.sp.clamp(0, 20),
+                                        color: Colors.white,
+                                      )),
+                                    ),
+                                  ],),
                                 ),
-                                child: Text("Apartment History",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp.clamp(0, 20),
-                                      color: Colors.white,
-                                    )),
-                              ),
+                              )
                             ),
                           )
                         ],

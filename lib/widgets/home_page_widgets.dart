@@ -28,25 +28,44 @@ Widget HostelCard({
     // width: MediaQuery.of(context).size.width,
     width: Constant.width,
     child: ListView.builder(
-      physics: !variant ?const BouncingScrollPhysics(): NeverScrollableScrollPhysics(),
-      scrollDirection: !variant ?Axis.horizontal: Axis.vertical,
+      physics: !variant
+          ? const BouncingScrollPhysics()
+          : NeverScrollableScrollPhysics(),
+      scrollDirection: !variant ? Axis.horizontal : Axis.vertical,
       itemCount: seeAllPopular ? hostels.length : 5,
       itemBuilder: (context, index) {
         Hostels hostel = hostels[index];
         String? string = hostel.hostel_images?[0];
-        return !variant ?Row(
-          children: [
-            if (index == 0) SizedBox(width: 25.h),
-            hostelGestureCard(hostel: hostel, favoriteBools: favoriteBools, onFavoriteTap: onFavoriteTap, string: string, value: value, index: index),
+        return !variant
+            ? Row(
+                children: [
+                  if (index == 0) SizedBox(width: 25.h),
+                  hostelGestureCard(
+                    hostel: hostel,
+                    favoriteBools: favoriteBools,
+                    onFavoriteTap: onFavoriteTap,
+                    string: string,
+                    value: value,
+                    index: index,
+                  ),
 
-            const SizedBox(width: 20),
-          ],
-        ): Column(
-          children: [
-            hostelGestureCard(hostel: hostel, favoriteBools: favoriteBools, onFavoriteTap: onFavoriteTap, string: string, value: value, index: index, variant: variant),
-            SizedBox(height : 25.h)
-          ],
-        );
+                  const SizedBox(width: 20),
+                ],
+              )
+            : Column(
+                children: [
+                  hostelGestureCard(
+                    hostel: hostel,
+                    favoriteBools: favoriteBools,
+                    onFavoriteTap: onFavoriteTap,
+                    string: string,
+                    value: value,
+                    index: index,
+                    variant: variant,
+                  ),
+                  SizedBox(height: 25.h),
+                ],
+              );
       },
     ),
   );
@@ -74,12 +93,12 @@ Widget hostelGestureCard({
     child: Container(
       height: Constant.height * 0.44,
       decoration: BoxDecoration(
-        border: !variant ? Border.all(color: Color(0xFFD9D9D9)):null,
+        border: !variant ? Border.all(color: Color(0xFFD9D9D9)) : null,
         borderRadius: BorderRadius.circular(8.r),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            offset: !variant ? Offset(0, 12): Offset.zero,
+            offset: !variant ? Offset(0, 12) : Offset.zero,
             blurRadius: !variant ? 28 : 0,
             spreadRadius: 0,
             color: Color.fromRGBO(0, 0, 0, 0.06),
@@ -91,22 +110,16 @@ Widget hostelGestureCard({
         children: [
           Container(
             // margin: EdgeInsets.only(right: 10.h),
-            padding: variant ? EdgeInsets.symmetric(horizontal: 25.h):null,
+            padding: variant ? EdgeInsets.symmetric(horizontal: 25.h) : null,
             height: Constant.height * 0.25,
-            width: !variant ?Constant.width * 0.85: Constant.width,
+            width: !variant ? Constant.width * 0.85 : Constant.width,
             decoration: BoxDecoration(
               // color: Colors.black,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12.r),
                 topRight: Radius.circular(12.r),
-                bottomLeft:
-                    Radius.circular( variant ?
-                      12.r: 0,
-                    ),
-                bottomRight:
-                    Radius.circular(variant ?
-                      12.r: 0,
-                    ),
+                bottomLeft: Radius.circular(variant ? 12.r : 0),
+                bottomRight: Radius.circular(variant ? 12.r : 0),
               ),
             ),
             child: Stack(
@@ -119,14 +132,8 @@ Widget hostelGestureCard({
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8.r),
                       topRight: Radius.circular(8.r),
-                      bottomLeft:
-                          Radius.circular(variant ?
-                            8.r : 0,
-                          ),
-                      bottomRight:
-                          Radius.circular(variant ?
-                            8.r: 0,
-                          ),
+                      bottomLeft: Radius.circular(variant ? 8.r : 0),
+                      bottomRight: Radius.circular(variant ? 8.r : 0),
                     ),
                     child: CachedNetworkImage(
                       imageUrl: string ?? "",
@@ -247,9 +254,11 @@ Widget hostelGestureCard({
             ),
           ),
           Container(
-            padding: !variant ? EdgeInsets.only(right: 5.h, left: 10.h): EdgeInsets.symmetric(horizontal: 25.h),
+            padding: !variant
+                ? EdgeInsets.only(right: 5.h, left: 10.h)
+                : EdgeInsets.symmetric(horizontal: 25.h),
             height: Constant.height * 0.067,
-            width: !variant ? Constant.width * 0.85: Constant.width,
+            width: !variant ? Constant.width * 0.85 : Constant.width,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -330,10 +339,10 @@ Widget hostelGestureCard({
                           height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
-                              "GHS ${hostel.amt_per_year} ",
+                              "GH₵ ${hostel.amt_per_year} ",
                               style: TextStyle(
                                 fontWeight:
-                                    FontWeight.w600, // Only "GHS" is bold
+                                    FontWeight.w600, // Only "GH₵" is bold
                                 fontSize: 12.sp.clamp(0, 12),
                                 color: const Color(0xFF323232),
                               ),
@@ -347,7 +356,7 @@ Widget hostelGestureCard({
                               "per year",
                               style: TextStyle(
                                 fontWeight:
-                                    FontWeight.w500, // Only "GHS" is bold
+                                    FontWeight.w500, // Only "GH₵" is bold
                                 fontSize: 12.sp.clamp(0, 12),
                                 color: const Color(0xFF323232),
                               ),
@@ -373,7 +382,10 @@ Widget hostelGestureCard({
                   children: [
                     if (index == 0) SizedBox(width: !variant ? 10.h : 25.h),
                     Container(
-                      margin: EdgeInsets.only(left: !variant ? 5.h : 0, right: 5.w),
+                      margin: EdgeInsets.only(
+                        left: !variant ? 5.h : 0,
+                        right: 5.w,
+                      ),
                       padding: EdgeInsets.only(
                         left: 5.w,
                         top: .5.h,
@@ -421,7 +433,7 @@ Widget hostelGestureCard({
           ),
           SizedBox(height: 10.h),
           SizedBox(
-            width: !variant ? Constant.width * 0.85: Constant.width,
+            width: !variant ? Constant.width * 0.85 : Constant.width,
             height: Constant.height * 0.04,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -429,9 +441,12 @@ Widget hostelGestureCard({
               itemBuilder: (context, index) {
                 return Row(
                   children: [
-                    if (index == 0) SizedBox(width :!variant ? 10.h: 25.h),
+                    if (index == 0) SizedBox(width: !variant ? 10.h : 25.h),
                     Container(
-                      margin: EdgeInsets.only(left: !variant ? 5.h: 0, right: 5.w),
+                      margin: EdgeInsets.only(
+                        left: !variant ? 5.h : 0,
+                        right: 5.w,
+                      ),
                       padding: EdgeInsets.only(
                         left: 5.w,
                         top: 5.h,
@@ -474,8 +489,8 @@ Widget hostelGestureCard({
                         ),
                       ),
                     ),
-                    if(variant && index == value.length -1)
-                    SizedBox(width: 25.h)
+                    if (variant && index == value.length - 1)
+                      SizedBox(width: 25.h),
                   ],
                 );
               },

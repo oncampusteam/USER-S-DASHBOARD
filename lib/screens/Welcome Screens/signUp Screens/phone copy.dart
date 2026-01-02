@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:on_campus/classes/constants.dart';
 
 class Phone extends StatefulWidget {
   const Phone({super.key});
@@ -64,14 +65,24 @@ class _PhoneState extends State<Phone> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(
-                    "Log in with Phone number",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23),
+                  SizedBox(
+                    height: Constant.height * 0.03,
+                    child: FittedBox(
+                      child: Text(
+                        "Log in with Phone number",
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 15),
-                  Text(
-                    "Welcome back! Sign in using your Phone number or email to continue with us",
-                    textAlign: TextAlign.center,
+                  SizedBox(
+                    height: Constant.height * 0.06,
+                    child: FittedBox(
+                      child: Text(
+                        "Welcome back! Sign in using your Phone number\nor email to continue with us",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                   SizedBox(height: 50),
                 ],

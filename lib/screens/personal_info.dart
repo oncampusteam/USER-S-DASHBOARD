@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/customStepper.dart';
 
@@ -425,20 +426,22 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        margin: EdgeInsets.only(top: Constant.height * 0.06,),
+        child: SingleChildScrollView(
           child: Container(
             // height: MediaQuery.of(context).size.height,
             color: Colors.white,
             width: double.infinity,
-            padding: EdgeInsets.only(left: 20.h, right: 20.h, top: 30.h),
+            padding: EdgeInsets.only(left: 20.h, right: 20.h,),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 30.h,
-                  width: 30.w,
+                  height: 40.h,
+                  width: 40.w,
                   foregroundDecoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.03),
                     borderRadius: BorderRadius.circular(8.r),
@@ -458,319 +461,329 @@ class _PersonalInfoState extends State<PersonalInfo> {
                     ),
                   ),
                 ),
-                Transform.translate(
-                  offset: Offset(0, -65),
-                  child: Column(
-                    children: [
-                      Align(
+                Column(
+                  children: [
+                    Align(
+                      child: SizedBox(
+                        height: Constant.height * 0.1,
+                        width: Constant.width * 0.2,
                         child: Image.asset(
                           "assets/personal_info/user logo.png",
-                          height: 110.h,
-                          width: 100.w,
+                          fit: BoxFit.contain
                         ),
                       ),
-                      Align(
-                        child: Text(
-                          user?.displayName ?? "user",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "Poppins-Bold",
-                            fontSize: 22.sp,
-                            letterSpacing: 0.15.w,
-                            color: const Color(0xFF323232),
+                    ),
+                    Align(
+                      child: SizedBox(
+                        height: Constant.height * 0.04,
+                        child: FittedBox(
+                          child: Text(
+                            user?.displayName ?? "user",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: "Poppins-Bold",
+                              fontSize: 22.sp,
+                              letterSpacing: 0.15.w,
+                              color: const Color(0xFF323232),
+                            ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 5),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Personal Information",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(height: 5),
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        height: Constant.height * 0.03,
+                        child: FittedBox(
+                          child: Text(
+                            "Personal Information",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 6),
-                      isLoading
-                          ? CircularProgressIndicator()
-                          : Container(
-                              height: MediaQuery.of(context).size.height,
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: Column(
-                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CustomStepper(
-                                    currentStep: currentStep,
-                                    stepTitles: steps,
-                                    onStepTapped: (index) {
-                                      setState(() => currentStep = index);
-                                    },
-                                  ),
-                                  // Your step content here based on currentStep
-                                  Container(
-                                    child: IntrinsicHeight(
-                                      child: IndexedStack(
-                                        index: currentStep,
-                                        children: [
-                                          PersonalInfoForm(),
-                                          UniversityInfoForm(),
-                                          GuardianDetailsForm(),
-                                          ConfirmationPage(),
-                                        ],
-                                      ),
+                    ),
+                    SizedBox(height: 6),
+                    isLoading
+                        ? CircularProgressIndicator()
+                        : Container(
+                            height: MediaQuery.of(context).size.height,
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomStepper(
+                                  currentStep: currentStep,
+                                  stepTitles: steps,
+                                  onStepTapped: (index) {
+                                    setState(() => currentStep = index);
+                                  },
+                                ),
+                                // Your step content here based on currentStep
+                                Container(
+                                  child: IntrinsicHeight(
+                                    child: IndexedStack(
+                                      index: currentStep,
+                                      children: [
+                                        PersonalInfoForm(),
+                                        UniversityInfoForm(),
+                                        GuardianDetailsForm(),
+                                        ConfirmationPage(),
+                                      ],
                                     ),
                                   ),
-                                  // Spacer(),
-                                  SizedBox(height: 50),
-                                  // Navigation buttons
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      if (currentStep > 0)
-                                        TextButton(
-                                          onPressed: () =>
-                                              setState(() => currentStep--),
-                                          child: Text(
-                                            'Back',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                ),
+                                // Spacer(),
+                                SizedBox(height: 50),
+                                // Navigation buttons
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (currentStep > 0)
+                                      TextButton(
+                                        onPressed: () =>
+                                            setState(() => currentStep--),
+                                        child: Text(
+                                          'Back',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      // if (currentStep < steps.length )
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: SizedBox(
-                                          height: 50,
-                                          width:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              0.5,
-                                          child: ElevatedButton(
-                                            onPressed: () async {
-                                              if (currentStep > 1) {
-                                                setState(() {
-                                                  isLoadingStep = true;
-                                                });
-                                                try {
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection("Users")
-                                                      .doc(user!.uid)
-                                                      .set({
-                                                        "name":
-                                                            "${firstName.text} ${surName.text}",
-                                                        "email": email.text,
-                                                        "phone": int.parse(
-                                                          mobileNumber.text,
-                                                        ),
-                                                        "gender": gender.text,
-                                                        "program": program.text,
-                                                        "year": int.parse(
-                                                          year.text,
-                                                        ),
-                                                        "guardian":
-                                                            guardian.text,
-                                                        "emergency1": int.parse(
-                                                          emergency1.text,
-                                                        ),
-                                                        "emergency2": int.parse(
-                                                          emergency2.text,
-                                                        ),
-                                                        "userInfoDone": true,
-                                                      }, SetOptions(merge: true));
-                                                } catch (e) {
-                                                  Get.snackbar(
-                                                    "Error",
-                                                    e.toString(),
-                                                    snackPosition:
-                                                        SnackPosition.BOTTOM,
-                                                  );
-                                                }
-
-                                                setState(() {
-                                                  isLoadingStep = false;
-                                                });
-
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  isScrollControlled: true,
-                                                  builder: (BuildContext context) {
-                                                    return IntrinsicHeight(
-                                                      child: Container(
-                                                        child: Column(
-                                                          children: [
-                                                            SizedBox(
-                                                              height: 15,
+                                      ),
+                                    // if (currentStep < steps.length )
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: SizedBox(
+                                        height: 50,
+                                        width:
+                                            MediaQuery.of(
+                                              context,
+                                            ).size.width *
+                                            0.5,
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            if (currentStep > 1) {
+                                              setState(() {
+                                                isLoadingStep = true;
+                                              });
+                                              try {
+                                                await FirebaseFirestore
+                                                    .instance
+                                                    .collection("Users")
+                                                    .doc(user!.uid)
+                                                    .set({
+                                                      "name":
+                                                          "${firstName.text} ${surName.text}",
+                                                      "email": email.text,
+                                                      "phone": int.parse(
+                                                        mobileNumber.text,
+                                                      ),
+                                                      "gender": gender.text,
+                                                      "program": program.text,
+                                                      "year": int.parse(
+                                                        year.text,
+                                                      ),
+                                                      "guardian":
+                                                          guardian.text,
+                                                      "emergency1": int.parse(
+                                                        emergency1.text,
+                                                      ),
+                                                      "emergency2": int.parse(
+                                                        emergency2.text,
+                                                      ),
+                                                      "userInfoDone": true,
+                                                    }, SetOptions(merge: true));
+                                              } catch (e) {
+                                                Get.snackbar(
+                                                  "Error",
+                                                  e.toString(),
+                                                  snackPosition:
+                                                      SnackPosition.BOTTOM,
+                                                );
+                                              }
+                            
+                                              setState(() {
+                                                isLoadingStep = false;
+                                              });
+                            
+                                              showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                builder: (BuildContext context) {
+                                                  return IntrinsicHeight(
+                                                    child: Container(
+                                                      child: Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Container(
+                                                            color: Colors
+                                                                .black45,
+                                                            width: 35,
+                                                            height: 5,
+                                                          ),
+                                                          Align(
+                                                            child: Image.asset(
+                                                              "assets/personal_info/confirm.png",
+                                                              height: 110.h,
+                                                              width: 100.w,
                                                             ),
-                                                            Container(
-                                                              color: Colors
-                                                                  .black45,
-                                                              width: 35,
-                                                              height: 5,
-                                                            ),
-                                                            Align(
-                                                              child: Image.asset(
-                                                                "assets/personal_info/confirm.png",
-                                                                height: 110.h,
-                                                                width: 100.w,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 15,
-                                                            ),
-                                                            Text(
-                                                              "Confirmed Successfully",
-                                                            ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                              "Your personal information has been \nSuccessfully updated",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 35,
-                                                            ),
-                                                            Container(
-                                                              color:
-                                                                  Colors.white,
-                                                              height: 60.h,
-                                                              width:
-                                                                  MediaQuery.sizeOf(
-                                                                    context,
-                                                                  ).width,
-                                                              child: Padding(
-                                                                padding:
-                                                                    EdgeInsets.symmetric(
-                                                                      vertical:
-                                                                          8.0.h,
-                                                                      horizontal:
-                                                                          12.w,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          Text(
+                                                            "Confirmed Successfully",
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            "Your personal information has been \nSuccessfully updated",
+                                                            textAlign:
+                                                                TextAlign
+                                                                    .center,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 35,
+                                                          ),
+                                                          Container(
+                                                            color:
+                                                                Colors.white,
+                                                            height: 60.h,
+                                                            width:
+                                                                MediaQuery.sizeOf(
+                                                                  context,
+                                                                ).width,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        8.0.h,
+                                                                    horizontal:
+                                                                        12.w,
+                                                                  ),
+                                                              child: ElevatedButton(
+                                                                onPressed: () {
+                                                                  Get.to(
+                                                                    () => BottomNav(
+                                                                      username:
+                                                                          FirebaseAuth.instance.currentUser!.displayName ??
+                                                                          "User",
                                                                     ),
-                                                                child: ElevatedButton(
-                                                                  onPressed: () {
-                                                                    Get.to(
-                                                                      () => BottomNav(
-                                                                        username:
-                                                                            FirebaseAuth.instance.currentUser!.displayName ??
-                                                                            "User",
-                                                                      ),
-                                                                      transition:
-                                                                          Transition
-                                                                              .fadeIn,
-                                                                      duration: Duration(
-                                                                        milliseconds:
-                                                                            300,
-                                                                      ),
-                                                                      curve: Curves
-                                                                          .easeIn,
-                                                                    );
-                                                                  },
-                                                                  style: ElevatedButton.styleFrom(
-                                                                    elevation:
-                                                                        0,
-                                                                    shape: RoundedRectangleBorder(
-                                                                      side: BorderSide
-                                                                          .none,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            15.r,
-                                                                          ),
+                                                                    transition:
+                                                                        Transition
+                                                                            .fadeIn,
+                                                                    duration: Duration(
+                                                                      milliseconds:
+                                                                          300,
                                                                     ),
-                                                                    backgroundColor:
-                                                                        const Color(
-                                                                          0xFF00EFD1,
+                                                                    curve: Curves
+                                                                        .easeIn,
+                                                                  );
+                                                                },
+                                                                style: ElevatedButton.styleFrom(
+                                                                  elevation:
+                                                                      0,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    side: BorderSide
+                                                                        .none,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          15.r,
                                                                         ),
                                                                   ),
-                                                                  child: const Text(
-                                                                    "Done",
-                                                                    style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
+                                                                  backgroundColor:
+                                                                      const Color(
+                                                                        0xFF00EFD1,
+                                                                      ),
+                                                                ),
+                                                                child: const Text(
+                                                                  "Done",
+                                                                  style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                              if (currentStep == 0
-                                                  ? formkey0.currentState!
-                                                        .validate()
-                                                  : currentStep == 1
-                                                  ? formkey1.currentState!
-                                                        .validate()
-                                                  : formkey2.currentState!
-                                                            .validate() &&
-                                                        currentStep < 3) {
-                                                setState(() {
-                                                  currentStep++;
-                                                  print(currentStep);
-                                                });
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color(
-                                                0xFF00EFD1,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            }
+                                            if (currentStep == 0
+                                                ? formkey0.currentState!
+                                                      .validate()
+                                                : currentStep == 1
+                                                ? formkey1.currentState!
+                                                      .validate()
+                                                : formkey2.currentState!
+                                                          .validate() &&
+                                                      currentStep < 3) {
+                                              setState(() {
+                                                currentStep++;
+                                                print(currentStep);
+                                              });
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Color(
+                                              0xFF00EFD1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(15),
                                               ),
                                             ),
-
-                                            child: isLoadingStep
-                                                ? Align(
-                                                    alignment: Alignment.center,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 15,
-                                                          height: 15,
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                        ),
-                                                        SizedBox(width: 5),
-                                                        Text("Please wait.."),
-                                                      ],
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    'Next',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
                                           ),
+                            
+                                          child: isLoadingStep
+                                              ? Align(
+                                                  alignment: Alignment.center,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 15,
+                                                        height: 15,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                              color: Colors
+                                                                  .white,
+                                                            ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Text("Please wait.."),
+                                                    ],
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'Next',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                  ),
+                                                ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                    ],
-                  ),
+                          ),
+                  ],
                 ),
               ],
             ),

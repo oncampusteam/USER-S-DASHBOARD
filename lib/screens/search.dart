@@ -254,9 +254,7 @@ class _SearchState extends State<Search> {
                             return GestureDetector(
                               onTap: () {
                                 Get.to(
-                                  () => HostelDetails(
-                                    hostel: hostel,
-                                  ),
+                                  () => HostelDetails(hostel: hostel),
                                   transition: Transition.fadeIn,
                                   duration: const Duration(milliseconds: 200),
                                   curve: Curves.easeIn,
@@ -475,7 +473,7 @@ class _SearchState extends State<Search> {
                                                     ),
                                                     TextSpan(
                                                       text:
-                                                          "GHS ${hostel.amt_per_year}/",
+                                                          "GH₵ ${hostel.amt_per_year}/",
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -804,7 +802,7 @@ class _SearchState extends State<Search> {
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                        "GHS ${recommendedHostel.amt_per_year}/",
+                                                        "GH₵ ${recommendedHostel.amt_per_year}/",
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,

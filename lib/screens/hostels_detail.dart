@@ -29,6 +29,9 @@ class HostelDetails extends StatefulWidget {
 String gender = "";
 String selectedGender = "";
 
+List<TextEditingController> occupantNames = [];
+List<TextEditingController> occupantEmails = [];
+
 class _HostelDetailsState extends State<HostelDetails> {
   int selectedIndex = 0;
   List<RoomTypes> roomTypes = [];
@@ -385,9 +388,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       return StatefulBuilder(
                         builder:
                             (BuildContext context, StateSetter setModalState) {
-                              return IntrinsicHeight(
-                                child: setDate(setModalState),
-                              );
+                              return setDate(setModalState);
                             },
                       );
                     },
@@ -412,9 +413,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                         ),
                       )
                     : SizedBox(
-                      height: Constant.height * 0.03,
-                      child: FittedBox(
-                        child: Text(
+                        height: Constant.height * 0.03,
+                        child: FittedBox(
+                          child: Text(
                             "Continue",
                             style: TextStyle(
                               fontFamily: "Roboto",
@@ -423,8 +424,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                               fontSize: 17.sp.clamp(0, 17),
                             ),
                           ),
+                        ),
                       ),
-                    ),
               ),
             ),
           ],
@@ -451,13 +452,13 @@ class _HostelDetailsState extends State<HostelDetails> {
           ),
         ),
 
-        padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: double.infinity,
+              width: Constant.width,
               child: Align(
                 child: Container(
                   height: 5.h,
@@ -537,7 +538,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     Text.rich(
                       TextSpan(
                         children: [
-                          TextSpan(text: "GHS 4000/"),
+                          TextSpan(text: "GH₵ 4000/"),
                           TextSpan(
                             text: "Academic year",
                             style: TextStyle(fontSize: 8),
@@ -595,7 +596,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                     ],
                     decoration: InputDecoration(
                       // enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF00EFD1))),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF00EFD1)),
+                      ),
                       labelText: "1",
                       labelStyle: const TextStyle(
                         color: Colors.grey,
@@ -671,7 +674,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   color: Colors.grey,
                                   fontSize: 14,
                                 ),
-                                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF00EFD1))),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00EFD1),
+                                  ),
+                                ),
                                 filled: true,
                                 fillColor: Colors.white,
                                 floatingLabelBehavior:
@@ -707,6 +714,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   fontSize: 14,
                                 ),
                                 filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00EFD1),
+                                  ),
+                                ),
                                 fillColor: Colors.white,
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.auto,
@@ -737,7 +749,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                             ),
 
                             Align(
-                              alignment:Alignment.centerLeft,
+                              alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                   left: 20.0,
@@ -750,7 +762,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     fontFamily: "Roboto",
                                     fontWeight: FontWeight.w400,
                                     color: const Color.fromRGBO(0, 0, 0, 0.6),
-                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -872,9 +884,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                               ),
                             )
                           : SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              child: Text(
+                              height: Constant.height * 0.03,
+                              child: FittedBox(
+                                child: Text(
                                   "Continue",
                                   style: TextStyle(
                                     fontFamily: "Roboto",
@@ -883,8 +895,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     fontSize: 20.sp.clamp(0, 20),
                                   ),
                                 ),
+                              ),
                             ),
-                          ),
                     ),
                   ),
                 ],
@@ -899,6 +911,7 @@ class _HostelDetailsState extends State<HostelDetails> {
   Widget setDate(StateSetter setModalState) {
     return SingleChildScrollView(
       child: Container(
+        height: Constant.height * 0.6,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -995,7 +1008,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(text: "GHS 4000/"),
+                            TextSpan(text: "GH₵ 4000/"),
                             TextSpan(
                               text: "Academic year",
                               style: TextStyle(fontSize: 8),
@@ -1189,9 +1202,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                           ),
                         )
                       : SizedBox(
-                        height: Constant.height * 0.03,
-                        child: FittedBox(
-                          child: Text(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
                               "Proceed to payment",
                               style: TextStyle(
                                 fontFamily: "Roboto",
@@ -1200,8 +1213,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 fontSize: 20.sp.clamp(0, 20),
                               ),
                             ),
+                          ),
                         ),
-                      ),
                 ),
               ),
             ],
@@ -1225,7 +1238,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                 Positioned(
                   top: Constant.height * 0.06,
                   child: SizedBox(
-                    height: Constant.height -(Constant.height * 0.06),
+                    height: Constant.height - (Constant.height * 0.06),
                     width: Constant.width,
                     child: SingleChildScrollView(
                       child: Container(
@@ -1252,7 +1265,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             widget.hostel.hostel_images![index];
                                         return CachedNetworkImage(
                                           imageUrl: string ?? "",
-                                          width: MediaQuery.sizeOf(context).width,
+                                          width: MediaQuery.sizeOf(
+                                            context,
+                                          ).width,
                                           fit: BoxFit.cover,
                                           placeholder: (context, url) =>
                                               SpinKitThreeBounce(
@@ -1291,10 +1306,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   Navigator.pop(context);
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.only(left: 20.h),
+                                                  margin: EdgeInsets.only(
+                                                    left: 20.h,
+                                                  ),
                                                   height: 45.h,
                                                   width: 45.w,
-                                                      
+
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromRGBO(
                                                       255,
@@ -1317,64 +1334,80 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               Row(
                                                 children: [
                                                   Container(
-                                                margin: EdgeInsets.only(right: 10.h),
-                                                //
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: const Color.fromRGBO(
-                                                    255,
-                                                    255,
-                                                    255,
-                                                    0.6,
-                                                  ),
-                                                ),
-                                                height: 45.h,
-                                                width: 45.w,
-                                                child: Stack(
-                                                  children: [
-                                                    Positioned(
-                                                      top: 0,
-                                                      left: 0,
-                                                      right: 0,
-                                                      bottom: 0,
-                                                      child: Padding(
-                                                        padding: EdgeInsets.all(12.r),
-                                                        child: Image.asset("assets/hostels_detail/share.png", fit: BoxFit.contain))
+                                                    margin: EdgeInsets.only(
+                                                      right: 10.h,
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              // SizedBox(width: 5.h),
-                                                Container(
-                                                margin: EdgeInsets.only(right: 20.h),
-                                                //
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: const Color.fromRGBO(
-                                                    255,
-                                                    255,
-                                                    255,
-                                                    0.6,
-                                                  ),
-                                                ),
-                                                height: 45.h,
-                                                width: 45.w,
-                                                child: Stack(
-                                                  children: [
-                                                    Positioned(
-                                                      top: 0,
-                                                      left: 0,
-                                                      right: 0,
-                                                      bottom: 0,
-                                                      child: const Icon(
-                                                        Icons.favorite_border_outlined,
-                                                        color: Colors.black,
-                                                      ),
+                                                    //
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                            255,
+                                                            255,
+                                                            255,
+                                                            0.6,
+                                                          ),
                                                     ),
-                                                  ],
-                                                ),
+                                                    height: 45.h,
+                                                    width: 45.w,
+                                                    child: Stack(
+                                                      children: [
+                                                        Positioned(
+                                                          top: 0,
+                                                          left: 0,
+                                                          right: 0,
+                                                          bottom: 0,
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                  12.r,
+                                                                ),
+                                                            child: Image.asset(
+                                                              "assets/hostels_detail/share.png",
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  // SizedBox(width: 5.h),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                      right: 20.h,
+                                                    ),
+                                                    //
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                            255,
+                                                            255,
+                                                            255,
+                                                            0.6,
+                                                          ),
+                                                    ),
+                                                    height: 45.h,
+                                                    width: 45.w,
+                                                    child: Stack(
+                                                      children: [
+                                                        Positioned(
+                                                          top: 0,
+                                                          left: 0,
+                                                          right: 0,
+                                                          bottom: 0,
+                                                          child: const Icon(
+                                                            Icons
+                                                                .favorite_border_outlined,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              ],)
                                             ],
                                           ),
                                           const Spacer(),
@@ -1387,11 +1420,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             ),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Align(
                                                   child: Container(
-                                                    height: Constant.height * 0.25,
+                                                    height:
+                                                        Constant.height * 0.25,
                                                     margin: EdgeInsets.only(
                                                       top: 50.h,
                                                       left: 10.h,
@@ -1399,36 +1434,48 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                     // color: Colors.red,
                                                     child: Column(
                                                       crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Container(
                                                           // color: Colors.green,
                                                           height:
-                                                              Constant.height * 0.04,
-                                                          width: Constant.width * 0.65,
+                                                              Constant.height *
+                                                              0.04,
+                                                          width:
+                                                              Constant.width *
+                                                              0.65,
                                                           child: FittedBox(
-                                                            alignment:
-                                                                Alignment.centerLeft,
+                                                            alignment: Alignment
+                                                                .centerLeft,
                                                             child: Text(
-                                                              widget.hostel.name,
+                                                              widget
+                                                                  .hostel
+                                                                  .name,
                                                               style: TextStyle(
-                                                                fontFamily: "Poppins",
-                                                                color: Colors.white,
+                                                                fontFamily:
+                                                                    "Poppins",
+                                                                color: Colors
+                                                                    .white,
                                                                 fontWeight:
-                                                                    FontWeight.w900,
-                                                                fontSize: 24.sp.clamp(
-                                                                  0,
-                                                                  24,
-                                                                ),
-                                                                letterSpacing: 0.1.w,
+                                                                    FontWeight
+                                                                        .w900,
+                                                                fontSize: 24.sp
+                                                                    .clamp(
+                                                                      0,
+                                                                      24,
+                                                                    ),
+                                                                letterSpacing:
+                                                                    0.1.w,
                                                               ),
                                                             ),
                                                           ),
                                                         ),
                                                         Padding(
-                                                          padding: EdgeInsets.only(
-                                                            left: 0.w,
-                                                          ),
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                left: 0.w,
+                                                              ),
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
@@ -1447,7 +1494,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             .height *
                                                                         0.09,
                                                                     width:
-                                                                        Constant.width *
+                                                                        Constant
+                                                                            .width *
                                                                         0.6,
                                                                     child: Stack(
                                                                       children: [
@@ -1455,12 +1503,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           // color: Colors
                                                                           //     .yellow,
                                                                           height:
-                                                                              Constant
-                                                                                  .height *
+                                                                              Constant.height *
                                                                               0.05,
                                                                           width:
-                                                                              Constant
-                                                                                  .width *
+                                                                              Constant.width *
                                                                               0.6,
                                                                           child: Row(
                                                                             children: [
@@ -1473,8 +1519,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                     0.06,
                                                                                 child: Image.asset(
                                                                                   "assets/hostels_detail/location_white.png",
-                                                                                  fit: BoxFit
-                                                                                      .fitHeight,
+                                                                                  fit: BoxFit.fitHeight,
                                                                                 ),
                                                                               ),
                                                                               SizedBox(
@@ -1501,48 +1546,43 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         ),
                                                                         Positioned(
                                                                           top:
-                                                                              Constant
-                                                                                  .height *
+                                                                              Constant.height *
                                                                               0.041,
-                                                                          left: 0,
-                                                                          right: 0,
+                                                                          left:
+                                                                              0,
+                                                                          right:
+                                                                              0,
                                                                           child: Align(
                                                                             alignment:
-                                                                                Alignment
-                                                                                    .centerLeft,
+                                                                                Alignment.centerLeft,
                                                                             child: SizedBox(
                                                                               width:
-                                                                                  Constant
-                                                                                      .width *
+                                                                                  Constant.width *
                                                                                   0.06,
                                                                               height:
-                                                                                  Constant
-                                                                                      .height *
+                                                                                  Constant.height *
                                                                                   0.015,
                                                                               child: Image.asset(
                                                                                 "assets/hostels_detail/Rectangle 50.png",
-                                                                                fit: BoxFit
-                                                                                    .contain,
+                                                                                fit: BoxFit.contain,
                                                                               ),
                                                                             ),
                                                                           ),
                                                                         ),
                                                                         Positioned(
                                                                           top:
-                                                                              Constant
-                                                                                  .height *
+                                                                              Constant.height *
                                                                               0.045,
-                                                                          left: 0,
+                                                                          left:
+                                                                              0,
                                                                           // right: 0,
                                                                           child: Container(
                                                                             // color: Colors.orange,
                                                                             width:
-                                                                                Constant
-                                                                                    .width *
+                                                                                Constant.width *
                                                                                 0.6,
                                                                             height:
-                                                                                Constant
-                                                                                    .height *
+                                                                                Constant.height *
                                                                                 0.05,
                                                                             child: Row(
                                                                               children: [
@@ -1556,8 +1596,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                       0.045,
                                                                                   child: Image.asset(
                                                                                     "assets/hostels_detail/University_white.png",
-                                                                                    fit:
-                                                                                        BoxFit.contain,
+                                                                                    fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
                                                                                 SizedBox(
@@ -1598,8 +1637,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     child: const Icon(
                                                                       Icons
                                                                           .directions_walk_sharp,
-                                                                      color:
-                                                                          Colors.white,
+                                                                      color: Colors
+                                                                          .white,
                                                                     ),
                                                                   ),
                                                                   SizedBox(
@@ -1607,7 +1646,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-                                                                    width: Constant.width * 0.1,
+                                                                    width:
+                                                                        Constant
+                                                                            .width *
+                                                                        0.1,
                                                                     child: FittedBox(
                                                                       child: Text(
                                                                         // " 1 hour 08 min",
@@ -1616,16 +1658,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           fontFamily:
                                                                               "Roboto",
                                                                           fontWeight:
-                                                                              FontWeight
-                                                                                  .w500,
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize: 12
-                                                                              .sp
-                                                                              .clamp(
-                                                                                0,
-                                                                                12,
-                                                                              ),
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontSize: 12.sp.clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1636,7 +1675,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-                                                                    
+
                                                                     child: Image.asset(
                                                                       "assets/hostels_detail/driving.png",
                                                                       fit: BoxFit
@@ -1648,24 +1687,24 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-                                                                    width: Constant.width * 0.1,
+                                                                    width:
+                                                                        Constant
+                                                                            .width *
+                                                                        0.1,
                                                                     child: FittedBox(
                                                                       child: Text(
                                                                         " ${widget.hostel.distance_car} mins",
-                                                                        style:TextStyle(
+                                                                        style: TextStyle(
                                                                           fontFamily:
                                                                               "Roboto",
                                                                           fontWeight:
-                                                                              FontWeight
-                                                                                  .w500,
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize: 12
-                                                                              .sp
-                                                                              .clamp(
-                                                                                0,
-                                                                                12,
-                                                                              ),
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontSize: 12.sp.clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1679,7 +1718,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     child: FittedBox(
                                                                       child: Image.asset(
                                                                         "assets/hostels_detail/Bus_white.png",
-                                                                        fit: BoxFit.fitHeight
+                                                                        fit: BoxFit
+                                                                            .fitHeight,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -1688,7 +1728,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-                                                                    width: Constant.width * 0.1,
+                                                                    width:
+                                                                        Constant
+                                                                            .width *
+                                                                        0.1,
                                                                     child: FittedBox(
                                                                       child: Text(
                                                                         " ${widget.hostel.distance_car} mins",
@@ -1696,16 +1739,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           fontFamily:
                                                                               "Roboto",
                                                                           fontWeight:
-                                                                              FontWeight
-                                                                                  .w500,
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontSize: 12
-                                                                              .sp
-                                                                              .clamp(
-                                                                                0,
-                                                                                12,
-                                                                              ),
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontSize: 12.sp.clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1720,10 +1760,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                 ),
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 10.h,
+                                                  ),
                                                   height: Constant.height * 0.5,
                                                   child: Align(
-                                                    alignment: Alignment.bottomCenter,
+                                                    alignment:
+                                                        Alignment.bottomCenter,
                                                     child: Container(
                                                       // color: Colors.blue,
                                                       margin: EdgeInsets.only(
@@ -1732,12 +1775,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       ),
                                                       child: Column(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment.spaceBetween,
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
                                                           Container(
                                                             decoration: BoxDecoration(
                                                               border: Border.all(
-                                                                color: Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 width: 2.0,
                                                               ),
                                                               borderRadius:
@@ -1752,9 +1797,16 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   ),
                                                               child: Image.asset(
                                                                 'assets/hostels_detail/hostel-2.png',
-                                                                height: Constant.height * 0.05,
-                                                                width: Constant.width * 0.115,
-                                                                fit: BoxFit.cover,
+                                                                height:
+                                                                    Constant
+                                                                        .height *
+                                                                    0.05,
+                                                                width:
+                                                                    Constant
+                                                                        .width *
+                                                                    0.115,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
                                                             ),
                                                           ),
@@ -1762,7 +1814,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           Container(
                                                             decoration: BoxDecoration(
                                                               border: Border.all(
-                                                                color: Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 width: 2.0,
                                                               ),
                                                               borderRadius:
@@ -1777,19 +1830,32 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   ),
                                                               child: Image.asset(
                                                                 'assets/hostels_detail/hostel-2.png',
-                                                                height: Constant.height * 0.05,
-                                                                width: Constant.width * 0.115,
-                                                                fit: BoxFit.cover,
+                                                                height:
+                                                                    Constant
+                                                                        .height *
+                                                                    0.05,
+                                                                width:
+                                                                    Constant
+                                                                        .width *
+                                                                    0.115,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                               ),
                                                             ),
                                                           ),
                                                           // SizedBox(height: 10.h),
                                                           Container(
-                                                            height: Constant.height * 0.05,
-                                                           width: Constant.width * 0.115,
+                                                            height:
+                                                                Constant
+                                                                    .height *
+                                                                0.05,
+                                                            width:
+                                                                Constant.width *
+                                                                0.115,
                                                             decoration: BoxDecoration(
                                                               border: Border.all(
-                                                                color: Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 width: 2.w,
                                                               ),
                                                               borderRadius:
@@ -1803,34 +1869,56 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     10.r,
                                                                   ),
                                                               child: SizedBox(
-                                                                height: Constant.height * 0.05,
-                                                                width: Constant.width * 0.115,
+                                                                height:
+                                                                    Constant
+                                                                        .height *
+                                                                    0.05,
+                                                                width:
+                                                                    Constant
+                                                                        .width *
+                                                                    0.115,
                                                                 child: Stack(
                                                                   children: [
                                                                     Image.asset(
-                                                                  'assets/hostels_detail/hostel-2.png',
-                                                                  height: Constant.height * 0.05,
-                                                                  width: Constant.width * 0.115,
-                                                                  fit: BoxFit.cover,
-                                                                ),
-                                                                Container(
-                                                                  decoration: BoxDecoration(
-                                                                    color: Color.fromRGBO(51, 51, 51, 0.1)
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      "+10",
-                                                                      style: TextStyle(
-                                                                        fontFamily: "Poppins",
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 12.sp,
-                                                                        color: Colors.white,
-                                                                      )
+                                                                      'assets/hostels_detail/hostel-2.png',
+                                                                      height:
+                                                                          Constant
+                                                                              .height *
+                                                                          0.05,
+                                                                      width:
+                                                                          Constant
+                                                                              .width *
+                                                                          0.115,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                    Container(
+                                                                      decoration: BoxDecoration(
+                                                                        color: Color.fromRGBO(
+                                                                          51,
+                                                                          51,
+                                                                          51,
+                                                                          0.1,
+                                                                        ),
                                                                       ),
-                                                                  )
-                                                                )
+                                                                      child: Center(
+                                                                        child: Text(
+                                                                          "+10",
+                                                                          style: TextStyle(
+                                                                            fontFamily:
+                                                                                "Poppins",
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                12.sp,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ],
-                                                                )
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -1868,9 +1956,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             width: Constant.width * 0.27,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius: BorderRadius.circular(
-                                                5,
-                                              ).r,
+                                              borderRadius:
+                                                  BorderRadius.circular(5).r,
                                             ),
                                             child: OutlinedButton(
                                               onPressed: () {},
@@ -1878,7 +1965,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 foregroundColor: Colors.black87,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(16.r),
+                                                      BorderRadius.circular(
+                                                        16.r,
+                                                      ),
                                                 ),
                                                 side: BorderSide(
                                                   width: 1.w,
@@ -1894,14 +1983,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       fit: BoxFit.contain,
                                                     ),
                                                     SizedBox(
-                                                      height: Constant.height * 0.021,
+                                                      height:
+                                                          Constant.height *
+                                                          0.021,
                                                       child: FittedBox(
                                                         child: Text(
                                                           " Photos",
                                                           style: TextStyle(
-                                                            fontFamily: "Work Sans",
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 13.sp.clamp(0, 13),
+                                                            fontFamily:
+                                                                "Work Sans",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 13.sp
+                                                                .clamp(0, 13),
                                                           ),
                                                         ),
                                                       ),
@@ -1916,9 +2010,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             width: Constant.width * 0.27,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius: BorderRadius.circular(
-                                                5,
-                                              ).r,
+                                              borderRadius:
+                                                  BorderRadius.circular(5).r,
                                             ),
                                             child: OutlinedButton(
                                               onPressed: () {},
@@ -1926,7 +2019,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 foregroundColor: Colors.black87,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(16.r),
+                                                      BorderRadius.circular(
+                                                        16.r,
+                                                      ),
                                                 ),
                                                 side: BorderSide(
                                                   width: 1.w,
@@ -1943,14 +2038,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       fit: BoxFit.contain,
                                                     ),
                                                     SizedBox(
-                                                      height: Constant.height * 0.021,
+                                                      height:
+                                                          Constant.height *
+                                                          0.021,
                                                       child: FittedBox(
                                                         child: Text(
                                                           " Videos",
                                                           style: TextStyle(
-                                                            fontFamily: "Work Sans",
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 13.sp.clamp(0, 13),
+                                                            fontFamily:
+                                                                "Work Sans",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 13.sp
+                                                                .clamp(0, 13),
                                                           ),
                                                         ),
                                                       ),
@@ -1965,9 +2065,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             width: Constant.width * 0.28,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius: BorderRadius.circular(
-                                                5,
-                                              ).r,
+                                              borderRadius:
+                                                  BorderRadius.circular(5).r,
                                             ),
                                             child: OutlinedButton(
                                               onPressed: () {},
@@ -1975,7 +2074,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 foregroundColor: Colors.black87,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(16.r),
+                                                      BorderRadius.circular(
+                                                        16.r,
+                                                      ),
                                                 ),
                                                 side: BorderSide(
                                                   width: 1.w,
@@ -1992,14 +2093,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       fit: BoxFit.contain,
                                                     ),
                                                     SizedBox(
-                                                      height: Constant.height * 0.021,
+                                                      height:
+                                                          Constant.height *
+                                                          0.021,
                                                       child: FittedBox(
                                                         child: Text(
                                                           " View",
                                                           style: TextStyle(
-                                                            fontFamily: "Work Sans",
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 13.sp.clamp(0, 13),
+                                                            fontFamily:
+                                                                "Work Sans",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 13.sp
+                                                                .clamp(0, 13),
                                                           ),
                                                         ),
                                                       ),
@@ -2047,7 +2153,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   _scrollToSection(tile.name);
                                                 },
                                                 child: AnimatedContainer(
-                                                  height: Constant.height * 0.06,
+                                                  height:
+                                                      Constant.height * 0.06,
                                                   duration: const Duration(
                                                     milliseconds: 300,
                                                   ),
@@ -2061,12 +2168,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   //     ),
                                                   decoration: BoxDecoration(
                                                     // color: Colors.blue,
-                                                    border: selectedIndex == index
+                                                    border:
+                                                        selectedIndex == index
                                                         ? Border(
                                                             bottom: BorderSide(
-                                                              color: const Color(
-                                                                0xFF00EFD1,
-                                                              ),
+                                                              color:
+                                                                  const Color(
+                                                                    0xFF00EFD1,
+                                                                  ),
                                                               width: 1.5.w,
                                                             ),
                                                           )
@@ -2074,15 +2183,20 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   child: Align(
                                                     child: SizedBox(
-                                                      height: Constant.height * 0.025,
+                                                      height:
+                                                          Constant.height *
+                                                          0.025,
                                                       child: FittedBox(
                                                         child: Text(
                                                           tile.name,
                                                           style: TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                            fontFamily: "Poppins",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                "Poppins",
                                                             color:
-                                                                selectedIndex == index
+                                                                selectedIndex ==
+                                                                    index
                                                                 ? null
                                                                 : Colors.black,
                                                           ),
@@ -2119,7 +2233,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   style: TextStyle(
                                                     fontFamily: "Poppins",
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                     letterSpacing: 0.15.w,
                                                   ),
                                                 ),
@@ -2159,7 +2276,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
-                    
+
                                   /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2168,7 +2285,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   Container(
                                     // color: const Color.fromRGBO(255, 255, 255, 1),
                                     color: Colors.white,
-                                    padding: EdgeInsets.symmetric(horizontal: 25.h),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 25.h,
+                                    ),
                                     child: Column(
                                       children: [
                                         Align(
@@ -2188,14 +2307,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           ),
                                         ),
                                         SizedBox(height: 10.h),
-                                       
-                                          utilities(
-                                            hostel: widget.hostel,
-                                            context : context,
-                                            type: "Amenities",
-                                            amenities: true
-                                          ),
-                                       
+
+                                        utilities(
+                                          hostel: widget.hostel,
+                                          context: context,
+                                          type: "Amenities",
+                                          amenities: true,
+                                        ),
+
                                         SizedBox(height: 20.h),
                                         Align(
                                           alignment: Alignment.topLeft,
@@ -2213,14 +2332,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             ),
                                           ),
                                         ),
-                    
+
                                         SizedBox(height: 10.h),
                                         utilities(
-                                            hostel: widget.hostel,
-                                            context : context,
-                                            type: "Bills & Utilities",
-                                            bills: true
-                                          ),
+                                          hostel: widget.hostel,
+                                          context: context,
+                                          type: "Bills & Utilities",
+                                          bills: true,
+                                        ),
                                         SizedBox(height: 20.h),
                                         Align(
                                           alignment: Alignment.topLeft,
@@ -2243,13 +2362,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           hostel: widget.hostel,
                                           type: "Security & Saftety",
                                           context: context,
-                                          security: true
-                                          ),
+                                          security: true,
+                                        ),
                                         SizedBox(height: 20.h),
                                       ],
                                     ),
                                   ),
-                    
+
                                   // /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2273,13 +2392,18 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              padding: EdgeInsets.only(left: 30.w),
+                                              padding: EdgeInsets.only(
+                                                left: 30.w,
+                                              ),
                                               height: Constant.height * 0.035,
                                               child: FittedBox(
                                                 child: Text(
                                                   "Room Types(${roomTypes.length})",
                                                   style: TextStyle(
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
@@ -2309,9 +2433,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                               ),
                                                           foregroundColor:
                                                               Colors.white,
-                                                          backgroundColor: Color(
-                                                            0xFF00EFD1,
-                                                          ),
+                                                          backgroundColor:
+                                                              Color(0xFF00EFD1),
                                                         ),
                                                         onPressed: () {
                                                           _scrollToSection(
@@ -2329,9 +2452,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 fontFamily:
                                                                     "Manrope",
                                                                 fontWeight:
-                                                                    FontWeight.w500,
+                                                                    FontWeight
+                                                                        .w500,
                                                                 fontSize: 12.sp,
-                                                                color: Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                               ),
                                                             ),
                                                           ),
@@ -2341,88 +2466,94 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   Container(
                                                     color: Colors.white,
-                                                    child: Row(children: [
-                                                      ...List.generate(roomTypes.length, (
-                                                      index,
-                                                    ) {
-                                                      bool isRoomAvailable = true;
-                                                      RoomTypes rooms =
-                                                          roomTypes[index];
-                                                      if (rooms.availableRooms ==
-                                                              null ||
-                                                          rooms.availableRooms == 0) {
-                                                        setState(() {
-                                                          isRoomAvailable = false;
-                                                        });
-                                                      }
-                                                      return Row(
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets.only(
-                                                                  left: 8,
-                                                                  top: 8,
-                                                                  bottom: 8,
-                                                                ),
-                                                            child: SizedBox(
-                                                              // height: 30,
-                                                              child: ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                  elevation: 0,
-                                                                  padding:
-                                                                      EdgeInsets.symmetric(
+                                                    child: Row(
+                                                      children: [
+                                                        ...List.generate(roomTypes.length, (
+                                                          index,
+                                                        ) {
+                                                          bool isRoomAvailable =
+                                                              true;
+                                                          RoomTypes rooms =
+                                                              roomTypes[index];
+                                                          if (rooms.availableRooms ==
+                                                                  null ||
+                                                              rooms.availableRooms ==
+                                                                  0) {
+                                                            setState(() {
+                                                              isRoomAvailable =
+                                                                  false;
+                                                            });
+                                                          }
+                                                          return Row(
+                                                            children: [
+                                                              Container(
+                                                                padding:
+                                                                    const EdgeInsets.only(
+                                                                      left: 8,
+                                                                      top: 8,
+                                                                      bottom: 8,
+                                                                    ),
+                                                                child: SizedBox(
+                                                                  // height: 30,
+                                                                  child: ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      elevation:
+                                                                          0,
+                                                                      padding: EdgeInsets.symmetric(
                                                                         horizontal:
                                                                             10,
-                                                                        vertical: 5,
+                                                                        vertical:
+                                                                            5,
                                                                       ),
-                                                                  // foregroundColor:
-                                                                  //     Colors.black,
-                                                                  backgroundColor:
-                                                                      Color(
-                                                                        0xFFEFEFEF,
-                                                                      ),
-                                                                ),
-                                                                onPressed: () {
-                                                                  _scrollToSection(
-                                                                    rooms.type,
-                                                                  );
-                                                                },
-                                                                child: SizedBox(
-                                                                  height:
-                                                                      Constant
-                                                                          .height *
-                                                                      0.025,
-                                                                  child: FittedBox(
-                                                                    child: Text(
-                                                                      "${roomTypeText(rooms.type ?? "")} Room",
-                                                                      style: TextStyle(
-                                                                        fontFamily:
-                                                                            "Manrope",
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
-                                                                        fontSize:
-                                                                            12.sp,
-                                                                        color: Color(
-                                                                          0xFF101219,
+                                                                      // foregroundColor:
+                                                                      //     Colors.black,
+                                                                      backgroundColor:
+                                                                          Color(
+                                                                            0xFFEFEFEF,
+                                                                          ),
+                                                                    ),
+                                                                    onPressed: () {
+                                                                      _scrollToSection(
+                                                                        rooms
+                                                                            .type,
+                                                                      );
+                                                                    },
+                                                                    child: SizedBox(
+                                                                      height:
+                                                                          Constant
+                                                                              .height *
+                                                                          0.025,
+                                                                      child: FittedBox(
+                                                                        child: Text(
+                                                                          "${roomTypeText(rooms.type ?? "")} Room",
+                                                                          style: TextStyle(
+                                                                            fontFamily:
+                                                                                "Manrope",
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                12.sp,
+                                                                            color: Color(
+                                                                              0xFF101219,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ),
-                                                          // if ((index - 1) ==
-                                                          //     roomTypes.length)
-                                                          //   SizedBox(width: 30.w),
-                                                          
-                                                        ],
-                                                      );
-                                                    }),
-                                                    SizedBox(width: 30.w)
-                                                    ],),
-                                                  )
+
+                                                              // if ((index - 1) ==
+                                                              //     roomTypes.length)
+                                                              //   SizedBox(width: 30.w),
+                                                            ],
+                                                          );
+                                                        }),
+                                                        SizedBox(width: 30.w),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -2452,17 +2583,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 children: [
                                                   Container(
                                                     color: Colors.white,
-                                                    key: _sectionKeys[room.type],
+                                                    key:
+                                                        _sectionKeys[room.type],
                                                     // color: Colors.white,
                                                     margin: EdgeInsets.only(
                                                       bottom: 25.w,
                                                       // left: 20.h,
                                                       // right: 20.h
                                                     ),
-                                                    padding: EdgeInsets.symmetric(
-                                                      vertical: 25.h,
-                                                      horizontal: 25.w,
-                                                    ),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          vertical: 25.h,
+                                                          horizontal: 25.w,
+                                                        ),
                                                     child: Column(
                                                       children: [
                                                         Container(
@@ -2495,7 +2628,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              SizedBox(width: 10),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
                                                               Expanded(
                                                                 child: Column(
                                                                   crossAxisAlignment:
@@ -2513,12 +2648,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           maxLines:
                                                                               2,
                                                                           style: TextStyle(
-                                                                            fontSize: 16
-                                                                                .sp
-                                                                                .clamp(
-                                                                                  0,
-                                                                                  16,
-                                                                                ),
+                                                                            fontSize: 16.sp.clamp(
+                                                                              0,
+                                                                              16,
+                                                                            ),
                                                                             // letterSpacing: 0.2.w,
                                                                             fontWeight:
                                                                                 FontWeight.w600,
@@ -2527,7 +2660,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       ),
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 5.h,
+                                                                      height:
+                                                                          5.h,
                                                                     ),
                                                                     SizedBox(
                                                                       height:
@@ -2577,19 +2711,18 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       ),
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 5.h,
+                                                                      height:
+                                                                          5.h,
                                                                     ),
                                                                     Row(
                                                                       children: [
                                                                         Text(
                                                                           "Available Rooms:",
                                                                           style: TextStyle(
-                                                                            fontSize: 12
-                                                                                .sp
-                                                                                .clamp(
-                                                                                  0,
-                                                                                  12,
-                                                                                ),
+                                                                            fontSize: 12.sp.clamp(
+                                                                              0,
+                                                                              12,
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                         SizedBox(
@@ -2619,10 +2752,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                     15.r,
                                                                                   ),
                                                                                 ),
-                                                                                width:
-                                                                                    55.w,
-                                                                                height:
-                                                                                    25.h,
+                                                                                width: 55.w,
+                                                                                height: 25.h,
                                                                                 child: Center(
                                                                                   child: Text(
                                                                                     "Sold out",
@@ -2661,13 +2792,15 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 children: [
                                                                   Image.asset(
                                                                     "assets/hostels_detail/home.png",
-                                                                    height: 24.h,
+                                                                    height:
+                                                                        24.h,
                                                                     width: 24.w,
                                                                   ),
                                                                   Container(
                                                                     margin:
                                                                         EdgeInsets.only(
-                                                                          top: 5.h,
+                                                                          top: 5
+                                                                              .h,
                                                                         ),
                                                                     child: Text(
                                                                       " Bedroom 1",
@@ -2681,8 +2814,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               14,
                                                                             ),
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
+                                                                            FontWeight.w500,
                                                                         color: const Color(
                                                                           0xFF323232,
                                                                         ),
@@ -2702,7 +2834,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 Container(
                                                                   margin:
                                                                       EdgeInsets.only(
-                                                                        top: 5.h,
+                                                                        top:
+                                                                            5.h,
                                                                       ),
                                                                   child: Text(
                                                                     " Bathroom 1",
@@ -2741,7 +2874,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 children: [
                                                                   Image.asset(
                                                                     "assets/hostels_detail/bed.png",
-                                                                    height: 24.h,
+                                                                    height:
+                                                                        24.h,
                                                                     width: 24.w,
                                                                   ),
                                                                   Text(
@@ -2776,7 +2910,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 Container(
                                                                   margin:
                                                                       EdgeInsets.only(
-                                                                        top: 5.h,
+                                                                        top:
+                                                                            5.h,
                                                                       ),
                                                                   child: Text(
                                                                     " Private Bedroom",
@@ -2837,8 +2972,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         child: Text(
                                                                           "View more details",
                                                                           textAlign:
-                                                                              TextAlign
-                                                                                  .center,
+                                                                              TextAlign.center,
                                                                           style: TextStyle(
                                                                             fontWeight:
                                                                                 FontWeight.w500,
@@ -2859,16 +2993,18 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                               // SizedBox(width: 40.h),
                                                               Container(
                                                                 width:
-                                                                    Constant.width *
+                                                                    Constant
+                                                                        .width *
                                                                     0.48,
                                                                 // color:
-                                                                    // Colors.yellow,
+                                                                // Colors.yellow,
                                                                 child: Row(
                                                                   children: [
                                                                     SvgPicture.asset(
                                                                       'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
                                                                       width: 20,
-                                                                      height: 20,
+                                                                      height:
+                                                                          20,
                                                                     ),
                                                                     SizedBox(
                                                                       width: 5,
@@ -2877,8 +3013,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       "More",
                                                                       style: TextStyle(
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
+                                                                            FontWeight.w500,
                                                                         fontSize:
                                                                             14.sp,
                                                                         fontFamily:
@@ -2911,19 +3046,28 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           child: Row(
                                                             children: [
                                                               SizedBox(
-                                                                height: Constant.height * 0.03,
+                                                                height:
+                                                                    Constant
+                                                                        .height *
+                                                                    0.03,
                                                                 width:
                                                                     MediaQuery.sizeOf(
                                                                       context,
                                                                     ).width *
                                                                     0.4,
                                                                 child: FittedBox(
-                                                                  alignment: Alignment.centerLeft,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerLeft,
                                                                   child: Text(
                                                                     "Academic Year",
                                                                     style: TextStyle(
-                                                                      fontSize: 15.sp
-                                                                          .clamp(0, 15),
+                                                                      fontSize: 15
+                                                                          .sp
+                                                                          .clamp(
+                                                                            0,
+                                                                            15,
+                                                                          ),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w600,
@@ -2933,13 +3077,20 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                               ),
                                                               Expanded(
                                                                 child: SizedBox(
-                                                                  height: Constant.width * 0.04,
+                                                                  height:
+                                                                      Constant
+                                                                          .width *
+                                                                      0.04,
                                                                   child: FittedBox(
                                                                     child: Text(
                                                                       "Move in: 08 Aug 2024",
                                                                       style: TextStyle(
-                                                                        fontSize: 13.sp
-                                                                            .clamp(0, 13),
+                                                                        fontSize: 13
+                                                                            .sp
+                                                                            .clamp(
+                                                                              0,
+                                                                              13,
+                                                                            ),
                                                                         color: const Color(
                                                                           0xFF323232,
                                                                         ),
@@ -2965,21 +3116,23 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     ).width *
                                                                     0.4,
                                                                 child: Align(
-                                                                  alignment: Alignment
-                                                                      .topLeft,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
                                                                   child: Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
                                                                     children: [
                                                                       Text(
                                                                         "Price Estimate",
-                                                                        textAlign: TextAlign.left,
+                                                                        textAlign:
+                                                                            TextAlign.left,
                                                                         style: TextStyle(
-                                                                          fontSize: 12
-                                                                              .sp
-                                                                              .clamp(
-                                                                                0,
-                                                                                12,
-                                                                              ),
+                                                                          fontSize: 12.sp.clamp(
+                                                                            0,
+                                                                            12,
+                                                                          ),
                                                                           letterSpacing:
                                                                               0.2.w,
                                                                           color: const Color(
@@ -2994,17 +3147,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       Container(
                                                                         // color: Colors.brown,
                                                                         height:
-                                                                            Constant
-                                                                                .height *
+                                                                            Constant.height *
                                                                             0.03,
                                                                         width:
-                                                                            Constant
-                                                                                .width *
+                                                                            Constant.width *
                                                                             0.43,
                                                                         child: Row(
                                                                           mainAxisAlignment:
-                                                                              MainAxisAlignment
-                                                                                  .start,
+                                                                              MainAxisAlignment.start,
                                                                           children: [
                                                                             SizedBox(
                                                                               height:
@@ -3019,8 +3169,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                       18,
                                                                                     ),
                                                                                     fontWeight: FontWeight.w500,
-                                                                                    color: Color(0xFF323232),
-                                                                                    fontFamily: "Poppins"
+                                                                                    color: Color(
+                                                                                      0xFF323232,
+                                                                                    ),
+                                                                                    fontFamily: "Poppins",
                                                                                   ),
                                                                                 ),
                                                                               ),
@@ -3062,8 +3214,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                           Alignment
                                                                               .center,
                                                                       child: SizedBox(
-                                                                        width: 110.w,
-                                                                        height: Constant.height * 0.05,
+                                                                        width:
+                                                                            110.w,
+                                                                        height:
+                                                                            Constant.height *
+                                                                            0.05,
                                                                         child: ElevatedButton(
                                                                           onPressed: () {
                                                                             TextEditingController
@@ -3078,19 +3233,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             TextEditingController
                                                                             emailAddress =
                                                                                 TextEditingController();
-                                                                            List<
-                                                                              TextEditingController
-                                                                            >
+                                                                            // List<
+                                                                            //   TextEditingController
+                                                                            // >
                                                                             occupantNames = [
                                                                               TextEditingController(),
                                                                             ];
-                                                                            List<
-                                                                              TextEditingController
-                                                                            >
+                                                                            // List<
+                                                                            //   TextEditingController
+                                                                            // >
                                                                             occupantEmails = [
                                                                               TextEditingController(),
                                                                             ];
-                                                                                                                          
+
                                                                             if (user !=
                                                                                 null) {
                                                                               Get.snackbar(
@@ -3098,14 +3253,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                 'Task saved!',
                                                                               );
                                                                               showModalBottomSheet(
-                                                                                context:
-                                                                                    context,
-                                                                                isScrollControlled:
-                                                                                    true,
+                                                                                context: context,
+                                                                                isScrollControlled: true,
                                                                                 builder:
                                                                                     (
-                                                                                      BuildContext
-                                                                                      context,
+                                                                                      BuildContext context,
                                                                                     ) {
                                                                                       return StatefulBuilder(
                                                                                         builder:
@@ -3119,38 +3271,36 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                                     context,
                                                                                                   ).viewInsets.bottom,
                                                                                                 ),
-                                                                                                child: IntrinsicHeight(
-                                                                                                  child: book(
-                                                                                                    setModalState,
-                                                                                                    name,
-                                                                                                    phoneNum,
-                                                                                                    emailAddress,
-                                                                                                    occupantNames,
-                                                                                                    occupantEmails,
-                                                                                                  ),
+                                                                                                child: book(
+                                                                                                  setModalState,
+                                                                                                  name,
+                                                                                                  phoneNum,
+                                                                                                  emailAddress,
+                                                                                                  occupantNames,
+                                                                                                  occupantEmails,
                                                                                                 ),
                                                                                               );
                                                                                             },
                                                                                       );
                                                                                     },
-                                                                              ).whenComplete(() {
-                                                                                numPeople
-                                                                                    .dispose();
-                                                                                                                          
-                                                                                setState(() {
-                                                                                  isChecked =
-                                                                                      false;
-                                                                                });
-                                                                                                                          
-                                                                                for (var c
-                                                                                    in occupantNames) {
-                                                                                  c.dispose();
-                                                                                }
-                                                                                for (var c
-                                                                                    in occupantEmails) {
-                                                                                  c.dispose();
-                                                                                }
-                                                                              });
+                                                                              ).whenComplete(
+                                                                                () {
+                                                                                  // numPeople.dispose();
+
+                                                                                  setState(
+                                                                                    () {
+                                                                                      isChecked = false;
+                                                                                    },
+                                                                                  );
+
+                                                                                  // for (var c in occupantNames) {
+                                                                                  //   c.dispose();
+                                                                                  // }
+                                                                                  // for (var c in occupantEmails) {
+                                                                                  //   c.dispose();
+                                                                                  // }
+                                                                                },
+                                                                              );
                                                                             } else {
                                                                               Get.snackbar(
                                                                                 'Error',
@@ -3162,36 +3312,29 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             elevation:
                                                                                 0,
                                                                             shape: ContinuousRectangleBorder(
-                                                                              side: BorderSide
-                                                                                  .none,
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(
-                                                                                    30.r,
-                                                                                  ),
+                                                                              side: BorderSide.none,
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                30.r,
+                                                                              ),
                                                                             ),
-                                                                            backgroundColor:
-                                                                                const Color.fromARGB(
-                                                                                  255,
-                                                                                  33,
-                                                                                  243,
-                                                                                  201,
-                                                                                ),
+                                                                            backgroundColor: const Color.fromARGB(
+                                                                              255,
+                                                                              33,
+                                                                              243,
+                                                                              201,
+                                                                            ),
                                                                           ),
                                                                           child: SizedBox(
                                                                             height:
-                                                                                Constant
-                                                                                    .height *
+                                                                                Constant.height *
                                                                                 0.025,
                                                                             child: FittedBox(
                                                                               child: Text(
                                                                                 "Book now",
-                                                                                textAlign:
-                                                                                    TextAlign.center,
+                                                                                textAlign: TextAlign.center,
                                                                                 style: TextStyle(
-                                                                                  color:
-                                                                                      Colors.white,
-                                                                                  fontWeight:
-                                                                                      FontWeight.w600,
+                                                                                  color: Colors.white,
+                                                                                  fontWeight: FontWeight.w600,
                                                                                   fontSize: 14.sp.clamp(
                                                                                     0,
                                                                                     14,
@@ -3235,7 +3378,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   "Cancellation Policies",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                     letterSpacing: 0.2.w,
                                                   ),
                                                 ),
@@ -3251,14 +3397,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Cooling off period",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3266,15 +3417,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3302,7 +3460,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   "Payment Details",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -3317,14 +3478,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Booking deposit",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3332,15 +3498,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3359,14 +3532,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Payment installment plan",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3374,15 +3552,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3401,14 +3586,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Mode of payment",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3416,15 +3606,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3443,14 +3640,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Guarantor requirement",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3458,15 +3660,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3494,7 +3703,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   "Location",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -3538,7 +3750,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   "Frequently Asked Questions (FAQs)",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 20.sp.clamp(0, 20),
+                                                    fontSize: 20.sp.clamp(
+                                                      0,
+                                                      20,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -3553,14 +3768,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Can I bring a TV?",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3568,15 +3788,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3595,14 +3822,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Can I make a group booking?",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3610,15 +3842,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3637,14 +3876,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Can I have friends stay over?",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3652,15 +3896,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3679,56 +3930,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
                                                     "Do you have a cleaner",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
-                                                      fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {},
-                                                child: SizedBox(
-                                                  height: Constant.height * 0.03,
-                                                  // width: Constant.width,
-                                                  child: FittedBox(
-                                                    child: Text(
-                                                      "View",
-                                                      style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
                                                       ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10.h),
-                                          Divider(height: .2.h),
-                                          SizedBox(height: 20.h),
-                                         Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                height: Constant.height * 0.03,
-                                                width: Constant.width * 0.7,
-                                                child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Is beddings & linen provided",
-                                                    style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3736,58 +3950,22 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10.h),
-                                          Divider(height: .2.h),
-                                          SizedBox(height: 20.h),
-                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                height: Constant.height * 0.03,
-                                                width: Constant.width * 0.7,
-                                                child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    "What our rents covered",
-                                                    style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
-                                                      fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Color(0xFF323232)
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {},
-                                                child: SizedBox(
-                                                  height: Constant.height * 0.03,
-                                                  // width: Constant.width,
-                                                  child: FittedBox(
-                                                    child: Text(
-                                                      "View",
-                                                      style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: "Poppins"
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ),
                                                     ),
                                                   ),
@@ -3806,13 +3984,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 height: Constant.height * 0.03,
                                                 width: Constant.width * 0.7,
                                                 child: FittedBox(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
-                                                    "Do i need a guarantor?",
+                                                    "Is beddings & linen provided",
                                                     style: TextStyle(
-                                                      fontSize: 15.sp.clamp(0, 15),
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
                                                     ),
                                                   ),
                                                 ),
@@ -3820,16 +4004,131 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               TextButton(
                                                 onPressed: () {},
                                                 child: SizedBox(
-                                                  height: Constant.height * 0.03,
+                                                  height:
+                                                      Constant.height * 0.03,
                                                   // width: Constant.width,
                                                   child: FittedBox(
                                                     child: Text(
                                                       "View",
                                                       style: TextStyle(
-                                                        fontSize: 15.sp.clamp(0, 15),
-                                                        color: const Color(0xFF00EFD1),
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: "Poppins"
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Divider(height: .2.h),
+                                          SizedBox(height: 20.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                height: Constant.height * 0.03,
+                                                width: Constant.width * 0.7,
+                                                child: FittedBox(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "What our rents covered",
+                                                    style: TextStyle(
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
+                                                      fontFamily: "Poppins",
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xFF323232),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {},
+                                                child: SizedBox(
+                                                  height:
+                                                      Constant.height * 0.03,
+                                                  // width: Constant.width,
+                                                  child: FittedBox(
+                                                    child: Text(
+                                                      "View",
+                                                      style: TextStyle(
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Poppins",
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Divider(height: .2.h),
+                                          SizedBox(height: 20.h),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                height: Constant.height * 0.03,
+                                                width: Constant.width * 0.7,
+                                                child: FittedBox(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Do i need a guarantor?",
+                                                    style: TextStyle(
+                                                      fontSize: 15.sp.clamp(
+                                                        0,
+                                                        15,
+                                                      ),
+                                                      fontFamily: "Poppins",
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {},
+                                                child: SizedBox(
+                                                  height:
+                                                      Constant.height * 0.03,
+                                                  // width: Constant.width,
+                                                  child: FittedBox(
+                                                    child: Text(
+                                                      "View",
+                                                      style: TextStyle(
+                                                        fontSize: 15.sp.clamp(
+                                                          0,
+                                                          15,
+                                                        ),
+                                                        color: const Color(
+                                                          0xFF00EFD1,
+                                                        ),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily: "Poppins",
                                                       ),
                                                     ),
                                                   ),

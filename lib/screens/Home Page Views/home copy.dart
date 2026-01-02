@@ -796,10 +796,10 @@
 //                                                                         ),
 //                                                                         TextSpan(
 //                                                                           text:
-//                                                                               "GHS ${hostel.amt_per_year} ",
+//                                                                               "GH₵ ${hostel.amt_per_year} ",
 //                                                                           style: TextStyle(
 //                                                                             fontWeight:
-//                                                                                 FontWeight.bold, // Only "GHS" is bold
+//                                                                                 FontWeight.bold, // Only "GH₵" is bold
 //                                                                             fontSize: 12.sp.clamp(
 //                                                                               0,
 //                                                                               12,
@@ -1267,10 +1267,10 @@
 //                                                                       ),
 //                                                                       TextSpan(
 //                                                                         text:
-//                                                                             "GHS ${topHostel.amt_per_year} ",
+//                                                                             "GH₵ ${topHostel.amt_per_year} ",
 //                                                                         style: TextStyle(
 //                                                                           fontWeight:
-//                                                                               FontWeight.bold, // Only "GHS" is bold
+//                                                                               FontWeight.bold, // Only "GH₵" is bold
 //                                                                           fontSize: 12.sp.clamp(
 //                                                                             0,
 //                                                                             12,
@@ -1768,7 +1768,7 @@
 //                                                               ),
 //                                                               TextSpan(
 //                                                                 text:
-//                                                                     "GHS ${hostels[index].amt_per_year}/",
+//                                                                     "GH₵ ${hostels[index].amt_per_year}/",
 //                                                                 style: TextStyle(
 //                                                                   fontWeight:
 //                                                                       FontWeight

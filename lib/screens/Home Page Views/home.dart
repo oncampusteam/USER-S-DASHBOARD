@@ -859,9 +859,10 @@ class _HomeState extends State<Home> {
                                                             alignment: Alignment
                                                                 .centerLeft,
                                                             child: Text(
-                                                            "${hostels[index].university}" ==  "null"? 
-                                                            "University, ${hostels[index].city}, ${hostels[index].region?? {"region"}}":
-                                                            "${hostels[index].university}, ${hostels[index].city}, ${hostels[index].region ?? {"region"}}",
+                                                              "${hostels[index].university}" ==
+                                                                      "null"
+                                                                  ? "University, ${hostels[index].city}, ${hostels[index].region ?? {"region"}}"
+                                                                  : "${hostels[index].university}, ${hostels[index].city}, ${hostels[index].region ?? {"region"}}",
                                                               style: TextStyle(
                                                                 fontSize: 13.sp
                                                                     .clamp(
@@ -896,7 +897,7 @@ class _HomeState extends State<Home> {
                                                                 ),
                                                                 TextSpan(
                                                                   text:
-                                                                      "GHS ${hostels[index].amt_per_year}/",
+                                                                      "GH₵ ${hostels[index].amt_per_year}/",
                                                                   style: TextStyle(
                                                                     fontWeight:
                                                                         FontWeight
@@ -1166,7 +1167,7 @@ class _HomeState extends State<Home> {
                           width: 252.w,
                         ),
                       ),
-                      SizedBox(height : 20.h),
+                      SizedBox(height: 20.h),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 40.h),
                         // width: 380.w,
@@ -1204,7 +1205,7 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: Constant.width*0.5,
+                              width: Constant.width * 0.5,
                               height: Constant.height * 0.03,
                               padding: EdgeInsets.only(left: 25.h),
                               // color: Colors.green,
@@ -1232,13 +1233,13 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Container(
-                              width: Constant.width*0.5,
+                              width: Constant.width * 0.5,
                               height: Constant.height * 0.03,
                               child: Row(
                                 children: [
                                   Image.asset(
                                     "assets/home/quick response.png",
-                                    fit: BoxFit.contain
+                                    fit: BoxFit.contain,
                                   ),
                                   SizedBox(
                                     height: Constant.height * 0.025,
@@ -1267,7 +1268,7 @@ class _HomeState extends State<Home> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: Constant.width*0.5,
+                              width: Constant.width * 0.5,
                               height: Constant.height * 0.03,
                               padding: EdgeInsets.only(left: 25.h),
                               // color: Colors.green,
@@ -1295,13 +1296,13 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Container(
-                              width: Constant.width*0.5,
+                              width: Constant.width * 0.5,
                               height: Constant.height * 0.03,
                               child: Row(
                                 children: [
                                   Image.asset(
                                     "assets/home/help.png",
-                                    fit: BoxFit.contain
+                                    fit: BoxFit.contain,
                                   ),
                                   SizedBox(
                                     height: Constant.height * 0.025,
@@ -1323,7 +1324,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                     SizedBox(height: 35.h),
+                      SizedBox(height: 35.h),
                       Container(
                         margin: EdgeInsets.only(left: 30.h, right: 50.h),
                         child: Row(
@@ -1335,7 +1336,7 @@ class _HomeState extends State<Home> {
                               // width: 130.w,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
-                                color: Color(0xFF00EFD1)
+                                color: Color(0xFF00EFD1),
                               ),
                               child: Align(
                                 child: Row(
@@ -1371,7 +1372,7 @@ class _HomeState extends State<Home> {
                               // width: 130.w,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
-                                color: Color(0xFFEDEDED)
+                                color: Color(0xFFEDEDED),
                               ),
                               child: Align(
                                 child: Row(

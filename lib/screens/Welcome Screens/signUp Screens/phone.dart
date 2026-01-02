@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/otp.dart';
 
 class Phone extends StatefulWidget {
@@ -56,14 +57,34 @@ class _PhoneState extends State<Phone> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(
-                    "Log in with Phone number",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23),
+                  SizedBox(
+                    height: Constant.height * 0.04,
+                    child: FittedBox(
+                      child: Text(
+                        "Log in with Phone number",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 23,
+                          color: Color(0xFF000E08)
+                          ),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 15),
-                  Text(
-                    "Welcome back! Sign in using your Phone number or email to continue with us",
-                    textAlign: TextAlign.center,
+                  SizedBox(
+                    height: Constant.height * 0.06,
+                    width: Constant.width * 0.8,
+                    child: FittedBox(
+                      child: Text(
+                        "Welcome back! Sign in using your Phone number\nor email to continue with us",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF797C7B)
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 50),
                 ],

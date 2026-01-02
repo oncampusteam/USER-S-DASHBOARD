@@ -46,7 +46,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
       context: context,
-      removeBottom: true,
+      // removeBottom: true,
       removeTop: true,
       child: PopScope(
         canPop: false,
@@ -60,7 +60,7 @@ class _BottomNavState extends State<BottomNav> {
                   const ComingSoon(),
                   Home(username: widget.username),
                   const ComingSoon(),
-                  // Profile(),
+                  Profile(),
                 ]
               )),
               Positioned(

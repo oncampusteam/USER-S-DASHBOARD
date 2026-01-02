@@ -174,9 +174,7 @@ class _HomestelHostelCategoryState extends State<HomestelHostelCategory> {
                           return GestureDetector(
                             onTap: () async {
                               Get.to(
-                                () => HostelDetails(
-                                  hostel: hostel,
-                                ),
+                                () => HostelDetails(hostel: hostel),
                                 transition: Transition.fadeIn,
                                 duration: const Duration(milliseconds: 800),
                                 curve: Curves.easeIn,
@@ -452,7 +450,7 @@ class _HomestelHostelCategoryState extends State<HomestelHostelCategory> {
                                                         TextSpan(text: "From "),
                                                         TextSpan(
                                                           text:
-                                                              " GHS ${hostel.amt_per_year}/",
+                                                              " GH₵ ${hostel.amt_per_year}/",
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,

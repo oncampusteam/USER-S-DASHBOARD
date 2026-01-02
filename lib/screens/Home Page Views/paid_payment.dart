@@ -430,7 +430,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                   Row(
                                                                     children: [
                                                                       Text(
-                                                                        "GHS ${paidHostel.amt_per_year}/",
+                                                                        "GH₵ ${paidHostel.amt_per_year}/",
                                                                         style: TextStyle(
                                                                           fontFamily:
                                                                               "Poppins",
@@ -645,7 +645,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    "GHS ${paidHostel.amt_per_year}",
+                                                                    "GH₵ ${paidHostel.amt_per_year}",
                                                                     style: TextStyle(
                                                                       fontSize: 14
                                                                           .sp
@@ -680,7 +680,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    "GHS ${(paidHostel.amt_per_year)! * 0.05}",
+                                                                    "GH₵ ${(paidHostel.amt_per_year)! * 0.05}",
                                                                     style: TextStyle(
                                                                       fontSize: 14
                                                                           .sp
@@ -715,7 +715,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    "GHS ${(((paidHostel.amt_per_year)! * 0.05) + (paidHostel.amt_per_year)!)}",
+                                                                    "GH₵ ${(((paidHostel.amt_per_year)! * 0.05) + (paidHostel.amt_per_year)!)}",
                                                                     style: TextStyle(
                                                                       fontSize: 14
                                                                           .sp

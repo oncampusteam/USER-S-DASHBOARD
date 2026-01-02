@@ -338,7 +338,7 @@ Widget book({
                   Text.rich(
                     TextSpan(
                       children: [
-                        TextSpan(text: "GHS 4000/"),
+                        TextSpan(text: "GH₵ 4000/"),
                         TextSpan(
                           text: "Academic year",
                           style: TextStyle(fontSize: 8),
@@ -882,17 +882,15 @@ Widget selectWidget({
                     return StatefulBuilder(
                       builder:
                           (BuildContext context, StateSetter setModalState) {
-                            return IntrinsicHeight(
-                              child: setDate(
-                                setModalState: setModalState,
-                                context: context,
-                                formkey2: formkey2,
-                                hostel: hostel,
-                                isLoading: isLoading,
-                                moveOut: moveOut,
-                                movin: movin,
-                                triggerRebuild: triggerRebuild
-                              ),
+                            return setDate(
+                              setModalState: setModalState,
+                              context: context,
+                              formkey2: formkey2,
+                              hostel: hostel,
+                              isLoading: isLoading,
+                              moveOut: moveOut,
+                              movin: movin,
+                              triggerRebuild: triggerRebuild,
                             );
                           },
                     );
@@ -1012,10 +1010,11 @@ Widget setDate({
   required TextEditingController movin,
   required TextEditingController moveOut,
   required BuildContext context,
-  required VoidCallback triggerRebuild
+  required VoidCallback triggerRebuild,
 }) {
   return SingleChildScrollView(
     child: Container(
+      height: Constant.height * 0.7,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -1112,7 +1111,7 @@ Widget setDate({
                     Text.rich(
                       TextSpan(
                         children: [
-                          TextSpan(text: "GHS 4000/"),
+                          TextSpan(text: "GH₵ 4000/"),
                           TextSpan(
                             text: "Academic year",
                             style: TextStyle(fontSize: 8),

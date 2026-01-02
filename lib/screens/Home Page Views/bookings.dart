@@ -479,11 +479,11 @@ class _BookingsState extends State<Bookings> {
                                                               ),
                                                               TextSpan(
                                                                 text:
-                                                                    "GHS ${pendingHostel.amt_per_year} ",
+                                                                    "GH₵ ${pendingHostel.amt_per_year} ",
                                                                 style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold, // Only "GHS" is bold
+                                                                          .bold, // Only "GH₵" is bold
                                                                   fontSize: 12
                                                                       .sp
                                                                       .clamp(
@@ -543,7 +543,10 @@ class _BookingsState extends State<Bookings> {
                                                     ),
                                                     Text(" - "),
                                                     Text(
-                                                      formatDate(bookedHostel.move_out ?? ""),
+                                                      formatDate(
+                                                        bookedHostel.move_out ??
+                                                            "",
+                                                      ),
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -831,11 +834,11 @@ class _BookingsState extends State<Bookings> {
                                                               ),
                                                               TextSpan(
                                                                 text:
-                                                                    "GHS ${paidHostel.amt_per_year} ",
+                                                                    "GH₵ ${paidHostel.amt_per_year} ",
                                                                 style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold, // Only "GHS" is bold
+                                                                          .bold, // Only "GH₵" is bold
                                                                   fontSize: 12
                                                                       .sp
                                                                       .clamp(
@@ -895,7 +898,10 @@ class _BookingsState extends State<Bookings> {
                                                     ),
                                                     Text(" - "),
                                                     Text(
-                                                      formatDate(bookedHostel.move_out ?? ""),
+                                                      formatDate(
+                                                        bookedHostel.move_out ??
+                                                            "",
+                                                      ),
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
