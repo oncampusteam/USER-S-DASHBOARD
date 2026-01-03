@@ -6,6 +6,7 @@ import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
+import 'package:on_campus/widgets/home_page_widgets.dart';
 
 class SchoolHostelCategory extends StatefulWidget {
   const SchoolHostelCategory({super.key});
@@ -182,288 +183,298 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                           itemCount: allSchoolHostels.length,
                           itemBuilder: (BuildContext context, int index) {
                             Hostels hostel = allSchoolHostels[index];
-                            print(hostel.name);
-                            return GestureDetector(
-                              onTap: () {
-                                try {
-                                  Get.to(
-                                    () => HostelDetails(hostel: hostel),
-                                    transition: Transition.fadeIn,
-                                    duration: const Duration(milliseconds: 800),
-                                    curve: Curves.easeIn,
-                                  );
-                                } catch (e) {
-                                  Get.snackbar(
-                                    "Error",
-                                    "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
-                                }
+
+                            return hostelCardVariant(
+                              hostel: allSchoolHostels[index],
+                              favorite: true,
+                              variant : true,
+                              triggerRebuild: () {
+                                setState(() {
+                                  
+                                });
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 2.0,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      // width: double.infinity,
-                                      height: 110,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 5.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF5F8FF),
-                                        // color: Colors.red,
-                                        borderRadius: BorderRadius.circular(
-                                          12.r,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            offset: const Offset(0, 1),
-                                            blurRadius: 3,
-                                            spreadRadius: 1,
-                                            color: Colors.black.withOpacity(
-                                              0.15,
-                                            ),
-                                          ),
-                                          BoxShadow(
-                                            offset: const Offset(0, 1),
-                                            blurRadius: 2,
-                                            spreadRadius: 0,
-                                            color: Colors.black.withOpacity(
-                                              0.30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            // color: Colors.red,
-                                            height: 80.h,
-                                            width: 80.w,
-                                            child: Image.asset(
-                                              'assets/hostel_category_widget/media.png',
-                                            ),
-                                          ),
-                                          SizedBox(width: 10.h),
-                                          Container(
-                                            // color: Colors.red,
-                                            height: 80.h,
-                                            padding: EdgeInsets.only(top: 5.h),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                SizedBox(
-                                                  height: 16.h,
-                                                  child: FittedBox(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      hostel.name,
-                                                      style: TextStyle(
-                                                        fontFamily: "Roboto",
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 16.sp,
-                                                        letterSpacing: 0.15.w,
-                                                        color: const Color(
-                                                          0xFF1D1B20,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 12.h,
-                                                  child: FittedBox(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Image.asset(
-                                                          "assets/hostel_category_widget/location.png",
-                                                          height: 12.h,
-                                                          width: 8.77.w,
-                                                        ),
-                                                        Text(
-                                                          "${hostel.university}, ${hostel.region} region",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Roboto",
-                                                            // fontWeight: FontWeight.w500,
-                                                            fontSize: 10.sp,
-                                                            // letterSpacing: 0.15.w,
-                                                            color: const Color(
-                                                              0xFF333333,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                FittedBox(
-                                                  child: SizedBox(
-                                                    // color: Colors.red,
-                                                    height: 20.h,
-                                                    // width: 120.w,
-                                                    child: Text(
-                                                      "Wifi • Kitchen • Security • Parking •\nBalcony • Friendly Environment",
-                                                      overflow:
-                                                          TextOverflow.visible,
-                                                      style: TextStyle(
-                                                        fontFamily: "Roboto",
-                                                        // fontWeight: FontWeight.w500,
-                                                        fontSize: 9.sp,
-                                                        letterSpacing: 0.25.w,
-                                                        color: const Color(
-                                                          0xFF1D1B20,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5.h),
-                                                SizedBox(
-                                                  height: 12.h,
-                                                  child: FittedBox(
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          "${hostel.rate}",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Roboto",
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 10.sp,
-                                                            color: const Color(
-                                                              0xFF333333,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 5.h),
-                                                        SizedBox(
-                                                          height: 10,
-                                                          width: 60,
-                                                          child: ListView.builder(
-                                                            itemCount:
-                                                                hostel.rate,
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            itemBuilder:
-                                                                (
-                                                                  context,
-                                                                  index,
-                                                                ) {
-                                                                  return Icon(
-                                                                    Icons.star,
-                                                                    color: const Color(
-                                                                      0xFF00EFD1,
-                                                                    ),
-                                                                    size: 10.h,
-                                                                  );
-                                                                },
-                                                          ),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            // Image.asset("warning.png", height: 12, width: 10,),
-                                                            Transform.flip(
-                                                              flipY: true,
-                                                              child: Icon(
-                                                                Icons.info,
-                                                                color:
-                                                                    Colors.red,
-                                                                size: 10.h,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              hostel.available_rooms !=
-                                                                      null
-                                                                  ? "$hostel.available_rooms} Slots available"
-                                                                  : " No Slots available",
-                                                              style: TextStyle(
-                                                                color:
-                                                                    const Color.fromARGB(
-                                                                      180,
-                                                                      0,
-                                                                      0,
-                                                                      0,
-                                                                    ),
-                                                                fontFamily:
-                                                                    "Roboto",
-                                                                fontSize: 10.sp,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          // SizedBox(
-                                          //   width: ScreenDetails.percentage(percent: 2, quantityToScale: "width"),
-                                          // ),
-                                          Expanded(
-                                            child: Container(
-                                              // padding:EdgeInsets.only(right: 10.h),
-                                              // color: Colors.blue,
-                                              // width: 60.w,
-                                              padding: EdgeInsets.only(
-                                                top: 5.h,
-                                                right: 10.h,
-                                              ),
-                                              child: Align(
-                                                alignment: Alignment.topRight,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      favorite = !favorite;
-                                                    });
-                                                  },
-                                                  child: favorite
-                                                      ? Icon(
-                                                          Icons.favorite,
-                                                          color: const Color(
-                                                            0xFF00EFD1,
-                                                          ),
-                                                          size: 25.h,
-                                                        )
-                                                      : Icon(
-                                                          Icons
-                                                              .favorite_border_outlined,
-                                                          color: const Color(
-                                                            0xFF00EFD1,
-                                                          ),
-                                                          size: 25.h,
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                  ],
-                                ),
-                              ),
                             );
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     try {
+                            //       Get.to(
+                            //         () => HostelDetails(hostel: hostel),
+                            //         transition: Transition.fadeIn,
+                            //         duration: const Duration(milliseconds: 800),
+                            //         curve: Curves.easeIn,
+                            //       );
+                            //     } catch (e) {
+                            //       Get.snackbar(
+                            //         "Error",
+                            //         "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
+                            //         snackPosition: SnackPosition.BOTTOM,
+                            //       );
+                            //     }
+                            //   },
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.symmetric(
+                            //       horizontal: 2.0,
+                            //     ),
+                            //     child: Column(
+                            //       children: [
+                            //         Container(
+                            //           // width: double.infinity,
+                            //           height: 110,
+                            //           padding: EdgeInsets.symmetric(
+                            //             horizontal: 10,
+                            //             vertical: 5.h,
+                            //           ),
+                            //           decoration: BoxDecoration(
+                            //             color: const Color(0xFFF5F8FF),
+                            //             // color: Colors.red,
+                            //             borderRadius: BorderRadius.circular(
+                            //               12.r,
+                            //             ),
+                            //             boxShadow: [
+                            //               BoxShadow(
+                            //                 offset: const Offset(0, 1),
+                            //                 blurRadius: 3,
+                            //                 spreadRadius: 1,
+                            //                 color: Colors.black.withOpacity(
+                            //                   0.15,
+                            //                 ),
+                            //               ),
+                            //               BoxShadow(
+                            //                 offset: const Offset(0, 1),
+                            //                 blurRadius: 2,
+                            //                 spreadRadius: 0,
+                            //                 color: Colors.black.withOpacity(
+                            //                   0.30,
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //           child: Row(
+                            //             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.start,
+                            //             children: [
+                            //               SizedBox(
+                            //                 // color: Colors.red,
+                            //                 height: 80.h,
+                            //                 width: 80.w,
+                            //                 child: Image.asset(
+                            //                   'assets/hostel_category_widget/media.png',
+                            //                 ),
+                            //               ),
+                            //               SizedBox(width: 10.h),
+                            //               Container(
+                            //                 // color: Colors.red,
+                            //                 height: 80.h,
+                            //                 padding: EdgeInsets.only(top: 5.h),
+                            //                 child: Column(
+                            //                   crossAxisAlignment:
+                            //                       CrossAxisAlignment.start,
+                            //                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //                   children: [
+                            //                     SizedBox(
+                            //                       height: 16.h,
+                            //                       child: FittedBox(
+                            //                         alignment:
+                            //                             Alignment.centerLeft,
+                            //                         child: Text(
+                            //                           hostel.name,
+                            //                           style: TextStyle(
+                            //                             fontFamily: "Roboto",
+                            //                             fontWeight:
+                            //                                 FontWeight.w500,
+                            //                             fontSize: 16.sp,
+                            //                             letterSpacing: 0.15.w,
+                            //                             color: const Color(
+                            //                               0xFF1D1B20,
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                     SizedBox(
+                            //                       height: 12.h,
+                            //                       child: FittedBox(
+                            //                         alignment:
+                            //                             Alignment.centerLeft,
+                            //                         child: Row(
+                            //                           crossAxisAlignment:
+                            //                               CrossAxisAlignment
+                            //                                   .start,
+                            //                           children: [
+                            //                             Image.asset(
+                            //                               "assets/hostel_category_widget/location.png",
+                            //                               height: 12.h,
+                            //                               width: 8.77.w,
+                            //                             ),
+                            //                             Text(
+                            //                               "${hostel.university}, ${hostel.region} region",
+                            //                               style: TextStyle(
+                            //                                 fontFamily:
+                            //                                     "Roboto",
+                            //                                 // fontWeight: FontWeight.w500,
+                            //                                 fontSize: 10.sp,
+                            //                                 // letterSpacing: 0.15.w,
+                            //                                 color: const Color(
+                            //                                   0xFF333333,
+                            //                                 ),
+                            //                               ),
+                            //                             ),
+                            //                           ],
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                     FittedBox(
+                            //                       child: SizedBox(
+                            //                         // color: Colors.red,
+                            //                         height: 20.h,
+                            //                         // width: 120.w,
+                            //                         child: Text(
+                            //                           "Wifi • Kitchen • Security • Parking •\nBalcony • Friendly Environment",
+                            //                           overflow:
+                            //                               TextOverflow.visible,
+                            //                           style: TextStyle(
+                            //                             fontFamily: "Roboto",
+                            //                             // fontWeight: FontWeight.w500,
+                            //                             fontSize: 9.sp,
+                            //                             letterSpacing: 0.25.w,
+                            //                             color: const Color(
+                            //                               0xFF1D1B20,
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                     SizedBox(height: 5.h),
+                            //                     SizedBox(
+                            //                       height: 12.h,
+                            //                       child: FittedBox(
+                            //                         child: Row(
+                            //                           children: [
+                            //                             Text(
+                            //                               "${hostel.rate}",
+                            //                               style: TextStyle(
+                            //                                 fontFamily:
+                            //                                     "Roboto",
+                            //                                 fontWeight:
+                            //                                     FontWeight.w500,
+                            //                                 fontSize: 10.sp,
+                            //                                 color: const Color(
+                            //                                   0xFF333333,
+                            //                                 ),
+                            //                               ),
+                            //                             ),
+                            //                             SizedBox(width: 5.h),
+                            //                             SizedBox(
+                            //                               height: 10,
+                            //                               width: 60,
+                            //                               child: ListView.builder(
+                            //                                 itemCount:
+                            //                                     hostel.rate,
+                            //                                 scrollDirection:
+                            //                                     Axis.horizontal,
+                            //                                 itemBuilder:
+                            //                                     (
+                            //                                       context,
+                            //                                       index,
+                            //                                     ) {
+                            //                                       return Icon(
+                            //                                         Icons.star,
+                            //                                         color: const Color(
+                            //                                           0xFF00EFD1,
+                            //                                         ),
+                            //                                         size: 10.h,
+                            //                                       );
+                            //                                     },
+                            //                               ),
+                            //                             ),
+                            //                             Row(
+                            //                               children: [
+                            //                                 // Image.asset("warning.png", height: 12, width: 10,),
+                            //                                 Transform.flip(
+                            //                                   flipY: true,
+                            //                                   child: Icon(
+                            //                                     Icons.info,
+                            //                                     color:
+                            //                                         Colors.red,
+                            //                                     size: 10.h,
+                            //                                   ),
+                            //                                 ),
+                            //                                 Text(
+                            //                                   hostel.available_rooms !=
+                            //                                           null
+                            //                                       ? "$hostel.available_rooms} Slots available"
+                            //                                       : " No Slots available",
+                            //                                   style: TextStyle(
+                            //                                     color:
+                            //                                         const Color.fromARGB(
+                            //                                           180,
+                            //                                           0,
+                            //                                           0,
+                            //                                           0,
+                            //                                         ),
+                            //                                     fontFamily:
+                            //                                         "Roboto",
+                            //                                     fontSize: 10.sp,
+                            //                                   ),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ],
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               ),
+                            //               // SizedBox(
+                            //               //   width: ScreenDetails.percentage(percent: 2, quantityToScale: "width"),
+                            //               // ),
+                            //               Expanded(
+                            //                 child: Container(
+                            //                   // padding:EdgeInsets.only(right: 10.h),
+                            //                   // color: Colors.blue,
+                            //                   // width: 60.w,
+                            //                   padding: EdgeInsets.only(
+                            //                     top: 5.h,
+                            //                     right: 10.h,
+                            //                   ),
+                            //                   child: Align(
+                            //                     alignment: Alignment.topRight,
+                            //                     child: GestureDetector(
+                            //                       onTap: () {
+                            //                         setState(() {
+                            //                           favorite = !favorite;
+                            //                         });
+                            //                       },
+                            //                       child: favorite
+                            //                           ? Icon(
+                            //                               Icons.favorite,
+                            //                               color: const Color(
+                            //                                 0xFF00EFD1,
+                            //                               ),
+                            //                               size: 25.h,
+                            //                             )
+                            //                           : Icon(
+                            //                               Icons
+                            //                                   .favorite_border_outlined,
+                            //                               color: const Color(
+                            //                                 0xFF00EFD1,
+                            //                               ),
+                            //                               size: 25.h,
+                            //                             ),
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //         SizedBox(height: 20),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // );
                           },
                         ),
                       )
@@ -681,8 +692,7 @@ class _SchoolHostelCategoryState extends State<SchoolHostelCategory> {
                                                               ),
                                                             ),
                                                             Text(
-                                                              searchHostel
-                                                                          .available_rooms !=
+                                                              searchHostel.available_rooms !=
                                                                       null
                                                                   ? "${searchHostel.available_rooms} Slots available"
                                                                   : " No Slots available",

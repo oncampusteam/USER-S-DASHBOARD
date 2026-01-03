@@ -3273,8 +3273,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                                 ),
                                                                                                 child: book(
                                                                                                   setModalState,
+                                                                                                  numPeople,
                                                                                                   name,
-                                                                                                  phoneNum,
+                                                                                                  // phoneNum,
                                                                                                   emailAddress,
                                                                                                   occupantNames,
                                                                                                   occupantEmails,

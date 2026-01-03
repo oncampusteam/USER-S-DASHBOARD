@@ -7,6 +7,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/widgets/custompainter.dart';
+import 'package:on_campus/widgets/hostel_categories.dart';
 
 class BottomNav extends StatefulWidget {
   final String username;
@@ -17,9 +18,11 @@ class BottomNav extends StatefulWidget {
   State<BottomNav> createState() => _BottomNavState();
 }
 
-class _BottomNavState extends State<BottomNav> {
-  int currentpage = 2;
+int currentpage = 2;
+String hostelCategory = "";
+ValueNotifier currentPage = ValueNotifier(2);
 
+class _BottomNavState extends State<BottomNav> {
   // List<Widget> getPages() {
   //   return [
   //     Apartment(),
@@ -39,6 +42,12 @@ class _BottomNavState extends State<BottomNav> {
   @override
   void initState() {
     super.initState();
+    currentPage.addListener(() {
+      debugPrint("It's changed");
+      setState(() {
+        currentpage = currentPage.value;
+      });
+    });
     currentpage = widget.subindex ?? 2;
   }
 
@@ -53,16 +62,19 @@ class _BottomNavState extends State<BottomNav> {
         child: Scaffold(
           body: Stack(
             children: [
-              Positioned(child: IndexedStack(
-                index: currentpage,
-                children: [
-                  Apartment(),
-                  const ComingSoon(),
-                  Home(username: widget.username),
-                  const ComingSoon(),
-                  Profile(),
-                ]
-              )),
+              Positioned(
+                child: IndexedStack(
+                  index: currentpage,
+                  children: [
+                    Apartment(),
+                    const ComingSoon(),
+                    Home(username: widget.username),
+                    const ComingSoon(),
+                    Profile(),
+                    HostelCategory(categoryType: hostelCategory),
+                  ],
+                ),
+              ),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -275,6 +287,7 @@ class _BottomNavState extends State<BottomNav> {
                   ),
                 ),
               ),
+
               // Positioned.fill(
               //   child: AnimatedSwitcher(
               //     duration: const Duration(milliseconds: 500),
@@ -344,7 +357,6 @@ class _BottomNavState extends State<BottomNav> {
               //     onTap: (currentPage) => navigateBottomBar(currentPage),
               //   ),
               // ),
-              
               Positioned(
                 bottom: Constant.height * 0.035,
                 left: Constant.width * 0.44,

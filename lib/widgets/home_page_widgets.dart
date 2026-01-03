@@ -501,3 +501,349 @@ Widget hostelGestureCard({
     ),
   );
 }
+
+Widget hostelCardVariant({
+  required Hostels hostel,
+  required bool favorite,
+  required void Function() triggerRebuild,
+  bool variant = false,
+  int index = 0,
+}) {
+  int length = hostel.amenities?.length ?? 0;
+  return Row(
+    children: [
+      // if (index == 0) SizedBox(width: 20.w),
+      GestureDetector(
+        onTap: () {
+          Get.to(
+            () => HostelDetails(hostel: hostel),
+            transition: Transition.fadeIn,
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeIn,
+          );
+        },
+        child: Padding(
+          padding: !variant ? const EdgeInsets.all(8.0): EdgeInsetsGeometry.only(bottom: 20.h),
+          child: Container(
+            // height: 215.h,
+            width: !variant ? Constant.width * 0.65: Constant.width * 0.91,
+            decoration: BoxDecoration(
+              border: variant ? Border.all(color: Color(0xFFCAC4D0)): null,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(28.r),
+                topLeft: Radius.circular(28.r),
+                bottomLeft: Radius.circular(28.r),
+                bottomRight: Radius.circular(28.r),
+              ),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 1),
+                  blurRadius: 4,
+                  color: !variant ? const Color.fromARGB(64, 0, 0, 0): Colors.white,
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: variant ? Constant.height * 0.25: Constant.height * 0.2,
+                  // width: !variant ? Constant.width * 0.65,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        left: 0,
+                        child: Container(
+                          height: Constant.height * 0.25,
+                          // width: 245.w,
+                          decoration: BoxDecoration(
+                            // color: Colors.brown,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Image.network(
+                              hostel.hostel_images?[0] ?? "",
+                              height: Constant.height * 0.25,
+                              // width: 225.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 5.h,
+                        right: 5.w,
+                        // left: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            // setState(() {
+                            favorite = !favorite;
+                            triggerRebuild();
+                            // });
+                          },
+                          child: Container(
+                            height: 35,
+                            width: 35,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              size: 20.h,
+                              favorite
+                                  ? Icons.favorite_outlined
+                                  : Icons.favorite_border_outlined,
+                              color: const Color.fromARGB(255, 0, 239, 209),
+                            ),
+                          ),
+                        ),
+                      ),
+                       variant? Positioned(
+                        top: 5.h,
+                        left: 5.w,
+                        // left: 0,
+                        child: Container(
+                          height: Constant.height * 0.05,
+                          
+                          child: index % 2 == 0 ?Image.asset("assets/hostel_category_widget/Frame.png", fit: BoxFit.fitHeight):
+                          Image.asset("assets/hostel_category_widget/Frame 1.png", fit: BoxFit.fitHeight)
+                        ),
+                      ): Positioned(child: Container()),
+                      Positioned(
+                        left: 10.h,
+                        bottom: 5.h,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.h,
+                            vertical: 2.h,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: Color.fromRGBO(255, 255, 255, 0.5),
+                          ),
+                          height: Constant.height * 0.025,
+                          child: Align(
+                            child: SizedBox(
+                              height: Constant.height * 0.025,
+                              child: FittedBox(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star_border_outlined,
+                                      color: Color(0xFF00EFD1),
+                                    ),
+                                    Text(
+                                      "4.5",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF111111),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  // color: Colors.green,
+                  padding: EdgeInsets.only(left: 15.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: Constant.height * 0.03,
+                        child: FittedBox(
+                          child: Text(
+                            hostel.name,
+                            style: TextStyle(
+                              color: const Color(0xFF111111),
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: Constant.height * 0.02,
+                          width: Constant.width * 0.8,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "${hostel.university}" == "null"
+                                  ? "University, ${hostel.city}, ${hostel.region ?? {"region"}}"
+                                  : "${hostel.university}, ${hostel.city}, ${hostel.region ?? {"region"}}",
+                              style: TextStyle(
+                                fontSize: 13.sp.clamp(0, 18),
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "Poppins",
+                                color: const Color(0xFF7A7A7A),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      SizedBox(
+                        height: Constant.height * 0.025,
+                        child: FittedBox(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: "From "),
+                                TextSpan(
+                                  text: "GH₵ ${hostel.amt_per_year}/",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(text: "year"),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      SizedBox(
+                        width: !variant ? Constant.width * 0.65 : Constant.width * 0.91,
+                        height: 25,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: length != 0 ?(hostel.amenities!.length / 2).ceil(): 0,
+                          itemBuilder: (context, index2) {
+                            return Container(
+                              margin: EdgeInsets.only(left: 0, right: 5.w),
+                              padding: EdgeInsets.only(
+                                left: 5.w,
+                                top: .5.h,
+                                bottom: .5.h,
+                                right: 10.w,
+                              ),
+                              height: Constant.height * 0.04,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.r),
+                                border: Border.all(color: Color(0xFF7A7A7A)),
+                              ),
+                              // width: 40,
+                              // height: 20,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: FittedBox(
+                                  child: SizedBox(
+                                    height: Constant.height * 0.035,
+                                    child: Row(
+                                      children: [
+                                        GetIcon(
+                                          text:
+                                              hostel.amenities![index2] ??
+                                              "noicon",
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          hostel
+                                                  .amenities![index2]
+                                                  ?.capitalize ??
+                                              "none",
+                                          style: TextStyle(
+                                            fontFamily: "Work Sans",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13.sp,
+                                            color: Color(0xFF555555),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 15.h),
+                        width: !variant ? Constant.width * 0.65 : Constant.width * 0.91,
+                        height: 25,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount:length != 0 ?
+                              hostel.amenities!.length -
+                              ((hostel.amenities!.length / 2).ceil()):0,
+                          itemBuilder: (context, index3) {
+                            int i = length != 0 ?
+                                hostel.amenities!.length -
+                                ((hostel.amenities!.length / 2).ceil()): 0;
+                            int offset = length != 0 ?i + 1: 0;
+                            return Container(
+                              margin: EdgeInsets.only(left: 0, right: 5.w),
+                              padding: EdgeInsets.only(
+                                left: 5.w,
+                                top: .5.h,
+                                bottom: .5.h,
+                                right: 10.w,
+                              ),
+                              height: Constant.height * 0.04,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.r),
+                                border: Border.all(color: Color(0xFF7A7A7A)),
+                              ),
+                              // width: 40,
+                              // height: 20,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: FittedBox(
+                                  child: SizedBox(
+                                    height: Constant.height * 0.035,
+                                    child: Row(
+                                      children: [
+                                        GetIcon(
+                                          text:
+                                              hostel.amenities![index3 +
+                                                  offset] ??
+                                              "noicon",
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          hostel
+                                                  .amenities![index3 + offset]
+                                                  ?.capitalize ??
+                                              "none",
+                                          style: TextStyle(
+                                            fontFamily: "Work Sans",
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13.sp,
+                                            color: Color(0xFF555555),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}

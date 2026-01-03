@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/screens/personal_info.dart';
 
@@ -24,6 +25,7 @@ class _UserInformationState extends State<UserInformation> {
           // height: MediaQuery.of(context).size.height,
           color: Colors.white,
           width: double.infinity,
+          margin: EdgeInsets.only(top: Constant.height * 0.06),
           padding: EdgeInsets.only(left: 20.h, right: 20.h, top: 30.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

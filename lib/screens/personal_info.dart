@@ -23,6 +23,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
     super.initState();
   }
 
+  int index = 0;
+  double initialScrollOffset = 0;
+  ScrollController controller = ScrollController(
+  );
+
   bool isLoading = false;
   bool isLoadingStep = false;
   TextEditingController firstName = TextEditingController();
@@ -42,7 +47,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   final formkey0 = GlobalKey<FormState>();
   final formkey1 = GlobalKey<FormState>();
   final formkey2 = GlobalKey<FormState>();
-  int currentStep = 0;
+  // int index = 0;
   final List<String> genderList = ['Male', 'Female'];
   final List<String> steps = [
     'Personal Info',
@@ -76,7 +81,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: Constant.height * 0.1,
                 child: customTextForm(
                   controller: firstName,
                   hint: "Enter your first name",
@@ -97,7 +102,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: Constant.height * 0.1,
                 child: customTextForm(
                   controller: surName,
                   hint: "Enter your Surname",
@@ -118,7 +123,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: Constant.height * 0.1,
                 child: customEmailForm(
                   controller: email,
                   hint: "Enter your email",
@@ -139,7 +144,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: Constant.height * 0.1,
                 child: customNumberForm(
                   controller: mobileNumber,
                   hint: "Enter your phone number",
@@ -160,7 +165,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 ],
               ),
               SizedBox(
-                height: 40,
+                height: Constant.height * 0.1,
                 child: DropdownMenu<String>(
                   width: double.infinity,
 
@@ -168,14 +173,14 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   hintText: "Choose your gender",
                   inputDecorationTheme: InputDecorationTheme(
                     hintStyle: const TextStyle(
-                      color: Colors.grey,
+                      color: Color(0xFFB7B8BA),
                       fontSize: 12.5,
                     ),
 
                     filled: true,
-                    fillColor: Colors.grey.withOpacity(0.3),
+                    fillColor: Color(0xFFF1F1F1),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5.r),
                       borderSide: const BorderSide(
                         width: 0,
                         style: BorderStyle.none,
@@ -323,14 +328,26 @@ class _PersonalInfoState extends State<PersonalInfo> {
       enableSuggestions: true,
       autocorrect: false,
       cursorColor: Colors.white,
-      style: const TextStyle(color: Colors.grey),
+      cursorHeight: 20,
+      style: const TextStyle(
+        color: Color.fromARGB(255, 0, 0, 0),
+        fontWeight: FontWeight.w500,
+        fontSize: 12.5,
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey, fontSize: 12.5),
+        hintStyle: const TextStyle(
+          color: Color(0xFFB7B8BA),
+          fontWeight: FontWeight.w500,
+          fontSize: 12.5,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF00EFD1)),
+        ),
         filled: true,
-        fillColor: Colors.grey.withOpacity(0.3),
+        fillColor: Color(0xFFF1F1F1),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(5.r),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none),
         ),
       ),
@@ -354,13 +371,25 @@ class _PersonalInfoState extends State<PersonalInfo> {
       obscureText: false,
       enableSuggestions: true,
       autocorrect: false,
+      cursorHeight: 20,
       cursorColor: Colors.white,
-      style: const TextStyle(color: Colors.grey),
+      style: const TextStyle(
+        color: Color.fromARGB(255, 0, 0, 0),
+        fontWeight: FontWeight.w500,
+        fontSize: 12.5,
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey, fontSize: 12.5),
+        hintStyle: const TextStyle(
+          color: Color(0xFFB7B8BA),
+          fontWeight: FontWeight.w500,
+          fontSize: 12.5,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF00EFD1)),
+        ),
         filled: true,
-        fillColor: Colors.grey.withOpacity(0.3),
+        fillColor: Color(0xFFF1F1F1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none),
@@ -392,16 +421,28 @@ class _PersonalInfoState extends State<PersonalInfo> {
       enableSuggestions: true,
       autocorrect: false,
       cursorColor: Colors.white,
-      style: const TextStyle(color: Colors.grey),
+      cursorHeight: 20,
+      style: const TextStyle(
+        color: Color.fromARGB(255, 0, 0, 0),
+        fontWeight: FontWeight.w500,
+        fontSize: 12.5,
+      ),
       inputFormatters: [
         LengthLimitingTextInputFormatter(10),
         FilteringTextInputFormatter.digitsOnly,
       ],
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey, fontSize: 12.5),
+        hintStyle: const TextStyle(
+          color: Color(0xFFB7B8BA),
+          fontWeight: FontWeight.w500,
+          fontSize: 12.5,
+        ),
         filled: true,
-        fillColor: Colors.grey.withOpacity(0.3),
+        fillColor: Color(0xFFF1F1F1),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF00EFD1)),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none),
@@ -424,30 +465,236 @@ class _PersonalInfoState extends State<PersonalInfo> {
     return isLoading ? CircularProgressIndicator() : Container();
   }
 
+  dynamic confrimScrollSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: false,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: Constant.height * 0.43,
+          child: Column(
+            children: [
+              SizedBox(height: 15),
+              Container(color: Colors.black45, width: 35, height: 5),
+              SizedBox(height: 20.h),
+              Align(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  height: Constant.height * 0.1,
+                  width: Constant.width * 0.3,
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(0, 148, 118, 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    "assets/personal_info/Group.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              SizedBox(
+                height: Constant.height * 0.03,
+                child: FittedBox(
+                  child: Text(
+                    "Confirmed Successfully",
+                    style: TextStyle(
+                      fontFamily: "Nunito",
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                height: Constant.height * 0.06,
+                child: FittedBox(
+                  child: Text(
+                    "Your personal information has been\nSuccessfully updated",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Nunito",
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 35),
+              Container(
+                // color: Colors.white,
+                height: Constant.height * 0.1,
+                width: MediaQuery.sizeOf(context).width,
+                child: Align(
+                  child: SizedBox(
+                    height: Constant.height * 0.06,
+                    width: Constant.width * 0.8,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(
+                          () => BottomNav(
+                            username:
+                                FirebaseAuth
+                                    .instance
+                                    .currentUser!
+                                    .displayName ??
+                                "User",
+                          ),
+                          transition: Transition.fadeIn,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        backgroundColor: const Color(0xFF00EFD1),
+                      ),
+                      child: SizedBox(
+                        height: Constant.height * 0.025,
+                        child: FittedBox(
+                          child: const Text(
+                            "Done",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: SizedBox(
+        height: Constant.height * 0.1,
+        child: Align(
+          child: SizedBox(
+            height: Constant.height * 0.06,
+            width: Constant.width * 0.8,
+            child: ElevatedButton(
+              onPressed: () async {
+                () async {
+                  debugPrint("This is the executing");
+                };
+                if (index > 1) {
+                  setState(() {
+                    isLoadingStep = true;
+                  });
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(user!.uid)
+                        .set({
+                          "name": "${firstName.text} ${surName.text}",
+                          "email": email.text,
+                          "phone": int.parse(mobileNumber.text),
+                          "gender": gender.text,
+                          "program": program.text,
+                          "year": int.parse(year.text),
+                          "guardian": guardian.text,
+                          "emergency1": int.parse(emergency1.text),
+                          "emergency2": int.parse(emergency2.text),
+                          "userInfoDone": true,
+                        }, SetOptions(merge: true));
+                  } catch (e) {
+                    Get.snackbar(
+                      "Error",
+                      e.toString(),
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+
+                  setState(() {
+                    isLoadingStep = false;
+                  });
+
+                  confrimScrollSheet();
+                }
+                if (index == 0
+                    ? formkey0.currentState!.validate()
+                    : index == 1
+                    ? formkey1.currentState!.validate()
+                    : formkey2.currentState!.validate() && index < 3) {
+                  setState(() {
+                    // controller.initialScrollOffset
+                    // initialScrollOffset = 0;
+                    index++;
+                    controller.jumpTo(0);
+                    // index++;
+                  });
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF00EFD1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+              ),
+
+              child: isLoadingStep
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text("Please wait.."),
+                        ],
+                      ),
+                    )
+                  : Text(
+                      'Next',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+            ),
+          ),
+        ),
+      ),
       body: Container(
-        margin: EdgeInsets.only(top: Constant.height * 0.06,),
+        margin: EdgeInsets.only(top: Constant.height * 0.06),
         child: SingleChildScrollView(
+          controller: controller,
           child: Container(
             // height: MediaQuery.of(context).size.height,
             color: Colors.white,
             width: double.infinity,
-            padding: EdgeInsets.only(left: 20.h, right: 20.h,),
+            padding: EdgeInsets.only(left: 20.h, right: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   height: 40.h,
                   width: 40.w,
-                  foregroundDecoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.03),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
+                  // foregroundDecoration: BoxDecoration(
+                  //   color: Colors.black.withOpacity(0.03),
+                  //   borderRadius: BorderRadius.circular(8.r),
+                  // ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: const Color.fromRGBO(0, 0, 0, 0.05),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: GestureDetector(
@@ -469,7 +716,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         width: Constant.width * 0.2,
                         child: Image.asset(
                           "assets/personal_info/user logo.png",
-                          fit: BoxFit.contain
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -513,18 +760,24 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CustomStepper(
-                                  currentStep: currentStep,
-                                  stepTitles: steps,
-                                  onStepTapped: (index) {
-                                    setState(() => currentStep = index);
-                                  },
+                                // CustomStepper(
+                                //   index: index,
+                                //   stepTitles: steps,
+                                //   onStepTapped: (index) {
+                                //     setState(() => index = index);
+                                //   },
+                                // ),
+                                Steps(
+                                  index: index,
+                                  // stepsCallback: (){
+
+                                  // },
                                 ),
-                                // Your step content here based on currentStep
+                                // Your step content here based on index
                                 Container(
                                   child: IntrinsicHeight(
                                     child: IndexedStack(
-                                      index: currentStep,
+                                      index: index,
                                       children: [
                                         PersonalInfoForm(),
                                         UniversityInfoForm(),
@@ -541,10 +794,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    if (currentStep > 0)
+                                    if (index > 0)
                                       TextButton(
                                         onPressed: () =>
-                                            setState(() => currentStep--),
+                                            setState(() => index--),
                                         child: Text(
                                           'Back',
                                           style: TextStyle(
@@ -553,231 +806,18 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                           ),
                                         ),
                                       ),
-                                    // if (currentStep < steps.length )
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: SizedBox(
-                                        height: 50,
-                                        width:
-                                            MediaQuery.of(
-                                              context,
-                                            ).size.width *
-                                            0.5,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            if (currentStep > 1) {
-                                              setState(() {
-                                                isLoadingStep = true;
-                                              });
-                                              try {
-                                                await FirebaseFirestore
-                                                    .instance
-                                                    .collection("Users")
-                                                    .doc(user!.uid)
-                                                    .set({
-                                                      "name":
-                                                          "${firstName.text} ${surName.text}",
-                                                      "email": email.text,
-                                                      "phone": int.parse(
-                                                        mobileNumber.text,
-                                                      ),
-                                                      "gender": gender.text,
-                                                      "program": program.text,
-                                                      "year": int.parse(
-                                                        year.text,
-                                                      ),
-                                                      "guardian":
-                                                          guardian.text,
-                                                      "emergency1": int.parse(
-                                                        emergency1.text,
-                                                      ),
-                                                      "emergency2": int.parse(
-                                                        emergency2.text,
-                                                      ),
-                                                      "userInfoDone": true,
-                                                    }, SetOptions(merge: true));
-                                              } catch (e) {
-                                                Get.snackbar(
-                                                  "Error",
-                                                  e.toString(),
-                                                  snackPosition:
-                                                      SnackPosition.BOTTOM,
-                                                );
-                                              }
-                            
-                                              setState(() {
-                                                isLoadingStep = false;
-                                              });
-                            
-                                              showModalBottomSheet(
-                                                context: context,
-                                                isScrollControlled: true,
-                                                builder: (BuildContext context) {
-                                                  return IntrinsicHeight(
-                                                    child: Container(
-                                                      child: Column(
-                                                        children: [
-                                                          SizedBox(
-                                                            height: 15,
-                                                          ),
-                                                          Container(
-                                                            color: Colors
-                                                                .black45,
-                                                            width: 35,
-                                                            height: 5,
-                                                          ),
-                                                          Align(
-                                                            child: Image.asset(
-                                                              "assets/personal_info/confirm.png",
-                                                              height: 110.h,
-                                                              width: 100.w,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 15,
-                                                          ),
-                                                          Text(
-                                                            "Confirmed Successfully",
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Text(
-                                                            "Your personal information has been \nSuccessfully updated",
-                                                            textAlign:
-                                                                TextAlign
-                                                                    .center,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 35,
-                                                          ),
-                                                          Container(
-                                                            color:
-                                                                Colors.white,
-                                                            height: 60.h,
-                                                            width:
-                                                                MediaQuery.sizeOf(
-                                                                  context,
-                                                                ).width,
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsets.symmetric(
-                                                                    vertical:
-                                                                        8.0.h,
-                                                                    horizontal:
-                                                                        12.w,
-                                                                  ),
-                                                              child: ElevatedButton(
-                                                                onPressed: () {
-                                                                  Get.to(
-                                                                    () => BottomNav(
-                                                                      username:
-                                                                          FirebaseAuth.instance.currentUser!.displayName ??
-                                                                          "User",
-                                                                    ),
-                                                                    transition:
-                                                                        Transition
-                                                                            .fadeIn,
-                                                                    duration: Duration(
-                                                                      milliseconds:
-                                                                          300,
-                                                                    ),
-                                                                    curve: Curves
-                                                                        .easeIn,
-                                                                  );
-                                                                },
-                                                                style: ElevatedButton.styleFrom(
-                                                                  elevation:
-                                                                      0,
-                                                                  shape: RoundedRectangleBorder(
-                                                                    side: BorderSide
-                                                                        .none,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          15.r,
-                                                                        ),
-                                                                  ),
-                                                                  backgroundColor:
-                                                                      const Color(
-                                                                        0xFF00EFD1,
-                                                                      ),
-                                                                ),
-                                                                child: const Text(
-                                                                  "Done",
-                                                                  style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }
-                                            if (currentStep == 0
-                                                ? formkey0.currentState!
-                                                      .validate()
-                                                : currentStep == 1
-                                                ? formkey1.currentState!
-                                                      .validate()
-                                                : formkey2.currentState!
-                                                          .validate() &&
-                                                      currentStep < 3) {
-                                              setState(() {
-                                                currentStep++;
-                                                print(currentStep);
-                                              });
-                                            }
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color(
-                                              0xFF00EFD1,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                            ),
-                                          ),
-                            
-                                          child: isLoadingStep
-                                              ? Align(
-                                                  alignment: Alignment.center,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 15,
-                                                        height: 15,
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                              color: Colors
-                                                                  .white,
-                                                            ),
-                                                      ),
-                                                      SizedBox(width: 5),
-                                                      Text("Please wait.."),
-                                                    ],
-                                                  ),
-                                                )
-                                              : Text(
-                                                  'Next',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold,
-                                                  ),
-                                                ),
-                                        ),
-                                      ),
-                                    ),
+                                    // if (index < steps.length )
+                                    // Align(
+                                    //   alignment: Alignment.center,
+                                    //   child: SizedBox(
+                                    //     height: 50,
+                                    //     width:
+                                    //         MediaQuery.of(context).size.width *
+                                    //         0.5,
+
+                                    //     child:
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],
