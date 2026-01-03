@@ -508,6 +508,7 @@ Widget hostelCardVariant({
   required void Function() triggerRebuild,
   bool variant = false,
   int index = 0,
+  bool variant2 = false,
 }) {
   int length = hostel.amenities?.length ?? 0;
   return Row(
@@ -523,12 +524,14 @@ Widget hostelCardVariant({
           );
         },
         child: Padding(
-          padding: !variant ? const EdgeInsets.all(8.0): EdgeInsetsGeometry.only(bottom: 20.h),
+          padding: !variant ? const EdgeInsets.all(7.5): EdgeInsetsGeometry.only(bottom: 20.h),
           child: Container(
             // height: 215.h,
-            width: !variant ? Constant.width * 0.65: Constant.width * 0.91,
+            
+            width: !variant2 ?(!variant ? Constant.width * 0.65: Constant.width * 0.91): Constant.width * 0.55,
             decoration: BoxDecoration(
-              border: variant ? Border.all(color: Color(0xFFCAC4D0)): null,
+              // color: Colors.red,
+              border: variant || variant2 ? Border.all(color: Color(0xFFCAC4D0)): null,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(28.r),
                 topLeft: Radius.circular(28.r),
@@ -540,7 +543,7 @@ Widget hostelCardVariant({
                 BoxShadow(
                   offset: const Offset(0, 1),
                   blurRadius: 4,
-                  color: !variant ? const Color.fromARGB(64, 0, 0, 0): Colors.white,
+                  color: !variant || !variant2 ? const Color.fromARGB(64, 0, 0, 0): Colors.white,
                 ),
               ],
             ),
@@ -548,7 +551,7 @@ Widget hostelCardVariant({
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: variant ? Constant.height * 0.25: Constant.height * 0.2,
+                  height: !variant2 ?(variant ? Constant.height * 0.25: Constant.height * 0.2): Constant.height * 0.15,
                   // width: !variant ? Constant.width * 0.65,
                   child: Stack(
                     children: [
@@ -606,7 +609,7 @@ Widget hostelCardVariant({
                         top: 5.h,
                         left: 5.w,
                         // left: 0,
-                        child: Container(
+                        child: SizedBox(
                           height: Constant.height * 0.05,
                           
                           child: index % 2 == 0 ?Image.asset("assets/hostel_category_widget/Frame.png", fit: BoxFit.fitHeight):
@@ -658,12 +661,13 @@ Widget hostelCardVariant({
                 const SizedBox(height: 5),
                 Container(
                   // color: Colors.green,
-                  padding: EdgeInsets.only(left: 15.h),
+                  // padding: variant ? EdgeInsets.only(left: 15.h): EdgeInsets.zero,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: Constant.height * 0.03,
+                      Container(
+                        padding: EdgeInsets.only(left: 15.h),
+                        height: !variant2 ?(Constant.height * 0.03): Constant.height * 0.025,
                         child: FittedBox(
                           child: Text(
                             hostel.name,
@@ -677,8 +681,9 @@ Widget hostelCardVariant({
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          height: Constant.height * 0.02,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 15.h),
+                          height: !variant2 ? (Constant.height * 0.02): Constant.height * 0.015,
                           width: Constant.width * 0.8,
                           child: FittedBox(
                             alignment: Alignment.centerLeft,
@@ -697,8 +702,9 @@ Widget hostelCardVariant({
                         ),
                       ),
                       SizedBox(height: 5.h),
-                      SizedBox(
-                        height: Constant.height * 0.025,
+                      Container(
+                        padding: EdgeInsets.only(left: 15.h),
+                        height: !variant2 ? Constant.height * 0.025: Constant.height * 0.02,
                         child: FittedBox(
                           child: Text.rich(
                             TextSpan(
@@ -715,58 +721,69 @@ Widget hostelCardVariant({
                         ),
                       ),
                       SizedBox(height: 8),
-                      SizedBox(
+                      Container(
+                        // color: Colors.red,
                         width: !variant ? Constant.width * 0.65 : Constant.width * 0.91,
                         height: 25,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: length != 0 ?(hostel.amenities!.length / 2).ceil(): 0,
                           itemBuilder: (context, index2) {
-                            return Container(
-                              margin: EdgeInsets.only(left: 0, right: 5.w),
-                              padding: EdgeInsets.only(
-                                left: 5.w,
-                                top: .5.h,
-                                bottom: .5.h,
-                                right: 10.w,
-                              ),
-                              height: Constant.height * 0.04,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.r),
-                                border: Border.all(color: Color(0xFF7A7A7A)),
-                              ),
-                              // width: 40,
-                              // height: 20,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: FittedBox(
-                                  child: SizedBox(
-                                    height: Constant.height * 0.035,
-                                    child: Row(
-                                      children: [
-                                        GetIcon(
-                                          text:
-                                              hostel.amenities![index2] ??
-                                              "noicon",
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          hostel
-                                                  .amenities![index2]
-                                                  ?.capitalize ??
-                                              "none",
-                                          style: TextStyle(
-                                            fontFamily: "Work Sans",
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13.sp,
-                                            color: Color(0xFF555555),
+                            return Row(
+                              children: [
+                                if(index2 == 0)
+                                SizedBox(width: 15.h),
+                                Container(
+                                margin: EdgeInsets.only(left: 0, right: 5.w),
+                                padding: EdgeInsets.only(
+                                  left: 5.w,
+                                  top: .5.h,
+                                  bottom: .5.h,
+                                  right: 10.w,
+                                ),
+                                height: Constant.height * 0.04,
+                                decoration: BoxDecoration(
+                                  // color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(5.r),
+                                  border: Border.all(color: Color(0xFF7A7A7A)),
+                                ),
+                                // width: 40,
+                                // height: 20,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: FittedBox(
+                                    child: SizedBox(
+                                      height: Constant.height * 0.035,
+                                      child: Row(
+                                        children: [
+                                        SizedBox(width: 15.h),
+                                          GetIcon(
+                                            text:
+                                                hostel.amenities![index2] ??
+                                                "noicon",
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(width: 10),
+                                          Text(
+                                            hostel
+                                                    .amenities![index2]
+                                                    ?.capitalize ??
+                                                "none",
+                                            style: TextStyle(
+                                              fontFamily: "Work Sans",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13.sp,
+                                              color: Color(0xFF555555),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                              if(index2+1 == length)
+                              SizedBox(width: 15.h)
+                              ]
                             );
                           },
                         ),
@@ -786,52 +803,58 @@ Widget hostelCardVariant({
                                 hostel.amenities!.length -
                                 ((hostel.amenities!.length / 2).ceil()): 0;
                             int offset = length != 0 ?i + 1: 0;
-                            return Container(
-                              margin: EdgeInsets.only(left: 0, right: 5.w),
-                              padding: EdgeInsets.only(
-                                left: 5.w,
-                                top: .5.h,
-                                bottom: .5.h,
-                                right: 10.w,
-                              ),
-                              height: Constant.height * 0.04,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.r),
-                                border: Border.all(color: Color(0xFF7A7A7A)),
-                              ),
-                              // width: 40,
-                              // height: 20,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: FittedBox(
-                                  child: SizedBox(
-                                    height: Constant.height * 0.035,
-                                    child: Row(
-                                      children: [
-                                        GetIcon(
-                                          text:
-                                              hostel.amenities![index3 +
-                                                  offset] ??
-                                              "noicon",
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          hostel
-                                                  .amenities![index3 + offset]
-                                                  ?.capitalize ??
-                                              "none",
-                                          style: TextStyle(
-                                            fontFamily: "Work Sans",
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 13.sp,
-                                            color: Color(0xFF555555),
+                            return Row(
+                              children: [
+                                if(index3+offset == i+1)
+                                SizedBox(width: 15.h),
+                                Container(
+                                margin: EdgeInsets.only(left: 0, right: 5.w),
+                                padding: EdgeInsets.only(
+                                  left: 5.w,
+                                  top: .5.h,
+                                  bottom: .5.h,
+                                  right: 10.w,
+                                ),
+                                height: Constant.height * 0.04,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.r),
+                                  border: Border.all(color: Color(0xFF7A7A7A)),
+                                ),
+                                // width: 40,
+                                // height: 20,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: FittedBox(
+                                    child: SizedBox(
+                                      height: Constant.height * 0.035,
+                                      child: Row(
+                                        children: [
+                                          // SizedBox(width: 15.h),
+                                          GetIcon(
+                                            text:
+                                                hostel.amenities![index3 +
+                                                    offset] ??
+                                                "noicon",
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(width: 10),
+                                          Text(
+                                            hostel
+                                                    .amenities![index3 + offset]
+                                                    ?.capitalize ??
+                                                "none",
+                                            style: TextStyle(
+                                              fontFamily: "Work Sans",
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13.sp,
+                                              color: Color(0xFF555555),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ),]
                             );
                           },
                         ),

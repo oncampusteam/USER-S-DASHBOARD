@@ -20,7 +20,7 @@ class BottomNav extends StatefulWidget {
 
 int currentpage = 2;
 String hostelCategory = "";
-ValueNotifier currentPage = ValueNotifier(2);
+final ValueNotifier<int> currentPage = ValueNotifier<int>(2);
 
 class _BottomNavState extends State<BottomNav> {
   // List<Widget> getPages() {
