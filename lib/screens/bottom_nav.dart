@@ -122,6 +122,7 @@ class _BottomNavState extends State<BottomNav> {
                                         child: FittedBox(
                                           child: Image.asset(
                                             "assets/home/apartment.png",
+                                            color: currentpage == 0 ? Color(0xFF35AD9E): null,
                                           ),
                                         ),
                                       ),
@@ -134,7 +135,7 @@ class _BottomNavState extends State<BottomNav> {
                                           child: Text(
                                             "My Apartment",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: currentpage == 0 ? Color(0xFF35AD9E) :Colors.white ,
                                               fontFamily: "Poppins",
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -162,6 +163,7 @@ class _BottomNavState extends State<BottomNav> {
                                         child: FittedBox(
                                           child: Image.asset(
                                             "assets/home/connect.png",
+                                            color: currentpage == 1? Color(0xFF35AD9E): null,
                                           ),
                                         ),
                                       ),
@@ -172,7 +174,7 @@ class _BottomNavState extends State<BottomNav> {
                                           child: Text(
                                             "Connect+",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: currentpage == 1 ? Color(0xFF35AD9E):Colors.white,
                                               fontFamily: "Poppins",
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -218,6 +220,7 @@ class _BottomNavState extends State<BottomNav> {
                                         child: FittedBox(
                                           child: Image.asset(
                                             "assets/home/ai.png",
+                                            color: currentpage == 3? Color(0xFF35AD9E): null,
                                           ),
                                         ),
                                       ),
@@ -230,7 +233,7 @@ class _BottomNavState extends State<BottomNav> {
                                           child: Text(
                                             "Oncampus AI",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: currentpage == 3 ? Color(0xFF35AD9E):Colors.white,
                                               fontFamily: "Poppins",
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -258,6 +261,7 @@ class _BottomNavState extends State<BottomNav> {
                                         child: FittedBox(
                                           child: Image.asset(
                                             "assets/home/profile.png",
+                                            color: currentpage == 4? Color(0xFF35AD9E): null,
                                           ),
                                         ),
                                       ),
@@ -268,7 +272,7 @@ class _BottomNavState extends State<BottomNav> {
                                           child: Text(
                                             "Profile",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: currentpage == 4 ? Color(0xFF35AD9E):Colors.white,
                                               fontFamily: "Poppins",
                                               fontWeight: FontWeight.w600,
                                             ),

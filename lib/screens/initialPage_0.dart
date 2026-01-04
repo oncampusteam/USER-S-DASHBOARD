@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/initialPage1.dart';
 
@@ -23,7 +24,8 @@ class _Initialpage0State extends State<Initialpage0>
   @override
   void initState() {
     super.initState();
-    _rebuildAfterDelay();
+    // _rebuildAfterDelay();
+    _rebuild();
     controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -107,14 +109,14 @@ class _Initialpage0State extends State<Initialpage0>
 
     // await Future.delayed(const Duration(milliseconds: 50));
     if (mounted) {
-      Get.to(
-        () => user == null
-            ? Material(child: Initialpage1())
-            : BottomNav(username: user!.displayName!),
-        transition: Transition.fadeIn,
-        curve: Curves.easeIn,
-        duration: const Duration(milliseconds: 600),
-      );
+      // Get.to(
+      //   () => user == null
+      //       ? Material(child: Initialpage1())
+      //       : BottomNav(username: user!.displayName!),
+      //   transition: Transition.fadeIn,
+      //   curve: Curves.easeIn,
+      //   duration: const Duration(milliseconds: 600),
+      // );
     }
   }
 
@@ -129,54 +131,87 @@ class _Initialpage0State extends State<Initialpage0>
   double radius = 0;
   double opacity = 1;
   Curve curve = Curves.bounceOut;
+
+  void _rebuild() async {
+    if (mounted) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return AnimatedContainer(
-          onEnd: () {
-            setState(() {
-              padding = noPadding
-                  ? padding
-                  : MediaQuery.of(context).size.height * 0.4;
-            });
-          },
-          curve: curve,
-          color: Colors.white,
-          padding: EdgeInsets.only(top: padding),
-          duration: duration,
-          alignment: Alignment.topCenter,
-          child: image
-              ? AnimatedContainer(
-                  duration: duration,
-                  curve: curve,
-                  height: height,
-                  width: width,
-                  alignment: Alignment.topCenter,
-                  decoration: BoxDecoration(
-                    shape: shape,
-                    borderRadius: borderRadius,
-                    gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
-                    ),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/initialPage0/on.png",
-                      fit: BoxFit.cover,
-                      height: imageHeight,
-                      width: imageWidth,
-                    ),
-                  ),
+        return Container(
+          height: Constant.height,
+          width: Constant.width,
+          child: Stack(
+            children: [
+            Center(
+              child:Image.asset(
+                "assets/initialPage0/onCampus-big.png",
+                height: Constant.height * 0.15,
+                fit: BoxFit.contain
                 )
-              : Image.asset(
-                  "assets/initialPage0/onCampus.png",
-                  height: 97.h,
-                  width: 285.w,
                 ),
+                Positioned(
+                  bottom: Constant.height * 0.05,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    width: Constant.width,
+                    child: Center(
+                      child: Row(
+                        children:[
+                          
+                        ])
+                        )
+                  )
+                )
+          ]),
         );
+        // AnimatedContainer(
+        //   onEnd: () {
+        //     setState(() {
+        //       padding = noPadding
+        //           ? padding
+        //           : MediaQuery.of(context).size.height * 0.4;
+        //     });
+        //   },
+        //   curve: curve,
+        //   color: Colors.white,
+        //   padding: EdgeInsets.only(top: padding),
+        //   duration: duration,
+        //   alignment: Alignment.topCenter,
+        //   child: image
+        //       ? AnimatedContainer(
+        //           duration: duration,
+        //           curve: curve,
+        //           height: height,
+        //           width: width,
+        //           alignment: Alignment.topCenter,
+        //           decoration: BoxDecoration(
+        //             shape: shape,
+        //             borderRadius: borderRadius,
+        //             gradient: const LinearGradient(
+        //               begin: Alignment.topCenter,
+        //               end: Alignment.bottomCenter,
+        //               colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
+        //             ),
+        //           ),
+        //           child: Center(
+        //             child: Image.asset(
+        //               "assets/initialPage0/on.png",
+        //               fit: BoxFit.cover,
+        //               height: imageHeight,
+        //               width: imageWidth,
+        //             ),
+        //           ),
+        //         )
+        //       : Image.asset(
+        //           "assets/initialPage0/onCampus.png",
+        //           height: 97.h,
+        //           width: 285.w,
+        //         ),
+        // );
       },
     );
   }

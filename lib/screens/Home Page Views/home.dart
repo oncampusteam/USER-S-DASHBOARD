@@ -3,18 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
-import 'package:on_campus/screens/hostels_detail.dart';
+// import 'package:on_campus/screens/hostels_detail.dart';
 import 'package:on_campus/screens/search.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
-import 'package:on_campus/widgets/homestel_hostel_category.dart';
-import 'package:on_campus/widgets/hostel_categories.dart';
-import 'package:on_campus/widgets/school_hostel_category.dart';
-import 'package:on_campus/screens/get_icon.dart';
+// import 'package:on_campus/widgets/homestel_hostel_category.dart';
+// import 'package:on_campus/widgets/hostel_categories.dart';
+// import 'package:on_campus/widgets/school_hostel_category.dart';
+// import 'package:on_campus/screens/get_icon.dart';
 
 class Home extends StatefulWidget {
   final String? username;
@@ -82,6 +83,13 @@ class _HomeState extends State<Home> {
     getPopular();
   }
 
+  String getFirstName() {
+    debugPrint(widget.username);
+    String text = widget.username ?? "${user?.displayName}";
+    if (text.trim().isEmpty) return '';
+    return text.trim().split(' ').first;
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -121,11 +129,7 @@ class _HomeState extends State<Home> {
                                     child: FittedBox(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "Welcome ${user?.displayName ?? () {
-                                              String text = widget.username ?? "";
-                                              if (text.trim().isEmpty) return '';
-                                              return text.trim().split(' ').first;
-                                            }},",
+                                        "Welcome ${getFirstName()},",
                                         style: TextStyle(
                                           fontSize: 24.sp.clamp(0, 24),
                                           fontFamily: "Poppins-Bold",
@@ -177,101 +181,198 @@ class _HomeState extends State<Home> {
                       SizedBox(height: 20),
                       SizedBox(
                         // color: Colors.red,
-                        width: Constant.width * 0.7,
-                        height: Constant.height * 0.08,
+                        width: Constant.width,
                         child: Align(
-                          child: Container(
-                            height: Constant.height * 0.055,
-                      
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(24.r),
-                              border: Border.all(color: Color(0xFF00EFD1)),
-                              // boxShadow: [
-                              //   BoxShadow(
-                              //     offset: Offset(0, 1),
-                              //     blurRadius: 4,
-                              //     spreadRadius: 0,
-                              //     color: Color.fromRGBO(0, 0, 0, 0.25),
-                              //   ),
-                              // ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24.r),
-                              child: Stack(
-                                children: [
-                                  TextField(
-                                    obscureText: false,
-                                    enableSuggestions: true,
-                                    autocorrect: true,
-                                    cursorColor: Colors.black,
-                                    controller: searchController,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      prefixIcon: SizedBox(
-                                        width: 30.w,
-                                        height: 40.h,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                // color: Colors.red,
+                                width: Constant.width * 0.8,
+                                height: Constant.height * 0.08,
+                                child: Align(
+                                  child: Container(
+                                    height: Constant.height * 0.065,
+
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                      border: Border.all(
+                                        color: Color(0xFF00EFD1),
                                       ),
-                                      hint: SizedBox(
-                                        height: Constant.height * 0.025,
-                                        child: FittedBox(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            "Search by hostel's name or location",
-                                            style: TextStyle(
-                                              fontFamily: "Inter",
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xFFBBBBBB),
-                                              fontSize: 15.sp,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: Offset(0, 1),
+                                          blurRadius: 4,
+                                          spreadRadius: 0,
+                                          color: Color.fromRGBO(0, 0, 0, 0.25),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            child: TextField(
+                                              // decoration: TextDecoration.none,
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none
+                                              ),
+                                              obscureText: false,
+                                              enableSuggestions: true,
+                                              autocorrect: true,
+                                              cursorColor: Colors.black,
+                                              controller: searchController,
+                                              decoration: InputDecoration(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                prefixIcon: SizedBox(
+                                                  width: 30.w,
+                                                  height: 40.h,
+                                                ),
+                                                hint: SizedBox(
+                                                  // color: Colors.blue,
+                                                  height: Constant.height * 0.065,
+                                                  child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: SizedBox(
+                                                      height: Constant.height * 0.025,
+                                                      child: FittedBox(
+                                                        alignment:
+                                                            Alignment.centerLeft,
+                                                        child: Text(
+                                                          "   Search for hostels",
+                                                          style: TextStyle(
+                                                            fontFamily: "Inter",
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: const Color(
+                                                              0xFFBBBBBB,
+                                                            ),
+                                                            fontSize: 15.sp,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                border: 
+                                                
+                                                OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(24.r),
+                                                  // borderSide: const BorderSide(color: Color(0xFF00EFD1)),
+                                                  borderSide: BorderSide.none
+                                                ),
+                                                contentPadding: EdgeInsets.zero
+                                                //   focusedBorder: OutlineInputBorder(
+                                                //     borderRadius: BorderRadius.circular(16.r),
+                                                //     borderSide: const BorderSide(color: Colors.white),),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 15,
+                                            // top: 0,
+                                            child: Container(
+                                              // color: Colors.red,
+                                              height: Constant.height * 0.06,
+                                              width: 45.w,
+                                              child: Image.asset(
+                                                height: 60.h,
+                                                width: 50.w,
+                                                "assets/hostel_category_widget/ic-search@4x.png",
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => Search());
+                                              },
+                                              child: Container(
+                                                color: Colors.transparent,
+                                                child: Container(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Container(
+                                height: 40.h,
+                                width: 40.w,
+                                // padding: EdgeInsets.all(5.r),
+                                decoration: BoxDecoration(
+                                  // color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Color(0xFF00EFD1)),
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      height: 30.h,
+                                      width: 30.w,
+                                      "assets/home/hugeicons--notification-01 (1).svg",
+                                      // colorFilter: ColorFilter.mode(Color(0xFF00EFD1), blend),
+                                      // fit: BoxFit.cover
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Container(
+                                        padding: EdgeInsets.all(2.5),
+                                        width: 20.w,
+                                        height: 20.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Align(
+                                          child: Container(
+                                            width: 15.w,
+                                            height: 15.h,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF00EFD1),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Align(
+                                              child: Text(
+                                                "1",
+                                                style: TextStyle(
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.white,
+                                                  fontSize: 7.sp,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      border: InputBorder.none,
-                                      // OutlineInputBorder(
-                                      //   borderRadius: BorderRadius.circular(24.r),
-                                      //   borderSide: const BorderSide(color: Color(0xFF00EFD1)),
-                                      // ),
-                                      //   focusedBorder: OutlineInputBorder(
-                                      //     borderRadius: BorderRadius.circular(16.r),
-                                      //     borderSide: const BorderSide(color: Colors.white),),
                                     ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 20,
-                                    child: Container(
-                                      // color: Colors.red,
-                                      height: Constant.height * 0.05,
-                                      width: 30.w,
-                                      child: Image.asset(
-                                        "assets/hostel_category_widget/ic-search@4x.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    child: GestureDetector(
-                                      onTap: (){
-                                      Get.to(()=> Search());
-                                      },
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: Container()
-                                        ),
-                                    ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 15.h),
+                      SizedBox(height: 20.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h, right: 25.h),
                         height: Constant.height * 0.04,
@@ -304,8 +405,8 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Image.asset(
                                       "assets/home/Ellipse 3.png",
-                                      height: 70,
-                                      width: 70,
+                                      height: 60,
+                                      width: 60,
                                     ),
                                     SizedBox(height: 15.h),
                                     SizedBox(
@@ -347,16 +448,17 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Image.asset(
                                       "assets/home/Ellipse 4.png",
-                                      height: 70,
-                                      width: 70,
+                                      height: 60,
+                                      width: 60,
                                     ),
                                     SizedBox(height: 15),
                                     SizedBox(
                                       height: Constant.height * 0.025,
                                       child: FittedBox(
+                                        alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Private Hostel",
-                                          textAlign: TextAlign.center,
+                                          "   Private Hostel",
+                                          textAlign: TextAlign.right,
                                         ),
                                       ),
                                     ),
@@ -382,8 +484,8 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Image.asset(
                                       "assets/home/Ellipse 5.png",
-                                      height: 70,
-                                      width: 70,
+                                      height: 60,
+                                      width: 60,
                                     ),
                                     SizedBox(height: 15),
                                     SizedBox(
@@ -402,7 +504,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 20),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
                         width: Constant.width,
@@ -428,12 +530,12 @@ class _HomeState extends State<Home> {
                               padding: EdgeInsets.only(right: 15),
                               child: TextButton(
                                 style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(
-                                    Color.fromRGBO(0, 239, 209, .07),
-                                  ),
-                                  overlayColor: WidgetStateProperty.all(
-                                    Color.fromRGBO(0, 239, 209, .5),
-                                  ),
+                                  // backgroundColor: WidgetStateProperty.all(
+                                  //   Color.fromRGBO(0, 239, 209, .07),
+                                  // ),
+                                  // overlayColor: WidgetStateProperty.all(
+                                  //   Color.fromRGBO(0, 239, 209, .5),
+                                  // ),
                                   animationDuration: Duration(seconds: 2),
                                 ),
                                 isSemanticButton: true,
@@ -509,12 +611,12 @@ class _HomeState extends State<Home> {
                               padding: EdgeInsets.only(right: 15),
                               child: TextButton(
                                 style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(
-                                    Color.fromRGBO(0, 239, 209, .07),
-                                  ),
-                                  overlayColor: WidgetStateProperty.all(
-                                    Color.fromRGBO(0, 239, 209, .5),
-                                  ),
+                                  // backgroundColor: WidgetStateProperty.all(
+                                  //   Color.fromRGBO(0, 239, 209, .07),
+                                  // ),
+                                  // overlayColor: WidgetStateProperty.all(
+                                  //   Color.fromRGBO(0, 239, 209, .5),
+                                  // ),
                                   animationDuration: Duration(seconds: 2),
                                 ),
                                 isSemanticButton: true,
@@ -635,8 +737,8 @@ class _HomeState extends State<Home> {
                                           setState(() {});
                                         },
                                       ),
-                                      if(index+1 == hostels.length)
-                                      SizedBox(width: 20.w)
+                                      if (index + 1 == hostels.length)
+                                        SizedBox(width: 20.w),
                                     ],
                                   );
                                 },
@@ -675,14 +777,16 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15.h),
                       Container(
+                        // color: Colors.red,
                         margin: EdgeInsets.symmetric(horizontal: 25.h),
                         // padding: EdgeInsets.symmetric(horizontal: 5.h),
-                        width: 330.w,
-                        height: 256.h,
+                        height: Constant.height * 0.3,
+                          width: Constant.width,
                         child: Image.asset(
                           "assets/home/Undraw-1.png",
-                          height: 256.h,
-                          width: 252.w,
+                          // height: Constant.height * 0.15,
+                          // width: Constant.width,
+                          fit: BoxFit.contain
                         ),
                       ),
                       SizedBox(height: 20.h),
@@ -844,7 +948,7 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 35.h),
                       Container(
-                        margin: EdgeInsets.only(left: 30.h, right: 50.h),
+                        margin: EdgeInsets.only(left: 30.h, right: 30.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -852,6 +956,7 @@ class _HomeState extends State<Home> {
                               padding: EdgeInsets.symmetric(horizontal: 30.h),
                               height: Constant.height * 0.045,
                               // width: 130.w,
+                              width: Constant.width * 0.39,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
                                 color: Color(0xFF00EFD1),
@@ -884,10 +989,12 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ),
+                            
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 15.h),
                               height: Constant.height * 0.045,
                               // width: 130.w,
+                              width: Constant.width * 0.39,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
                                 color: Color(0xFFEDEDED),

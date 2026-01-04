@@ -306,7 +306,7 @@ class _BookingsState extends State<Bookings> {
                                               topRight: Radius.circular(12.r),
                                             ),
                                             child: Image.asset(
-                                              "assets/pending_payment/hostel-2.png",
+                                              "assets/hostels_detail/hostel-2.png",
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -659,7 +659,7 @@ class _BookingsState extends State<Bookings> {
                                               topRight: Radius.circular(12.r),
                                             ),
                                             child: Image.asset(
-                                              "assets/pending_payment/hostel-2.png",
+                                              "assets/hostels_detail/hostel-2.png",
                                               fit: BoxFit.cover,
                                             ),
                                           ),

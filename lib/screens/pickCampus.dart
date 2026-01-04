@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
@@ -54,6 +55,7 @@ class _PickcampusState extends State<Pickcampus> {
           bottomNavigationBar: GestureDetector(
             onTap: () {
               showModalBottomSheet(
+                backgroundColor: Colors.white,
                 context: context,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
@@ -196,13 +198,18 @@ class _PickcampusState extends State<Pickcampus> {
               ),
               width: 330.w,
               child: Align(
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                    fontSize: 20.sp.clamp(0, 20),
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                child: SizedBox(
+                  height: Constant.height * 0.03,
+                  child: FittedBox(
+                    child: Text(
+                      "Continue",
+                      style: TextStyle(
+                        fontFamily: "Inter",
+                        fontSize: 20.sp.clamp(0, 20),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -236,36 +243,127 @@ class _PickcampusState extends State<Pickcampus> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(40)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search_outlined),
-                          prefixIconColor: Colors.grey,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
-    
-                          hintText: "Search by Region, University...",
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            // fontWeight: FontWeight.w600,
-                            fontSize: 13.sp.clamp(0, 13),
+                   SizedBox(
+                    // color: Colors.red,
+                    width: Constant.width,
+                    height: Constant.height * 0.09,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        height: Constant.height * 0.065,
+                        width: Constant.width * 0.9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24.r),
+                          // border: Border.all(
+                          //   color: Color(0xFF00EFD1),
+                          // ),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 1),
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24.r),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: TextField(
+                                  // decoration: TextDecoration.none,
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none
+                                  ),
+                                  obscureText: false,
+                                  enableSuggestions: true,
+                                  autocorrect: true,
+                                  cursorColor: Colors.black,
+                                  controller: searchController,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    prefixIcon: SizedBox(
+                                      width: 30.w,
+                                      height: 40.h,
+                                    ),
+                                    hint: SizedBox(
+                                      // color: Colors.blue,
+                                      height: Constant.height * 0.065,
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: SizedBox(
+                                          height: Constant.height * 0.025,
+                                          child: FittedBox(
+                                            alignment:
+                  Alignment.centerLeft,
+                                            child: Text(
+                                              "Search by hostel's name or location",
+                                              style: TextStyle(
+                  fontFamily: "Inter",
+                  fontWeight:
+                      FontWeight.bold,
+                  color: const Color(
+                    0xFFBBBBBB,
+                  ),
+                  fontSize: 15.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    border: 
+
+                                    OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                      // borderSide: const BorderSide(color: Color(0xFF00EFD1)),
+                                      borderSide: BorderSide.none
+                                    ),
+                                    contentPadding: EdgeInsets.zero
+                                    //   focusedBorder: OutlineInputBorder(
+                                    //     borderRadius: BorderRadius.circular(16.r),
+                                    //     borderSide: const BorderSide(color: Colors.white),),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 15,
+                                // top: 0,
+                                child: Container(
+                                  // color: Colors.red,
+                                  height: Constant.height * 0.06,
+                                  width: 45.w,
+                                  child: Image.asset(
+                                    height: 60.h,
+                                    width: 50.w,
+                                    "assets/hostel_category_widget/ic-search@4x.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Get.to(() => Search());
+                                  },
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    child: Container(),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

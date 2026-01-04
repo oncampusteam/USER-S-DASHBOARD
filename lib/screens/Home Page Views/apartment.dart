@@ -160,13 +160,13 @@ class _ApartmentState extends State<Apartment> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                Get.to(
-                                    () => ApartmentHistory(
-                                        user: user!),
-                                    transition: Transition.fadeIn,
-                                    curve: Curves.easeIn,
-                                    duration:
-                                        const Duration(milliseconds: 600));
+                                // Get.to(
+                                //     () => ApartmentHistory(
+                                //         user: user!),
+                                //     transition: Transition.fadeIn,
+                                //     curve: Curves.easeIn,
+                                //     duration:
+                                //         const Duration(milliseconds: 600));
                               },
                               child: Align(
                                 child: Container(

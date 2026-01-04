@@ -81,25 +81,25 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/apartment/
-    - assets/apartment_history/
-    - assets/compare/
-    - assets/confirm/
+    # - assets/apartment_history/
+    # - assets/compare/
+    # - assets/confirm/
     - assets/gallery/
-    - assets/guardian_info/
+    # - assets/guardian_info/
     - assets/home/
     - assets/hostel_category_widget/
     - assets/hostels_detail/
     - assets/initial_page/
     - assets/initialPage0/
     - assets/loginPage/
-    - assets/signIn2/
+    # - assets/signIn2/
     - assets/payment/
-    - assets/pending_payment/
+    # - assets/pending_payment/
     - assets/personal_info/
     - assets/pickCampus/
-    - assets/profile/
+    # - assets/profile/
     - assets/search/
-    - assets/university_info/
+    # - assets/university_info/
     - assets/view_room_details/
     - assets/welcome_page_views/
     - assets/welcome_screen_1/

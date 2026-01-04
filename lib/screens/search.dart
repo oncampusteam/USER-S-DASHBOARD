@@ -7,6 +7,7 @@ import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
 import 'package:get/get.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/get_icon.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
@@ -124,17 +125,20 @@ class _SearchState extends State<Search> {
                                       ),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    height: 30.h,
-                                    width: 30.w,
+                                    height: 40.h,
+                                    width: 40.w,
                                     child: IconButton(
                                       icon: Icon(
-                                        Icons.arrow_back_ios_new_outlined,
-                                        size: 17.sp.clamp(0, 17),
+                                        Icons.chevron_left,
+                                        size: 24.sp.clamp(0, 24),
                                       ),
                                       color: Colors.black38,
                                       onPressed: () {
+                                        // setState(() {
+                                        //   bottomNav.currentPage.value = 2;
+                                        // });
                                         Get.to(
-                                          () => const Home(),
+                                          () => const BottomNav(username: "", subindex: 2,),
                                           transition: Transition.fadeIn,
                                           curve: Curves.easeIn,
                                           duration: const Duration(
@@ -160,11 +164,8 @@ class _SearchState extends State<Search> {
                                     ),
                                     height: 30.h,
                                     width: 30.w,
-                                    child: Icon(
-                                      Icons.list,
-                                      color: Colors.black38,
-                                      size: 17.sp.clamp(0, 17),
-                                    ),
+                                    child: Image.asset(
+                                      "assets/search/menu.png")
                                   ),
                                 ],
                               ),
@@ -278,7 +279,8 @@ class _SearchState extends State<Search> {
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 25.w),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
                                     height: Constant.height * 0.03,
@@ -286,26 +288,26 @@ class _SearchState extends State<Search> {
                                     child: Text(
                                       "Most searched hostels",
                                       style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF323232),
-                                      )
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF323232),
+                                      ),
                                     ),
-                                    ),
+                                  ),
                                   SizedBox(
                                     height: Constant.height * 0.025,
                                     width: Constant.width * 0.2,
                                     child: Text(
                                       "View all",
                                       style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF00EFD1),
-                                      )
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF00EFD1),
+                                      ),
                                     ),
-                                    )
+                                  ),
                                 ],
-                              )
+                              ),
                             ),
                             SizedBox(height: 10),
                             isLoading
@@ -343,18 +345,19 @@ class _SearchState extends State<Search> {
                                                 setState(() {});
                                               },
                                             ),
-                                          if(index+1 == hostels.length)
-                                            SizedBox(width: 20.w)
+                                            if (index + 1 == hostels.length)
+                                              SizedBox(width: 20.w),
                                           ],
                                         );
                                       },
                                     ),
                                   ),
-                                  SizedBox(height: 15.h),
+                            SizedBox(height: 15.h),
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 25.w),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
                                     height: Constant.height * 0.03,
@@ -362,26 +365,26 @@ class _SearchState extends State<Search> {
                                     child: Text(
                                       "Recommend for you",
                                       style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF323232),
-                                      )
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF323232),
+                                      ),
                                     ),
-                                    ),
+                                  ),
                                   SizedBox(
                                     height: Constant.height * 0.025,
                                     width: Constant.width * 0.2,
                                     child: Text(
                                       "View all",
                                       style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF00EFD1),
-                                      )
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF00EFD1),
+                                      ),
                                     ),
-                                    )
+                                  ),
                                 ],
-                              )
+                              ),
                             ),
                             SizedBox(height: 10),
                             isLoading
@@ -419,19 +422,18 @@ class _SearchState extends State<Search> {
                                                 setState(() {});
                                               },
                                             ),
-                                          if(index+1 == recommendedHostels.length)
-                                            SizedBox(width: 20.w)
+                                            if (index + 1 ==
+                                                recommendedHostels.length)
+                                              SizedBox(width: 20.w),
                                           ],
                                         );
                                       },
                                     ),
                                   ),
-                            
                           ],
                         ),
                       ),
                     ),
-                    
                   ],
                 ),
               ),

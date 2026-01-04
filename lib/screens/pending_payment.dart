@@ -115,7 +115,7 @@ class _PendingPaymentState extends State<PendingPayment> {
                                                 width: 90.w,
                                                 height: 90.h,
                                                 child: Image.asset(
-                                                  "assets/pending_payment/hostel-2.png",
+                                                  "assets/hostels_detail/hostel-2.png",
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -450,7 +450,7 @@ class _PendingPaymentState extends State<PendingPayment> {
                                           Row(
                                             children: [
                                               Image.asset(
-                                                "assets/pending_payment/Simplification.png",
+                                                "assets/payment/Simplification.png",
                                                 width: 25.w,
                                                 height: 25,
                                                 color: Colors.black,

@@ -7,6 +7,7 @@ import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/initialPage_0.dart';
 import 'package:on_campus/screens/initial_page.dart';
 import 'package:on_campus/firebase_options.dart';
+import 'package:on_campus/screens/welcome_page_views.dart';
 
 void main() async {
   // DependencyInjection.init();
@@ -68,7 +69,7 @@ class _StartupScreenState extends State<StartupScreen> {
   @override
   void initState() {
     super.initState();
-    future = Future.delayed(const Duration(milliseconds: 100));
+    future = Future.delayed(const Duration(seconds:5));
   }
 
   final PageController pageController = PageController();
@@ -79,35 +80,45 @@ class _StartupScreenState extends State<StartupScreen> {
       screenWidth: MediaQuery.of(context).size.width,
       screenHeight: MediaQuery.of(context).size.height,
     );
-    return ScreenUtilInit(
-      designSize: const Size(430, 932),
-      minTextAdapt: true,
-      builder: (BuildContext context, widget) {
-        return FutureBuilder(
-          future: future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Material(child: const InitialPage());
-            }
-            return 
-            Material(child: const Initialpage0());
-            // return Material(child:Scaffold(
-            //   body: Center(
-            //     child: Column(
-            //       children: [
-            //         SizedBox(height : 200.h),
-            //         Text("this is a"),
-            //         Container(
-            //             padding: EdgeInsets.symmetric(horizontal: 10.h),
-            //             height: 60,
-            //             child: CustomBottomNavBar(height: 60, dip: 50))
-            //       ],
-            //     ),
-            //   ),
-            // ));
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value:SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: ScreenUtilInit(
+          designSize: const Size(430, 932),
+          minTextAdapt: true,
+          builder: (BuildContext context, widget) {
+            return FutureBuilder(
+              future: future,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Material(child: const Initialpage0());
+                }
+                return 
+                Material(child: const WelcomePageViews());
+                // return Material(child:Scaffold(
+                //   body: Center(
+                //     child: Column(
+                //       children: [
+                //         SizedBox(height : 200.h),
+                //         Text("this is a"),
+                //         Container(
+                //             padding: EdgeInsets.symmetric(horizontal: 10.h),
+                //             height: 60,
+                //             child: CustomBottomNavBar(height: 60, dip: 50))
+                //       ],
+                //     ),
+                //   ),
+                // ));
+              },
+            );
           },
-        );
-      },
+        ),
+      ),
     );
   }
 }

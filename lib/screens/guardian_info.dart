@@ -51,7 +51,7 @@ class _GuardianInfoState extends State<GuardianInfo> {
             ),
           ),
           Align(
-              child: Image.asset("assets/guardian_info/user logo.png",
+              child: Image.asset("assets/personal_info/user logo.png",
                   height: 110.h, width: 100.w)),
           Align(
             child: Text(widget.username,
@@ -555,10 +555,10 @@ class _GuardianInfoState extends State<GuardianInfo> {
                       const WidgetStatePropertyAll(Color(0xFF00EFD1))),
               onPressed: () {
                 Navigator.pop(context);
-                Get.to(() => Confirm(username: widget.username),
-                    transition: Transition.fade,
-                    duration: const Duration(milliseconds: 800),
-                    curve: Curves.easeIn);
+                // Get.to(() => Confirm(username: widget.username),
+                //     transition: Transition.fade,
+                //     duration: const Duration(milliseconds: 800),
+                //     curve: Curves.easeIn);
                 // _receit = false;
               },
               child: Text("Next",

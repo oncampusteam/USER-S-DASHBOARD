@@ -316,7 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 25.h,
                       child: FittedBox(
                         child: Text(
-                          "Sign Up",
+                          "SKip",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24.sp,

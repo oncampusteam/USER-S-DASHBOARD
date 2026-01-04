@@ -37,6 +37,9 @@ class _HostelCategoryState extends State<HostelCategory> {
     if (awaitPrivateHostels.isNotEmpty) {
       setState(() {
         allPrivateHostels = awaitPrivateHostels;
+        favoriteBools = List.generate(allPrivateHostels.length, (index) {
+          return false;
+        });
         isLoading = false;
       });
     }
@@ -46,10 +49,14 @@ class _HostelCategoryState extends State<HostelCategory> {
     searchList = allPrivateHostels
         .where((item) => item.name.toLowerCase().contains(value.toLowerCase()))
         .toList();
-
+    searchFavoriteBools = List.generate(searchList.length, (index) {
+      return false;
+    });
     setState(() {});
   }
 
+  List<bool> favoriteBools = [];
+  List<bool> searchFavoriteBools = [];
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -209,6 +216,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                       ),
                     ),
                   ),
+                  // SizedBox(height: 30.h),
                   // Container(
                   //   color: Colors.white,
                   //   height: Constant.height * 0.06,
@@ -243,12 +251,16 @@ class _HostelCategoryState extends State<HostelCategory> {
                               // print(hostel.name);
                               return Column(
                                 children: [
+                                  if (index == 0) SizedBox(height: 12.h),
                                   hostelCardVariant(
                                     hostel: hostel,
-                                    favorite: true,
+                                    favorite: favoriteBools[index],
                                     variant: true,
                                     triggerRebuild: () {
-                                      setState(() {});
+                                      setState(() {
+                                        favoriteBools[index] =
+                                            !favoriteBools[index];
+                                      });
                                     },
                                     index: index,
                                   ),
@@ -279,6 +291,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                               // print(searchHostel.name);
                               return Column(
                                 children: [
+                                  if (index == 0) SizedBox(height: 12.h),
                                   hostelCardVariant(
                                     hostel: searchHostel,
                                     favorite: true,
