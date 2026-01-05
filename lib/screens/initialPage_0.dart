@@ -138,81 +138,84 @@ class _Initialpage0State extends State<Initialpage0>
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return Container(
-          height: Constant.height,
-          width: Constant.width,
-          child: Stack(
-            children: [
-            Center(
-              child:Image.asset(
-                "assets/initialPage0/onCampus-big.png",
-                height: Constant.height * 0.15,
-                fit: BoxFit.contain
-                )
-                ),
-                Positioned(
-                  bottom: Constant.height * 0.05,
-                  left: 0,
-                  right: 0,
-                  child: SizedBox(
-                    width: Constant.width,
-                    child: Center(
-                      child: Row(
-                        children:[
-                          
-                        ])
-                        )
+    return SafeArea(
+      top: false,
+      child: Builder(
+        builder: (context) {
+          return Container(
+            height: Constant.height,
+            width: Constant.width,
+            child: Stack(
+              children: [
+              Center(
+                child:Image.asset(
+                  "assets/initialPage0/onCampus-big.png",
+                  height: Constant.height * 0.15,
+                  fit: BoxFit.contain
                   )
-                )
-          ]),
-        );
-        // AnimatedContainer(
-        //   onEnd: () {
-        //     setState(() {
-        //       padding = noPadding
-        //           ? padding
-        //           : MediaQuery.of(context).size.height * 0.4;
-        //     });
-        //   },
-        //   curve: curve,
-        //   color: Colors.white,
-        //   padding: EdgeInsets.only(top: padding),
-        //   duration: duration,
-        //   alignment: Alignment.topCenter,
-        //   child: image
-        //       ? AnimatedContainer(
-        //           duration: duration,
-        //           curve: curve,
-        //           height: height,
-        //           width: width,
-        //           alignment: Alignment.topCenter,
-        //           decoration: BoxDecoration(
-        //             shape: shape,
-        //             borderRadius: borderRadius,
-        //             gradient: const LinearGradient(
-        //               begin: Alignment.topCenter,
-        //               end: Alignment.bottomCenter,
-        //               colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
-        //             ),
-        //           ),
-        //           child: Center(
-        //             child: Image.asset(
-        //               "assets/initialPage0/on.png",
-        //               fit: BoxFit.cover,
-        //               height: imageHeight,
-        //               width: imageWidth,
-        //             ),
-        //           ),
-        //         )
-        //       : Image.asset(
-        //           "assets/initialPage0/onCampus.png",
-        //           height: 97.h,
-        //           width: 285.w,
-        //         ),
-        // );
-      },
+                  ),
+                  Positioned(
+                    bottom: Constant.height * 0.05,
+                    left: 0,
+                    right: 0,
+                    child: SizedBox(
+                      width: Constant.width,
+                      child: Center(
+                        child: Row(
+                          children:[
+                            
+                          ])
+                          )
+                    )
+                  )
+            ]),
+          );
+          // AnimatedContainer(
+          //   onEnd: () {
+          //     setState(() {
+          //       padding = noPadding
+          //           ? padding
+          //           : MediaQuery.of(context).size.height * 0.4;
+          //     });
+          //   },
+          //   curve: curve,
+          //   color: Colors.white,
+          //   padding: EdgeInsets.only(top: padding),
+          //   duration: duration,
+          //   alignment: Alignment.topCenter,
+          //   child: image
+          //       ? AnimatedContainer(
+          //           duration: duration,
+          //           curve: curve,
+          //           height: height,
+          //           width: width,
+          //           alignment: Alignment.topCenter,
+          //           decoration: BoxDecoration(
+          //             shape: shape,
+          //             borderRadius: borderRadius,
+          //             gradient: const LinearGradient(
+          //               begin: Alignment.topCenter,
+          //               end: Alignment.bottomCenter,
+          //               colors: [Color(0xFF00FFC2), Color(0xFF3787E5)],
+          //             ),
+          //           ),
+          //           child: Center(
+          //             child: Image.asset(
+          //               "assets/initialPage0/on.png",
+          //               fit: BoxFit.cover,
+          //               height: imageHeight,
+          //               width: imageWidth,
+          //             ),
+          //           ),
+          //         )
+          //       : Image.asset(
+          //           "assets/initialPage0/onCampus.png",
+          //           height: 97.h,
+          //           width: 285.w,
+          //         ),
+          // );
+        },
+      ),
     );
   }
 }

@@ -64,73 +64,115 @@ class _UserInformationState extends State<UserInformation> {
                       ),
                     ),
                     Align(
-                      child: Text(
-                        user?.displayName ?? "user",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: "Poppins-Bold",
-                          fontSize: 22.sp,
-                          letterSpacing: 0.15.w,
-                          color: const Color(0xFF323232),
+                      child: SizedBox(
+                        height: Constant.height * 0.04,
+                        child: FittedBox(
+                          child: Text(
+                            user?.displayName ?? "user",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: "Poppins-Bold",
+                              fontSize: 22.sp,
+                              letterSpacing: 0.15.w,
+                              color: const Color(0xFF323232),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 5),
                     Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        "Personal Information",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                      child: SizedBox(
+                        height: Constant.height * 0.03,
+                        child: FittedBox(
+                          child: Text(
+                            "Personal Information",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 40),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "First Name : ${widget.userInfo!.name!.split(" ")[0]} ",
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "First Name : ${widget.userInfo!.name!.split(" ")[0]} ",
+                            ),
+                          ),
                         ),
                         const Divider(color: Color.fromARGB(31, 163, 162, 162)),
                         SizedBox(height: 10),
-                        Text(
-                          "Surname : ${widget.userInfo!.name!.split(" ").last}",
-                        ),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Email address : ${widget.userInfo!.email}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Phone Number : ${widget.userInfo!.phone}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Gender : ${widget.userInfo!.gender}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Program of study : ${widget.userInfo!.program}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Year : ${widget.userInfo!.year}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text("Guardian name : ${widget.userInfo!.guardian}"),
-                        SizedBox(height: 10),
-                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
-                        SizedBox(height: 10),
-                        Text(
-                          "Emergency contact(1) : ${widget.userInfo!.emergency1}",
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Surname : ${widget.userInfo!.name!.split(" ").last}",
+                            ),
+                          ),
                         ),
                         SizedBox(height: 10),
                         const Divider(color: Color.fromARGB(31, 163, 162, 162)),
                         SizedBox(height: 10),
-                        Text(
-                          "Emergency contact(2) : ${widget.userInfo!.emergency2}",
+                        SizedBox(
+                          height: Constant.height * 0.06,
+                          child: FittedBox(child: Text("Email address :\n${widget.userInfo!.email}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(child: Text("Phone Number : ${widget.userInfo!.phone}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(child: Text("Gender : ${widget.userInfo!.gender}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(child: Text("Program of study : ${widget.userInfo!.program}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(child: Text("Year : ${widget.userInfo!.year}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(child: Text("Guardian name : ${widget.userInfo!.guardian}"))),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Emergency contact(1) : ${widget.userInfo!.emergency1}",
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        const Divider(color: Color.fromARGB(31, 163, 162, 162)),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Emergency contact(2) : ${widget.userInfo!.emergency2}",
+                            ),
+                          ),
                         ),
                         SizedBox(height: 35),
                         Align(
@@ -155,9 +197,18 @@ class _UserInformationState extends State<UserInformation> {
                                 ),
                                 backgroundColor: const Color(0xFF00EFD1),
                               ),
-                              child: const Text(
-                                "Edit",
-                                style: TextStyle(color: Colors.white),
+                              child: SizedBox(
+                                height: Constant.height * 0.03,
+                                child: FittedBox(
+                                  child: const Text(
+                                    "Edit",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w400,
+                                      ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),

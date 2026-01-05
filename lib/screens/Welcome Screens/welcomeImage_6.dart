@@ -13,66 +13,65 @@ class _WelcomeScreen6State extends State<WelcomeScreen6> {
   @override
   Widget build(BuildContext context) {
     Size constant = MediaQuery.of(context).size;
-    return SafeArea(
-        child: Scaffold(
-      body: SizedBox(
-          child: SizedBox(
-        child: Stack(
-          children: [
-            Image.asset(
-              "assets/welcomeImage_6/welcomeImage_6.png",
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: MediaQuery.of(context).size.width,
-            ),
-            Positioned(
-              top: constant.height * 0.72,
-              child: SizedBox(
-                height: constant.height * 0.28,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: constant.height * 0.045,
-                      // color: Colors.red,
-                      width: constant.width,
-                      child: FittedBox(
-                        child: Text("Refer & Earn",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              decoration: TextDecoration.none,
-                              letterSpacing: 0.15.w,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Poppins",
-                              fontSize: 35.sp.clamp(0, 35),
-                            )),
-                      ),
-                    ),
-                    SizedBox(
-                      width: constant.width * 0.8,
-                      height: constant.height * 0.06,
-                      child: FittedBox(
-                        child: Text(
-                            "Invite friends to book with us and get rewards\nThe more you refer the more you earn",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              letterSpacing: 0.15.w,
-                              decoration: TextDecoration.none,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Poppins",
-                              fontSize: 18.sp.clamp(0, 18),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+    return Scaffold(
+          body: SizedBox(
+      child: SizedBox(
+    child: Stack(
+      children: [
+        Image.asset(
+          "assets/welcomeImage_6/welcomeImage_6.png",
+          fit: BoxFit.cover,
+          height: double.infinity,
+          width: MediaQuery.of(context).size.width,
         ),
-      )),
-    ));
+        Positioned(
+          top: constant.height * 0.72,
+          child: SizedBox(
+            height: constant.height * 0.28,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: constant.height * 0.045,
+                  // color: Colors.red,
+                  width: constant.width,
+                  child: FittedBox(
+                    child: Text("Refer & Earn",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          letterSpacing: 0.15.w,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Poppins",
+                          fontSize: 35.sp.clamp(0, 35),
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  width: constant.width * 0.8,
+                  height: constant.height * 0.06,
+                  child: FittedBox(
+                    child: Text(
+                        "Invite friends to book with us and get rewards\nThe more you refer the more you earn",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          letterSpacing: 0.15.w,
+                          decoration: TextDecoration.none,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "Poppins",
+                          fontSize: 18.sp.clamp(0, 18),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+          )),
+        );
   }
 }

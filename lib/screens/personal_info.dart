@@ -207,6 +207,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 if (genderSelect)
                   Container(
                     width: Constant.width,
+                    padding: EdgeInsets.only(left: 15.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
@@ -243,7 +244,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5.h),
+                        SizedBox(height: 10.h),
                         GestureDetector(
                           onTap: () {
                             setState(() {

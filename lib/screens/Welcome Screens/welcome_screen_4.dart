@@ -26,7 +26,7 @@ class _WelcomeScreen4State extends State<WelcomeScreen4> {
     child: Stack(
       children: [
         Positioned(
-            top: 0,
+            // top: 0,
             child: Image.asset(
               "assets/welcome_screen_4/welcomeImage4.jpg",
               fit: BoxFit.cover,

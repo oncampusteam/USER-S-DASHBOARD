@@ -136,7 +136,7 @@ class _HostelDetailsState extends State<HostelDetails> {
         _sectionKeys[room.type ?? "null"] = GlobalKey();
       }
       for (final tile in tileList) {
-        _sectionKeys[tile.name ?? "null"] = GlobalKey();
+        _sectionKeys[tile.name ] = GlobalKey();
       }
     });
     // occupantFields(1);
@@ -442,17 +442,18 @@ class _HostelDetailsState extends State<HostelDetails> {
     List<TextEditingController> occupantEmails,
     List<TextEditingController> occupantNames,
   ) {
-    return SingleChildScrollView(
-      child: Container(
+    return Container(
+        height: Constant.height * 0.75,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
-
-        padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
+      ),
+          
+      padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
+      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -636,7 +637,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     ),
                   ),
                   SizedBox(height: 10),
-
+              
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -663,7 +664,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                               ),
                             ),
                             SizedBox(height: 10.h),
-
+              
                             TextFormField(
                               controller: occupantNames[i],
                               cursorColor: Colors.black,
@@ -700,13 +701,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 return null;
                               },
                             ),
-
+              
                             SizedBox(height: 10.h),
                             TextFormField(
                               controller: occupantEmails[i],
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.grey),
-
+              
                               decoration: InputDecoration(
                                 labelText: "Occupant Email",
                                 labelStyle: const TextStyle(
@@ -739,7 +740,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 final emailRegex = RegExp(
                                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                 );
-
+              
                                 // 3️ Check if it matches
                                 if (!emailRegex.hasMatch(value)) {
                                   return 'Enter a valid email address';
@@ -747,7 +748,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 return null;
                               },
                             ),
-
+              
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -797,7 +798,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       ),
                     ],
                   ),
-
+              
                   SizedBox(height: 40.h),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -821,11 +822,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                           setModalState(() {
                             isLoading = true;
                           });
-
+              
                           final user = FirebaseAuth.instance.currentUser;
-
+              
                           List<Map<String, dynamic>> occupants = [];
-
+              
                           for (int i = 0; i < occupantNames.length; i++) {
                             occupants.add({
                               'name': occupantNames[i].text.trim(),
@@ -1229,19 +1230,20 @@ class _HostelDetailsState extends State<HostelDetails> {
     return PopScope(
       canPop: false,
       child: Material(
-        child: Scaffold(
-          body: SizedBox(
-            height: Constant.height,
-            width: Constant.width,
-            child: Stack(
-              children: [
-                Positioned(
-                  top: Constant.height * 0.06,
-                  child: SizedBox(
-                    height: Constant.height - (Constant.height * 0.06),
-                    width: Constant.width,
-                    child: SingleChildScrollView(
-                      child: Container(
+        child: SafeArea(
+          child: Scaffold(
+            body: SizedBox(
+              height: Constant.height,
+              width: Constant.width,
+              child: Stack(
+                children: [
+                  Positioned(
+                    // top: Constant.height * 0.06,
+                    child: SizedBox(
+                      height: Constant.height,
+                      // height: Constant.height - (Constant.height * 0.06),
+                      width: Constant.width,
+                      child: SingleChildScrollView(
                         child: Column(
                           children: [
                             Stack(
@@ -1259,7 +1261,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       autoplayDelay: 5000,
                                       itemCount:
                                           widget.hostel.hostel_images!.length,
-                                      itemBuilder: (BuildContext, index) {
+                                      itemBuilder: (context, index) {
                                         // Swipper swiper = swipers[index];
                                         String? string =
                                             widget.hostel.hostel_images![index];
@@ -1284,6 +1286,24 @@ class _HostelDetailsState extends State<HostelDetails> {
                                         );
                                       },
                                     ),
+                                  ),
+                                ),
+                                Container(
+                                  height: Constant.height * 0.5,
+                                  // color: Colors.red,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color.fromRGBO(0, 0, 0, 0),
+                                        // Color.fromRGBO(0, 0, 0, 0.2),
+                                        // Color.fromRGBO(0, 0, 0, 0.4),
+                                        Color.fromRGBO(0, 0, 0, 0.53),
+                                        // Color.fromRGBO(0, 0, 0, 0.8),
+                                        // Color.fromRGBO(0, 0, 0, 1),
+                                      ]
+                                    )
                                   ),
                                 ),
                                 SizedBox(
@@ -1311,7 +1331,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   height: 45.h,
                                                   width: 45.w,
-
+                        
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromRGBO(
                                                       255,
@@ -1675,7 +1695,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-
+                        
                                                                     child: Image.asset(
                                                                       "assets/hostels_detail/driving.png",
                                                                       fit: BoxFit
@@ -2185,7 +2205,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                     child: SizedBox(
                                                       height:
                                                           Constant.height *
-                                                          0.025,
+                                                          0.02,
                                                       child: FittedBox(
                                                         child: Text(
                                                           tile.name,
@@ -2276,7 +2296,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
-
+                        
                                   /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2307,14 +2327,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           ),
                                         ),
                                         SizedBox(height: 10.h),
-
+                        
                                         utilities(
                                           hostel: widget.hostel,
                                           context: context,
                                           type: "Amenities",
                                           amenities: true,
                                         ),
-
+                        
                                         SizedBox(height: 20.h),
                                         Align(
                                           alignment: Alignment.topLeft,
@@ -2332,7 +2352,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             ),
                                           ),
                                         ),
-
+                        
                                         SizedBox(height: 10.h),
                                         utilities(
                                           hostel: widget.hostel,
@@ -2368,7 +2388,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       ],
                                     ),
                                   ),
-
+                        
                                   // /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2543,7 +2563,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   ),
                                                                 ),
                                                               ),
-
+                        
                                                               // if ((index - 1) ==
                                                               //     roomTypes.length)
                                                               //   SizedBox(width: 30.w),
@@ -3245,7 +3265,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             occupantEmails = [
                                                                               TextEditingController(),
                                                                             ];
-
+                        
                                                                             if (user !=
                                                                                 null) {
                                                                               Get.snackbar(
@@ -3287,13 +3307,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               ).whenComplete(
                                                                                 () {
                                                                                   // numPeople.dispose();
-
+                        
                                                                                   setState(
                                                                                     () {
                                                                                       isChecked = false;
                                                                                     },
                                                                                   );
-
+                        
                                                                                   // for (var c in occupantNames) {
                                                                                   //   c.dispose();
                                                                                   // }
@@ -3356,13 +3376,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(height: 20.h),
+                                                  // SizedBox(height: 10.h),
                                                 ],
                                               );
                                             }),
                                           ),
                                         ),
-                                  SizedBox(height: 10.h),
+                                  // SizedBox(height: 10.h),
                                   Container(
                                     color: Colors.white,
                                     child: Padding(
@@ -4150,116 +4170,121 @@ class _HostelDetailsState extends State<HostelDetails> {
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromRGBO(158, 158, 158, 0.5),
-                          spreadRadius: 3.r,
-                          blurRadius: 12.r,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        bottom: 15,
-                        left: 20,
-                        right: 20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 150.w,
-                            height: Constant.height * 0.05,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Get.to(
-                                  () => Enquire(hostel: widget.hostel),
-                                  transition: Transition.fadeIn,
-                                  duration: const Duration(milliseconds: 800),
-                                  curve: Curves.easeIn,
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Color(0xFF00EFD1)),
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                                backgroundColor: const Color.fromRGBO(
-                                  0,
-                                  239,
-                                  209,
-                                  0.1,
-                                ),
-                              ),
-                              child: SizedBox(
-                                height: Constant.height * 0.025,
-                                child: FittedBox(
-                                  child: Text(
-                                    "View Rooms",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color(0xFF00EFD1),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.sp.clamp(0, 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 150.w,
-                            height: Constant.height * 0.05,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Get.to(
-                                  () => Enquire(hostel: widget.hostel),
-                                  transition: Transition.fadeIn,
-                                  duration: const Duration(milliseconds: 800),
-                                  curve: Curves.easeIn,
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                                backgroundColor: const Color(0xFF00EFD1),
-                              ),
-                              child: SizedBox(
-                                height: Constant.height * 0.025,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Enquire now",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.sp.clamp(0, 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromRGBO(158, 158, 158, 0.5),
+                            spreadRadius: 3.r,
+                            blurRadius: 12.r,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          bottom: 15,
+                          left: 20,
+                          right: 20,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 150.w,
+                              height: Constant.height * 0.05,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Get.to(
+                                  //   () => Enquire(hostel: widget.hostel),
+                                  //   transition: Transition.fadeIn,
+                                  //   duration: const Duration(milliseconds: 800),
+                                  //   curve: Curves.easeIn,
+                                  // );
+                
+                                  _scrollToSection("Room Type");
+                                  setState(() {
+                                    
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(color: Color(0xFF00EFD1)),
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  backgroundColor: const Color.fromRGBO(
+                                    0,
+                                    239,
+                                    209,
+                                    0.1,
+                                  ),
+                                ),
+                                child: SizedBox(
+                                  height: Constant.height * 0.025,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "View Rooms",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Color(0xFF00EFD1),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14.sp.clamp(0, 14),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150.w,
+                              height: Constant.height * 0.05,
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  Get.to(
+                                    () => Enquire(hostel: widget.hostel),
+                                    transition: Transition.fadeIn,
+                                    duration: const Duration(milliseconds: 800),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  backgroundColor: const Color(0xFF00EFD1),
+                                ),
+                                child: SizedBox(
+                                  height: Constant.height * 0.025,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "Enquire now",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14.sp.clamp(0, 14),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

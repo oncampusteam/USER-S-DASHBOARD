@@ -16,7 +16,7 @@ class _WelcomeScreen1State extends State<WelcomeScreen1> {
     Size constant = MediaQuery.of(context).size;
     return Material(
       child: Scaffold(
-        extendBodyBehindAppBar: true,
+        // extendBodyBehindAppBar: true,
               body: SizedBox(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,

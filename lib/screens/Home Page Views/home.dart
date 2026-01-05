@@ -199,14 +199,14 @@ class _HomeState extends State<Home> {
                                       border: Border.all(
                                         color: Color(0xFF00EFD1),
                                       ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          offset: Offset(0, 1),
-                                          blurRadius: 4,
-                                          spreadRadius: 0,
-                                          color: Color.fromRGBO(0, 0, 0, 0.25),
-                                        ),
-                                      ],
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     offset: Offset(0, 1),
+                                      //     blurRadius: 4,
+                                      //     spreadRadius: 0,
+                                      //     color: Color.fromRGBO(0, 0, 0, 0.25),
+                                      //   ),
+                                      // ],
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(24.r),

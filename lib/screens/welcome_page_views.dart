@@ -319,27 +319,22 @@ class _WelcomeLoginPageControllerState
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      removeBottom: true,
-      child: PageView(
-        controller: pageController,
-        onPageChanged: (int page) {
-          // if (currentPage == 3) {
-          debugPrint("currentPage = 3");
-          setState(() {
-            welcomeLoginPage = page;
-            // controller.animateTo(page);
-          });
-          // }
-        },
-        children: [
-          WelcomePageViews(),
-          // Placeholder(),
-          LoginPage(index: 0),
-        ],
-      ),
+    return PageView(
+      controller: pageController,
+      onPageChanged: (int page) {
+        // if (currentPage == 3) {
+        debugPrint("currentPage = 3");
+        setState(() {
+          welcomeLoginPage = page;
+          // controller.animateTo(page);
+        });
+        // }
+      },
+      children: [
+        WelcomePageViews(),
+        // Placeholder(),
+        LoginPage(index: 0),
+      ],
     );
   }
 }
