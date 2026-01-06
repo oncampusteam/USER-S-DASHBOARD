@@ -1,17 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:on_campus/screens/search.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:on_campus/widgets/home_page_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
 // import 'package:on_campus/screens/hostels_detail.dart';
-import 'package:on_campus/screens/search.dart';
-import 'package:on_campus/widgets/home_page_widgets.dart';
 // import 'package:on_campus/widgets/homestel_hostel_category.dart';
 // import 'package:on_campus/widgets/hostel_categories.dart';
 // import 'package:on_campus/widgets/school_hostel_category.dart';
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
       //   (seeAllTop ? topHostels.length : topHostels.length / 2.ceil()).toInt();
       //   for (int i = 0; i <= hostels.length - 1; i++) {
       //   favoritebools.add(false);
-      //   debugPrint("");
+      //   debugdebugPrint("");
       // }
       // myLocations = awaitLocations;
       isLoading = false;
@@ -220,7 +220,7 @@ class _HomeState extends State<Home> {
                                             child: TextField(
                                               // decoration: TextDecoration.none,
                                               style: TextStyle(
-                                                decoration: TextDecoration.none
+                                                decoration: TextDecoration.none,
                                               ),
                                               obscureText: false,
                                               enableSuggestions: true,
@@ -236,14 +236,18 @@ class _HomeState extends State<Home> {
                                                 ),
                                                 hint: SizedBox(
                                                   // color: Colors.blue,
-                                                  height: Constant.height * 0.065,
+                                                  height:
+                                                      Constant.height * 0.065,
                                                   child: Align(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: SizedBox(
-                                                      height: Constant.height * 0.025,
+                                                      height:
+                                                          Constant.height *
+                                                          0.025,
                                                       child: FittedBox(
-                                                        alignment:
-                                                            Alignment.centerLeft,
+                                                        alignment: Alignment
+                                                            .centerLeft,
                                                         child: Text(
                                                           "   Search for hostels",
                                                           style: TextStyle(
@@ -260,14 +264,15 @@ class _HomeState extends State<Home> {
                                                     ),
                                                   ),
                                                 ),
-                                                border: 
-                                                
-                                                OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(24.r),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        24.r,
+                                                      ),
                                                   // borderSide: const BorderSide(color: Color(0xFF00EFD1)),
-                                                  borderSide: BorderSide.none
+                                                  borderSide: BorderSide.none,
                                                 ),
-                                                contentPadding: EdgeInsets.zero
+                                                contentPadding: EdgeInsets.zero,
                                                 //   focusedBorder: OutlineInputBorder(
                                                 //     borderRadius: BorderRadius.circular(16.r),
                                                 //     borderSide: const BorderSide(color: Colors.white),),
@@ -781,12 +786,12 @@ class _HomeState extends State<Home> {
                         margin: EdgeInsets.symmetric(horizontal: 25.h),
                         // padding: EdgeInsets.symmetric(horizontal: 5.h),
                         height: Constant.height * 0.3,
-                          width: Constant.width,
+                        width: Constant.width,
                         child: Image.asset(
                           "assets/home/Undraw-1.png",
                           // height: Constant.height * 0.15,
                           // width: Constant.width,
-                          fit: BoxFit.contain
+                          fit: BoxFit.contain,
                         ),
                       ),
                       SizedBox(height: 20.h),
@@ -989,7 +994,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ),
-                            
+
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 15.h),
                               height: Constant.height * 0.045,

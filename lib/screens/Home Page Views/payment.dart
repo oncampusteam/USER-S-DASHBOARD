@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:on_campus/classes/constants.dart';
-import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/bottom_nav.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/screens/payable.dart';
+import 'package:on_campus/firebase/classes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/widgets/payment_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Payment extends StatefulWidget {
   final User user;
@@ -69,10 +69,10 @@ class _PaymentState extends State<Payment> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         pending = await FirestoreDb.instance.getPendingHostels(user);
-        print("Pending: $pending");
+        debugPrint("Pending: $pending");
       }
     } catch (e) {
-      print("Error fetching payments: $e");
+      debugPrint("Error fetching payments: $e");
     }
   }
 
@@ -88,11 +88,11 @@ class _PaymentState extends State<Payment> {
           pendingHostels.add(hostelDetails);
         }
       } else {
-        print("No pending hostels");
+        debugPrint("No pending hostels");
       }
-      print("Pending Hostel Details: $pendingHostels");
+      debugPrint("Pending Hostel Details: $pendingHostels");
     } catch (e) {
-      print("Error fetching hostel details: $e");
+      debugPrint("Error fetching hostel details: $e");
     }
   }
 

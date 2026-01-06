@@ -1,12 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/screens/get_icon.dart';
-import 'package:on_campus/screens/hostels_detail.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_campus/screens/hostels_detail.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 Widget HostelCard({
   // required Map<String, dynamic> hostelsInfo,
@@ -563,7 +563,9 @@ Widget hostelCardVariant({
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  offset: !variant || !variant2 ? const Offset(0, 1): Offset.zero,
+                  offset: !variant || !variant2
+                      ? const Offset(0, 1)
+                      : Offset.zero,
                   blurRadius: 4,
                   color: !variant || !variant2
                       ? const Color.fromARGB(64, 0, 0, 0)
@@ -612,11 +614,11 @@ Widget hostelCardVariant({
                         child: GestureDetector(
                           onTap: () {
                             // setState(() {
-                            // debugPrint(
+                            // debugdebugPrint(
                             //   "This is the value of favorite before flip: $favorite",
                             // );
                             // favorite = !favorite;
-                            // debugPrint(
+                            // debugdebugPrint(
                             //   "This is the value of favorite: $favorite",
                             // );
                             triggerRebuild();

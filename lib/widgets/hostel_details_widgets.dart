@@ -1,16 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
-import 'package:intl/intl.dart';
-import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 import 'package:on_campus/screens/get_icon.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 
 Widget utilities({
   required Hostels hostel,
@@ -942,7 +942,7 @@ Widget genderSelector({
     onTap: () {
       setModalState(() {
         selectedGender = gender;
-        // debugPrint(selectedGender);
+        // debugdebugPrint(selectedGender);
       });
     },
     child: Container(

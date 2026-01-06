@@ -1,12 +1,11 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:on_campus/firebase/classes.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:on_campus/firebase/classes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_5.dart';
 
 //  UserModel? usermodel;
@@ -29,7 +28,7 @@ class FirestoreDb {
 
       return regionsList;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
@@ -48,7 +47,7 @@ class FirestoreDb {
       List<Hostels> allPrivateHostels = querySnapshot.docs
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
-      print(allPrivateHostels);
+      debugPrint(allPrivateHostels.toString());
       for (var e in querySnapshot.docs) {
         String fullPath = e.reference.path;
 
@@ -58,12 +57,12 @@ class FirestoreDb {
         String region = pathSegments[1];
         String city = pathSegments[3];
         await e.reference.update({'region': region, 'city': city});
-        // print("Data: ${e.data().length}");
-        // print("Data-info: ${e.data()}");
+        // debugPrint("Data: ${e.data().length}");
+        // debugPrint("Data-info: ${e.data()}");
       }
       return allPrivateHostels;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -90,7 +89,7 @@ class FirestoreDb {
         String region = pathSegments[1];
         String university = pathSegments[3];
         await e.reference.update({'region': region, 'university': university});
-        print(e.data().length);
+        debugPrint("${e.data().length}");
       }
       return allSchoolHostels;
     } catch (e) {
@@ -118,13 +117,13 @@ class FirestoreDb {
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
       for (var e in querySnapshot.docs) {
-        print(e.data());
+        debugPrint("${e.data()}");
       }
 
       return popularHostels;
     } catch (e) {
-      print("Anfa oo");
-      print(e);
+      debugPrint("Anfa oo");
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -152,7 +151,7 @@ class FirestoreDb {
       roomTypes = querySnapshot.docs
           .map((e) => RoomTypes.fromJson(e.data()))
           .toList();
-      print(roomTypes);
+      debugPrint(roomTypes.toString());
 
       return roomTypes;
     } catch (e) {
@@ -178,12 +177,12 @@ class FirestoreDb {
       popu = querySnapshot.docs.map((e) => Hostels.fromJson(e.data())).toList();
 
       for (var e in querySnapshot.docs) {
-        print("popu: ${e.data()}");
+        debugPrint("popu: ${e.data()}");
       }
 
       return popu;
     } catch (e) {
-      print("An error occurred during Google sign-in: $e");
+      debugPrint("An error occurred during Google sign-in: $e");
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -322,22 +321,26 @@ class FirestoreDb {
           //     // ]
           //   });
           // }
-          print('Updated document: ${doc.id}');
+          debugPrint('Updated document: ${doc.id}');
         } catch (e) {
-          print('Error updating document ${doc.id}: $e');
+          debugPrint('Error updating document ${doc.id}: $e');
         }
       }
 
-      print('Finished updating documents in "Private Hostels" collection.');
+      debugPrint(
+        'Finished updating documents in "Private Hostels" collection.',
+      );
     } catch (e) {
-      print('Error getting documents from "Private Hostels" collection: $e');
+      debugPrint(
+        'Error getting documents from "Private Hostels" collection: $e',
+      );
     }
   }
 
   Future<List<BookedHostels>> getBookedHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -349,10 +352,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    debugPrint("$bookedHostels");
     return bookedHostels;
   }
 
@@ -437,7 +440,7 @@ class FirestoreDb {
         'hostelsProcessed': processedCount,
       };
     } catch (e) {
-      print('Error setting up room structures: $e');
+      debugPrint('Error setting up room structures: $e');
       return {
         'success': false,
         'message': 'Failed to initialize room structures: ${e.toString()}',
@@ -470,7 +473,7 @@ class FirestoreDb {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-    print("hostelByName: $hostelByName");
+    debugPrint("hostelByName: $hostelByName");
 
     return hostelByName;
   }
@@ -500,7 +503,7 @@ class FirestoreDb {
 
       // Convert Firestore document to UserModel
       final userModel = UserModel.fromJson(docSnapshot.data()!);
-      print("User model: $userModel");
+      debugPrint("User model: $userModel");
       return userModel;
     } catch (e) {
       Get.snackbar(
@@ -515,7 +518,7 @@ class FirestoreDb {
   Future<List<BookedHostels>> getPaidHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -528,10 +531,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    debugPrint(bookedHostels.toString());
     return bookedHostels;
   }
 
@@ -549,10 +552,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    debugPrint(bookedHostels.toString());
     return bookedHostels;
   }
 }

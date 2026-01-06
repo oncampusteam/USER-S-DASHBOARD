@@ -1,13 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:on_campus/classes/screen_details.dart';
-import 'package:on_campus/screens/initialPage_0.dart';
-import 'package:on_campus/screens/initial_page.dart';
 import 'package:on_campus/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:on_campus/screens/initialPage_0.dart';
+import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/welcome_page_views.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:on_campus/screens/initial_page.dart';
 
 void main() async {
   // DependencyInjection.init();
@@ -69,7 +69,7 @@ class _StartupScreenState extends State<StartupScreen> {
   @override
   void initState() {
     super.initState();
-    future = Future.delayed(const Duration(seconds:5));
+    future = Future.delayed(const Duration(seconds: 5));
   }
 
   final PageController pageController = PageController();
@@ -81,10 +81,10 @@ class _StartupScreenState extends State<StartupScreen> {
       screenHeight: MediaQuery.of(context).size.height,
     );
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value:SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ),
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       child: ScreenUtilInit(
         designSize: const Size(430, 932),
         minTextAdapt: true,
@@ -95,8 +95,7 @@ class _StartupScreenState extends State<StartupScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Material(child: const Initialpage0());
               }
-              return 
-              Material(child: const WelcomePageViews());
+              return Material(child: const WelcomePageViews());
               // return Material(child:Scaffold(
               //   body: Center(
               //     child: Column(

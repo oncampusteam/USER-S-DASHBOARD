@@ -1,12 +1,11 @@
-
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Pickcampus extends StatefulWidget {
   final String username;
@@ -105,16 +104,15 @@ class _PickcampusState extends State<Pickcampus> {
                               TextButton(
                                 onPressed: () {
                                   Get.to(
-                                    () => BottomNav(
-                                      username: widget.username,
-                                    ),
+                                    () => BottomNav(username: widget.username),
                                     transition: Transition.fadeIn,
                                     curve: Curves.easeIn,
                                     duration: const Duration(seconds: 1),
                                   );
                                 },
                                 child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.03,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
                                       "Male",
@@ -131,16 +129,15 @@ class _PickcampusState extends State<Pickcampus> {
                               TextButton(
                                 onPressed: () {
                                   Get.to(
-                                    () => BottomNav(
-                                      username: widget.username,
-                                    ),
+                                    () => BottomNav(username: widget.username),
                                     transition: Transition.fadeIn,
                                     curve: Curves.easeIn,
                                     duration: const Duration(seconds: 1),
                                   );
                                 },
                                 child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.03,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
                                       "Female",
@@ -148,7 +145,7 @@ class _PickcampusState extends State<Pickcampus> {
                                         fontSize: 18,
                                         color: Color(0xFF323232),
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: "Poppins"
+                                        fontFamily: "Poppins",
                                       ),
                                     ),
                                   ),
@@ -157,16 +154,15 @@ class _PickcampusState extends State<Pickcampus> {
                               TextButton(
                                 onPressed: () {
                                   Get.to(
-                                    () => BottomNav(
-                                      username: widget.username,
-                                    ),
+                                    () => BottomNav(username: widget.username),
                                     transition: Transition.fadeIn,
                                     curve: Curves.easeIn,
                                     duration: const Duration(seconds: 1),
                                   );
                                 },
                                 child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.03,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
                                       "No Preference",
@@ -174,7 +170,7 @@ class _PickcampusState extends State<Pickcampus> {
                                         fontSize: 18,
                                         color: Color(0xFF323232),
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: "Poppins,"
+                                        fontFamily: "Poppins,",
                                       ),
                                     ),
                                   ),
@@ -243,7 +239,7 @@ class _PickcampusState extends State<Pickcampus> {
                     ),
                   ),
                   SizedBox(height: 8),
-                   SizedBox(
+                  SizedBox(
                     // color: Colors.red,
                     width: Constant.width,
                     height: Constant.height * 0.09,
@@ -278,7 +274,7 @@ class _PickcampusState extends State<Pickcampus> {
                                 child: TextField(
                                   // decoration: TextDecoration.none,
                                   style: TextStyle(
-                                    decoration: TextDecoration.none
+                                    decoration: TextDecoration.none,
                                   ),
                                   obscureText: false,
                                   enableSuggestions: true,
@@ -300,32 +296,26 @@ class _PickcampusState extends State<Pickcampus> {
                                         child: SizedBox(
                                           height: Constant.height * 0.025,
                                           child: FittedBox(
-                                            alignment:
-                  Alignment.centerLeft,
+                                            alignment: Alignment.centerLeft,
                                             child: Text(
                                               "Search by hostel's name or location",
                                               style: TextStyle(
-                  fontFamily: "Inter",
-                  fontWeight:
-                      FontWeight.bold,
-                  color: const Color(
-                    0xFFBBBBBB,
-                  ),
-                  fontSize: 15.sp,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFFBBBBBB),
+                                                fontSize: 15.sp,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    border: 
-
-                                    OutlineInputBorder(
+                                    border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(24.r),
                                       // borderSide: const BorderSide(color: Color(0xFF00EFD1)),
-                                      borderSide: BorderSide.none
+                                      borderSide: BorderSide.none,
                                     ),
-                                    contentPadding: EdgeInsets.zero
+                                    contentPadding: EdgeInsets.zero,
                                     //   focusedBorder: OutlineInputBorder(
                                     //     borderRadius: BorderRadius.circular(16.r),
                                     //     borderSide: const BorderSide(color: Colors.white),),
@@ -453,23 +443,23 @@ class _PickcampusState extends State<Pickcampus> {
                         isLoading
                             ? Center(
                                 child: SpinKitThreeBounce(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    0,
-                                    239,
-                                    209,
-                                  ),
+                                  color: const Color.fromARGB(255, 0, 239, 209),
                                   size: 50.0,
                                 ),
                               )
                             : Expanded(
                                 child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: SizedBox(
-                                      height: MediaQuery.of(context).size.height * 0.06,
-                                      width: MediaQuery.of(context).size.width * 0.65,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          0.06,
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.65,
                                       child: FittedBox(
                                         child: Text(
                                           "Popular Universities in ${regions[selectedIndex].name}",

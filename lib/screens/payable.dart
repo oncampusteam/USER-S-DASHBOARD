@@ -1,14 +1,14 @@
 import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:paystack_for_flutter/paystack_for_flutter.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
 
 class Payable extends StatefulWidget {
   final BookedHostels bookedHostel;
@@ -36,7 +36,7 @@ class _PayableState extends State<Payable> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 40),
+            // SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Align(
@@ -50,13 +50,29 @@ class _PayableState extends State<Payable> {
               ),
             ),
             SizedBox(height: 20),
-            Text("Payable Amount"),
+            SizedBox(
+              height: Constant.height * 0.025,
+              child: FittedBox(
+                child: Text(
+                  "Payable Amount",
+                  style: TextStyle(
+                    fontFamily: "Outfit",
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 10),
-            Text(
-              "GHS ${widget.amount}",
-              style: TextStyle(
-                fontSize: 32.sp.clamp(0, 32),
-                fontWeight: FontWeight.bold,
+            SizedBox(
+              height: Constant.height * 0.055,
+              child: FittedBox(
+                child: Text(
+                  "GHS ${widget.amount}",
+                  style: TextStyle(
+                    fontSize: 32.sp.clamp(0, 32),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 40),
@@ -90,20 +106,33 @@ class _PayableState extends State<Payable> {
                                   backgroundColor: Color(0xFF00EFD1),
                                   padding: EdgeInsets.symmetric(vertical: 0),
                                 ),
-                                child: Text(
-                                  "Room",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                                child: SizedBox(
+                                  height: Constant.height * 0.025,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "  Room  ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        Text(
-                          "Room 406",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Room 406",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -114,13 +143,29 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Name",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Name",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontSize: 12.sp.clamp(0, 12),
+                              ),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "${widget.user?.displayName}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "${widget.user?.displayName}",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -131,13 +176,26 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Room type",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Room type",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "4-in-a Room",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "4-in-a Room",
+                              style: TextStyle(
+                                fontFamily: "Outift",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -148,13 +206,21 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "No. of students",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "No. of students",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
                         Text(
                           "${widget.bookedHostel.people_booking}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontFamily: "Outfit",
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -165,13 +231,25 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Number of years",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Number of years",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "${widget.bookedHostel.duration} Year(s)",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          child: FittedBox(
+                            child: Text(
+                              "${widget.bookedHostel.duration} Year(s)",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -182,13 +260,51 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Date of move in",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Date of move in",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "${widget.bookedHostel.move_in}",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Divider(thickness: .5),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Date of move out",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
                         Text(
                           "${widget.bookedHostel.move_in}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontFamily: "Outift",
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
@@ -199,30 +315,23 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Date of move out",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Payment method",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "${widget.bookedHostel.move_in}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(thickness: .5),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Payment method",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
-                        ),
-                        Text(
-                          "Mobile Money",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Mobile Money",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -233,14 +342,27 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Phone number",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Phone number",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
-                        Text(
-                          // "${FirestoreDb.instance.getUserInfo(widget.user).}",
-                          "",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              // "${FirestoreDb.instance.getUserInfo(widget.user).}",
+                              "0552296265",
+                              style: TextStyle(
+                                fontFamily: "Outift",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -251,13 +373,25 @@ class _PayableState extends State<Payable> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Email address",
-                          style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            child: Text(
+                              "Email address",
+                              style: TextStyle(fontSize: 12.sp.clamp(0, 12)),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "${widget.user?.email}",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: Constant.height * 0.03,
+                          width: Constant.width * 0.5,
+                          child: FittedBox(
+                            child: Text(
+                              overflow: TextOverflow.clip,
+                              "${widget.user?.email}",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -265,15 +399,17 @@ class _PayableState extends State<Payable> {
                 ),
               ),
             ),
+            SizedBox(height: 100),
           ],
         ),
       ),
       bottomSheet: Container(
-        height: 80,
+        height: Constant.height * 0.08,
         color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+        child: Align(
           child: SizedBox(
+            height: Constant.height * 0.06,
+            width: Constant.width * 0.9,
             child: ElevatedButton(
               onPressed: () async {
                 await PaystackFlutter().pay(
@@ -345,19 +481,29 @@ class _PayableState extends State<Payable> {
                                   ),
                                   const SizedBox(height: 20),
 
-                                  const Text(
-                                    "Thank You!",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    height: Constant.height * 0.03,
+                                    child: FittedBox(
+                                      child: const Text(
+                                        "Thank You!",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 10),
 
-                                  const Text(
-                                    "Your hostel room has been booked\nEnjoy Your Day!",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 16),
+                                  SizedBox(
+                                    height: Constant.height * 0.06,
+                                    child: FittedBox(
+                                      child: const Text(
+                                        "Your hostel room has been booked\nEnjoy Your Day!",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 25),
 
@@ -381,12 +527,17 @@ class _PayableState extends State<Payable> {
                                           vertical: 15,
                                         ),
                                       ),
-                                      child: const Text(
-                                        "Go to My Bookings",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
+                                      child: SizedBox(
+                                        height: Constant.height * 0.025,
+                                        child: FittedBox(
+                                          child: const Text(
+                                            "Go to My Bookings",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -420,13 +571,18 @@ class _PayableState extends State<Payable> {
                 backgroundColor: const Color(0xFF00EFD1),
               ),
               child: Center(
-                child: Text(
-                  "Proceed",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 19.sp.clamp(0, 19),
+                child: SizedBox(
+                  height: Constant.height * 0.03,
+                  child: FittedBox(
+                    child: Text(
+                      "Proceed",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19.sp.clamp(0, 19),
+                      ),
+                    ),
                   ),
                 ),
               ),

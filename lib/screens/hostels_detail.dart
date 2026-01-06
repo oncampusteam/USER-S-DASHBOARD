@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:on_campus/classes/classes.dart';
 import 'package:on_campus/screens/enquire.dart';
 import 'package:on_campus/firebase/classes.dart';
-// import 'package:on_campus/screens/get_icon.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/widgets/hostel_details_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:on_campus/widgets/hostel_details_widgets.dart';
+// import 'package:on_campus/screens/get_icon.dart';
 
 class HostelDetails extends StatefulWidget {
   final Hostels hostel;
@@ -128,6 +128,20 @@ class _HostelDetailsState extends State<HostelDetails> {
     }
   }
 
+  dynamic showDate() {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return setDate(setModalState);
+          },
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -136,7 +150,7 @@ class _HostelDetailsState extends State<HostelDetails> {
         _sectionKeys[room.type ?? "null"] = GlobalKey();
       }
       for (final tile in tileList) {
-        _sectionKeys[tile.name ] = GlobalKey();
+        _sectionKeys[tile.name] = GlobalKey();
       }
     });
     // occupantFields(1);
@@ -332,7 +346,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                             BoxShadow(
                               blurRadius: 10,
                               offset: const Offset(0, 4),
-                              color: Colors.black.withOpacity(0.05),
+                              color: const Color.fromRGBO(0, 0, 0, 0.5),
                             ),
                           ],
                         ),
@@ -381,18 +395,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                   setModalState(() {
                     isLoading = false;
                   });
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return StatefulBuilder(
-                        builder:
-                            (BuildContext context, StateSetter setModalState) {
-                              return setDate(setModalState);
-                            },
-                      );
-                    },
-                  );
+                  showDate();
                 },
                 child: isLoading
                     ? Align(
@@ -443,15 +446,15 @@ class _HostelDetailsState extends State<HostelDetails> {
     List<TextEditingController> occupantNames,
   ) {
     return Container(
-        height: Constant.height * 0.75,
-        decoration: BoxDecoration(
+      height: Constant.height * 0.75,
+      decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
       ),
-          
+
       padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
       child: SingleChildScrollView(
         child: Column(
@@ -575,6 +578,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                   ),
                   10.verticalSpace,
                   TextFormField(
+                    // initialValue: "1",
+                    enableInteractiveSelection: false,
                     onChanged: (value) {
                       if (value.isNotEmpty) {
                         int count = int.tryParse(value) ?? 1;
@@ -613,17 +618,17 @@ class _HostelDetailsState extends State<HostelDetails> {
                         borderSide: BorderSide(
                           width: 1,
                           style: BorderStyle.none,
-                          color: Colors.grey.withOpacity(0.3),
+                          color: const Color.fromRGBO(158, 158, 158, 0.3),
                         ),
                       ),
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a number';
-                      }
-                      final num = int.tryParse(value);
-                      if (num == null || num < 1 || num > 4) {
+                      // if (value == null || value.isEmpty) {
+                      //   return 'Please enter a number';
+                      // }
+                      final num = int.parse(value ?? "1");
+                      if (num > 4) {
                         return 'Enter a number between 1 and 4';
                       }
                       return null;
@@ -637,7 +642,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     ),
                   ),
                   SizedBox(height: 10),
-              
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -664,8 +669,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                               ),
                             ),
                             SizedBox(height: 10.h),
-              
+
                             TextFormField(
+                              enableInteractiveSelection: false,
                               controller: occupantNames[i],
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.grey),
@@ -689,7 +695,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   borderSide: BorderSide(
                                     width: 1,
                                     style: BorderStyle.none,
-                                    color: Colors.grey.withOpacity(0.3),
+                                    color: const Color.fromRGBO(
+                                      158,
+                                      158,
+                                      158,
+                                      0.3,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -701,13 +712,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 return null;
                               },
                             ),
-              
+
                             SizedBox(height: 10.h),
                             TextFormField(
                               controller: occupantEmails[i],
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.grey),
-              
+
                               decoration: InputDecoration(
                                 labelText: "Occupant Email",
                                 labelStyle: const TextStyle(
@@ -740,7 +751,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 final emailRegex = RegExp(
                                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                 );
-              
+
                                 // 3️ Check if it matches
                                 if (!emailRegex.hasMatch(value)) {
                                   return 'Enter a valid email address';
@@ -748,7 +759,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 return null;
                               },
                             ),
-              
+
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -798,7 +809,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       ),
                     ],
                   ),
-              
+
                   SizedBox(height: 40.h),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -822,11 +833,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                           setModalState(() {
                             isLoading = true;
                           });
-              
+
                           final user = FirebaseAuth.instance.currentUser;
-              
+
                           List<Map<String, dynamic>> occupants = [];
-              
+
                           for (int i = 0; i < occupantNames.length; i++) {
                             occupants.add({
                               'name': occupantNames[i].text.trim(),
@@ -1056,6 +1067,7 @@ class _HostelDetailsState extends State<HostelDetails> {
               SizedBox(
                 height: 60,
                 child: TextFormField(
+                  cursorColor: Colors.white,
                   controller: dateController_movein,
                   readOnly: true,
                   onTap: () {
@@ -1076,8 +1088,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                       borderSide: BorderSide(
                         width: 1,
                         style: BorderStyle.none,
-                        color: Colors.grey.withOpacity(0.3),
+                        color: const Color.fromRGBO(158, 158, 158, 0.3),
                       ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Color(0xFF00EFD1)),
                     ),
                     suffix: IconButton(
                       icon: Icon(Icons.calendar_today),
@@ -1117,6 +1133,7 @@ class _HostelDetailsState extends State<HostelDetails> {
               SizedBox(
                 height: 60,
                 child: TextFormField(
+                  cursorColor: Colors.white,
                   controller: dateController_moveout,
                   readOnly: true,
                   decoration: InputDecoration(
@@ -1132,6 +1149,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                         style: BorderStyle.none,
                         color: Colors.grey.withOpacity(0.3),
                       ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Color(0xFF00EFD1)),
                     ),
                     suffixIcon: Icon(Icons.calendar_today),
                   ),
@@ -1302,8 +1323,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                         Color.fromRGBO(0, 0, 0, 0.53),
                                         // Color.fromRGBO(0, 0, 0, 0.8),
                                         // Color.fromRGBO(0, 0, 0, 1),
-                                      ]
-                                    )
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -1331,7 +1352,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   height: 45.h,
                                                   width: 45.w,
-                        
+
                                                   decoration: BoxDecoration(
                                                     color: const Color.fromRGBO(
                                                       255,
@@ -1695,7 +1716,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Constant
                                                                             .height *
                                                                         0.022,
-                        
+
                                                                     child: Image.asset(
                                                                       "assets/hostels_detail/driving.png",
                                                                       fit: BoxFit
@@ -2296,7 +2317,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
-                        
+
                                   /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2327,14 +2348,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           ),
                                         ),
                                         SizedBox(height: 10.h),
-                        
+
                                         utilities(
                                           hostel: widget.hostel,
                                           context: context,
                                           type: "Amenities",
                                           amenities: true,
                                         ),
-                        
+
                                         SizedBox(height: 20.h),
                                         Align(
                                           alignment: Alignment.topLeft,
@@ -2352,7 +2373,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             ),
                                           ),
                                         ),
-                        
+
                                         SizedBox(height: 10.h),
                                         utilities(
                                           hostel: widget.hostel,
@@ -2388,7 +2409,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       ],
                                     ),
                                   ),
-                        
+
                                   // /// Amenities
                                   ///  &
                                   /// Bills & Utilities
@@ -2563,7 +2584,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   ),
                                                                 ),
                                                               ),
-                        
+
                                                               // if ((index - 1) ==
                                                               //     roomTypes.length)
                                                               //   SizedBox(width: 30.w),
@@ -3242,8 +3263,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         child: ElevatedButton(
                                                                           onPressed: () {
                                                                             TextEditingController
-                                                                            numPeople =
-                                                                                TextEditingController();
+                                                                            numPeople = TextEditingController(
+                                                                              text: "1",
+                                                                            );
                                                                             TextEditingController
                                                                             name =
                                                                                 TextEditingController();
@@ -3265,7 +3287,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             occupantEmails = [
                                                                               TextEditingController(),
                                                                             ];
-                        
+
                                                                             if (user !=
                                                                                 null) {
                                                                               Get.snackbar(
@@ -3307,13 +3329,13 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               ).whenComplete(
                                                                                 () {
                                                                                   // numPeople.dispose();
-                        
+
                                                                                   setState(
                                                                                     () {
                                                                                       isChecked = false;
                                                                                     },
                                                                                   );
-                        
+
                                                                                   // for (var c in occupantNames) {
                                                                                   //   c.dispose();
                                                                                   // }
@@ -4207,11 +4229,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   //   duration: const Duration(milliseconds: 800),
                                   //   curve: Curves.easeIn,
                                   // );
-                
+
                                   _scrollToSection("Room Type");
-                                  setState(() {
-                                    
-                                  });
+                                  setState(() {});
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
@@ -4246,7 +4266,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                               width: 150.w,
                               height: Constant.height * 0.05,
                               child: ElevatedButton(
-                                onPressed: (){
+                                onPressed: () {
                                   Get.to(
                                     () => Enquire(hostel: widget.hostel),
                                     transition: Transition.fadeIn,

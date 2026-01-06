@@ -1,14 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../screens/Welcome Screens/welcome_screen_4.dart';
 
 const List<String> scopes = <String>[
   'email',
-  'https://www.googleapis.com/auth/contacts.readonly'
+  'https://www.googleapis.com/auth/contacts.readonly',
 ];
 GoogleSignIn _googleSignIn = GoogleSignIn(
   // Optional clientId
@@ -23,11 +22,13 @@ class GoogleAuth {
   static Future<dynamic> signUpWithGoogle() async {
     // _googleSignIn.signOut();
     debugPrint(
-        "Starting the execution of the signUpWithGoogle.................................");
+      "Starting the execution of the signUpWithGoogle.................................",
+    );
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       debugPrint(
-          "GoogleUser: $googleUser############################################");
+        "GoogleUser: $googleUser############################################",
+      );
       if (googleUser != null) {
         username = googleUser.displayName?.toUpperCase() ?? "";
         email = googleUser.email;
@@ -36,19 +37,24 @@ class GoogleAuth {
             await googleUser.authentication;
 
         final credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
         debugPrint("Google Auth Provider credential done...........");
 
-        final userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
+        final userCredential = await FirebaseAuth.instance.signInWithCredential(
+          credential,
+        );
 
         debugPrint("Should Push..................................");
 
-        Get.to(() => const WelcomeScreen4(),
-            transition: Transition.fadeIn,
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 600));
+        Get.to(
+          () => const WelcomeScreen4(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeIn,
+          duration: const Duration(milliseconds: 600),
+        );
         return userCredential;
       }
       debugPrint("GoogleUsr is null..............");
@@ -57,7 +63,8 @@ class GoogleAuth {
     } on FirebaseAuthException catch (e) {
       if (e.code == "network-request-failed") {
         debugPrint(
-            "There is network issue. Please check your internet connection.........................................");
+          "There is network issue. Please check your internet connection.........................................",
+        );
         return "network-request-failed";
       } else {
         debugPrint("this is the errorCode : $e");
@@ -66,20 +73,25 @@ class GoogleAuth {
     } on PlatformException catch (e) {
       if (e.code == "network_error") {
         debugPrint(
-            "There is no internet connection................................................");
+          "There is no internet connection................................................",
+        );
         Get.rawSnackbar(
-            messageText: const Text("PLEASE CONNECT TO THE INTERNET",
-                style: TextStyle(color: Colors.white, fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: Colors.red,
-            icon: const Icon(Icons.wifi_off, color: Colors.white, size: 35),
-            margin: EdgeInsets.zero,
-            snackStyle: SnackStyle.GROUNDED);
+          messageText: const Text(
+            "PLEASE CONNECT TO THE INTERNET",
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          icon: const Icon(Icons.wifi_off, color: Colors.white, size: 35),
+          margin: EdgeInsets.zero,
+          snackStyle: SnackStyle.GROUNDED,
+        );
         return "network-request-failed";
       }
     } catch (e) {
       debugPrint(
-          "This is the eror : $e .............................................");
+        "This is the eror : $e .............................................",
+      );
     }
   }
 }

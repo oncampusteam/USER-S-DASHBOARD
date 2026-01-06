@@ -1,13 +1,13 @@
-import 'package:on_campus/classes/constants.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/apartment.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/coming_soon.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/profile.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/widgets/custompainter.dart';
 import 'package:on_campus/widgets/hostel_categories.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/profile.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/apartment.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/coming_soon.dart';
 
 class BottomNav extends StatefulWidget {
   final String username;
@@ -91,7 +91,7 @@ class _BottomNavState extends State<BottomNav> {
                       padding: EdgeInsets.symmetric(
                         vertical: Constant.height * 0.005,
                       ),
-    
+
                       // color: const Color.fromRGBO(244, 67, 54, 0.7),
                       child: SizedBox(
                         // color: Colors.yellow,
@@ -118,7 +118,9 @@ class _BottomNavState extends State<BottomNav> {
                                       child: FittedBox(
                                         child: Image.asset(
                                           "assets/home/apartment.png",
-                                          color: currentpage == 0 ? Color(0xFF35AD9E): null,
+                                          color: currentpage == 0
+                                              ? Color(0xFF35AD9E)
+                                              : null,
                                         ),
                                       ),
                                     ),
@@ -131,7 +133,9 @@ class _BottomNavState extends State<BottomNav> {
                                         child: Text(
                                           "My Apartment",
                                           style: TextStyle(
-                                            color: currentpage == 0 ? Color(0xFF35AD9E) :Colors.white ,
+                                            color: currentpage == 0
+                                                ? Color(0xFF35AD9E)
+                                                : Colors.white,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -159,7 +163,9 @@ class _BottomNavState extends State<BottomNav> {
                                       child: FittedBox(
                                         child: Image.asset(
                                           "assets/home/connect.png",
-                                          color: currentpage == 1? Color(0xFF35AD9E): null,
+                                          color: currentpage == 1
+                                              ? Color(0xFF35AD9E)
+                                              : null,
                                         ),
                                       ),
                                     ),
@@ -170,7 +176,9 @@ class _BottomNavState extends State<BottomNav> {
                                         child: Text(
                                           "Connect+",
                                           style: TextStyle(
-                                            color: currentpage == 1 ? Color(0xFF35AD9E):Colors.white,
+                                            color: currentpage == 1
+                                                ? Color(0xFF35AD9E)
+                                                : Colors.white,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -216,7 +224,9 @@ class _BottomNavState extends State<BottomNav> {
                                       child: FittedBox(
                                         child: Image.asset(
                                           "assets/home/ai.png",
-                                          color: currentpage == 3? Color(0xFF35AD9E): null,
+                                          color: currentpage == 3
+                                              ? Color(0xFF35AD9E)
+                                              : null,
                                         ),
                                       ),
                                     ),
@@ -229,7 +239,9 @@ class _BottomNavState extends State<BottomNav> {
                                         child: Text(
                                           "Oncampus AI",
                                           style: TextStyle(
-                                            color: currentpage == 3 ? Color(0xFF35AD9E):Colors.white,
+                                            color: currentpage == 3
+                                                ? Color(0xFF35AD9E)
+                                                : Colors.white,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -257,7 +269,9 @@ class _BottomNavState extends State<BottomNav> {
                                       child: FittedBox(
                                         child: Image.asset(
                                           "assets/home/profile.png",
-                                          color: currentpage == 4? Color(0xFF35AD9E): null,
+                                          color: currentpage == 4
+                                              ? Color(0xFF35AD9E)
+                                              : null,
                                         ),
                                       ),
                                     ),
@@ -268,7 +282,9 @@ class _BottomNavState extends State<BottomNav> {
                                         child: Text(
                                           "Profile",
                                           style: TextStyle(
-                                            color: currentpage == 4 ? Color(0xFF35AD9E):Colors.white,
+                                            color: currentpage == 4
+                                                ? Color(0xFF35AD9E)
+                                                : Colors.white,
                                             fontFamily: "Poppins",
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -287,7 +303,7 @@ class _BottomNavState extends State<BottomNav> {
                 ),
               ),
             ),
-    
+
             // Positioned.fill(
             //   child: AnimatedSwitcher(
             //     duration: const Duration(milliseconds: 500),

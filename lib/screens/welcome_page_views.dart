@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/classes/screen_details.dart';
-import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcomeImage_6.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_1.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_2.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_3.dart';
+import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
 
 // import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
 int currentPage = 0;
@@ -81,7 +81,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: MediaQuery.of(context).size.width,
-                  
+
                   decoration: BoxDecoration(
                     // color: Colors.blue,
                     border: Border.all(width: 0, color: Colors.transparent),
@@ -112,7 +112,9 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
               Positioned(
                 top: 0,
                 child: Container(
-                  margin: EdgeInsets.only(top: ScreenDetails.ScreenHeight * 0.065),
+                  margin: EdgeInsets.only(
+                    top: ScreenDetails.ScreenHeight * 0.065,
+                  ),
                   width: MediaQuery.of(context).size.width,
                   child: Align(
                     alignment: Alignment.topCenter,
@@ -130,10 +132,10 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
                 left: 0,
                 right: 0,
                 child: GestureDetector(
-                onTap: () {
+                  onTap: () {
                     setState(() {
                       debugPrint("${controller.index}");
-      
+
                       if (controller.index <= 3) {
                         if (controller.index == 3) {
                           // Navigator.of(context)
@@ -150,7 +152,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
                         }
                         controller.index++;
                       }
-      
+
                       pageController.animateToPage(
                         controller.index,
                         duration: const Duration(milliseconds: 300),
@@ -166,37 +168,38 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
                         width: MediaQuery.of(context).size.width * 0.85,
                         decoration: BoxDecoration(
                           color: Color(0xFF00EFD1),
-                          borderRadius: BorderRadius.circular(15.r)
+                          borderRadius: BorderRadius.circular(15.r),
                         ),
                         child: Align(
-                              child: SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.03,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Start Exploring",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      // fontSize: ScreenDetails.ScreenHeight * 0.0250,
-                                      fontSize: 16.sp.clamp(0, 16),
-                                    ),
-                                  ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            child: FittedBox(
+                              child: Text(
+                                "Start Exploring",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  // fontSize: ScreenDetails.ScreenHeight * 0.0250,
+                                  fontSize: 16.sp.clamp(0, 16),
                                 ),
                               ),
                             ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-              )),
+                ),
+              ),
 
               // Positioned(
               //   bottom: ScreenDetails.ScreenHeight * 0.06,
               //   child: GestureDetector(
               //     onTap: () {
               //       setState(() {
-              //         debugPrint("${controller.index}");
-      
+              //         debugdebugPrint("${controller.index}");
+
               //         if (controller.index <= 3) {
               //           if (controller.index == 3) {
               //             // Navigator.of(context)
@@ -213,7 +216,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
               //           }
               //           controller.index++;
               //         }
-      
+
               //         pageController.animateToPage(
               //           controller.index,
               //           duration: const Duration(milliseconds: 300),
@@ -227,7 +230,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
               //         child: Container(
               //           // decoration:
               //           //     BoxDecoration(borderRadius: BorderRadius.circular(1)),
-                        
+
               //           height: ScreenDetails.ScreenHeight * 0.05332,
               //           width: ScreenDetails.ScreenWidth,
               //           foregroundDecoration: BoxDecoration(

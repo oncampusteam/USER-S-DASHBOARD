@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/screens/customStepper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PersonalInfo extends StatefulWidget {
   const PersonalInfo({super.key});
@@ -316,7 +316,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         fontFamily: "Outfit",
                         fontWeight: FontWeight.w500,
                         fontSize: 14.sp,
-                        color: "$level" == "0" ? Color(0xFFB7B8BA) : Colors.black,
+                        color: "$level" == "0"
+                            ? Color(0xFFB7B8BA)
+                            : Colors.black,
                       ),
                     ),
                     GestureDetector(
@@ -334,170 +336,170 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.h,),
-              if(yearSelect)
-              Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15.h),
-                    width: Constant.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 4),
-                          blurRadius: 4,
-                          color: Color.fromRGBO(0, 0, 0, 0.25),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            level = 100;
-                            yearSelect = false;
-                            setState(() {});
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "100",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              level = 200;
-                              yearSelect = false;
-                            });
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "200",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              level = 300;
-                              yearSelect = false;
-                            });
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "300",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              level = 400;
-                              yearSelect = false;
-                            });
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "400",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              level = 500;
-                              yearSelect = false;
-                            });
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "500",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              level = 600;
-                              yearSelect = false;
-                            });
-                          },
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "600",
-                                style: TextStyle(
-                                  fontFamily: "Outfit",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+              SizedBox(height: 20.h),
+              if (yearSelect)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.h),
+                  width: Constant.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
+                        color: Color.fromRGBO(0, 0, 0, 0.25),
+                      ),
+                    ],
                   ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          level = 100;
+                          yearSelect = false;
+                          setState(() {});
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "100",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            level = 200;
+                            yearSelect = false;
+                          });
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "200",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            level = 300;
+                            yearSelect = false;
+                          });
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "300",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            level = 400;
+                            yearSelect = false;
+                          });
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "400",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            level = 500;
+                            yearSelect = false;
+                          });
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "500",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            level = 600;
+                            yearSelect = false;
+                          });
+                        },
+                        child: SizedBox(
+                          height: Constant.height * 0.03,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "600",
+                              style: TextStyle(
+                                fontFamily: "Outfit",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
               SizedBox(height: 20),
             ],
@@ -870,7 +872,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                 if (index == 0
                     ? formkey0.currentState!.validate() && sex != ""
                     : index == 1
-                    ? formkey1.currentState!.validate() && level !=0
+                    ? formkey1.currentState!.validate() && level != 0
                     : formkey2.currentState!.validate() && index < 3) {
                   setState(() {
                     // controller.initialScrollOffset
@@ -1012,8 +1014,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                 // ),
                                 Steps(
                                   index: index,
-                                  stepsCallback: (int tapIndex){
-                                     if (index > 0 && tapIndex == 1) {
+                                  stepsCallback: (int tapIndex) {
+                                    if (index > 0 && tapIndex == 1) {
                                       setState(() {
                                         index = 0;
                                       });
@@ -1033,27 +1035,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                         index = 3;
                                       });
                                     }
-                                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                   },
                                 ),
                                 // Your step content here based on index

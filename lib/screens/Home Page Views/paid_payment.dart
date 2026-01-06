@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/widgets/payment_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaidPayment extends StatefulWidget {
   final User user;
@@ -29,7 +29,7 @@ class _PaidPaymentState extends State<PaidPayment> {
     DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
-    print(formattedDate); // Output: July 10, 2025
+    debugPrint(formattedDate); // Output: July 10, 2025
     return (formattedDate);
   }
 
@@ -64,10 +64,10 @@ class _PaidPaymentState extends State<PaidPayment> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         paid = await FirestoreDb.instance.getPaidHostels(user);
-        print("paid: $paid");
+        debugPrint("paid: $paid");
       }
     } catch (e) {
-      print("Error fetching payments: $e");
+      debugPrint("Error fetching payments: $e");
     }
   }
 
@@ -83,11 +83,11 @@ class _PaidPaymentState extends State<PaidPayment> {
           paidHostels.add(hostelDetails);
         }
       } else {
-        print("No paid hostels");
+        debugPrint("No paid hostels");
       }
-      print("paid Hostel Details: $paidHostels");
+      debugPrint("paid Hostel Details: $paidHostels");
     } catch (e) {
-      print("Error fetching hostel details: $e");
+      debugPrint("Error fetching hostel details: $e");
     }
   }
 
@@ -175,23 +175,22 @@ class _PaidPaymentState extends State<PaidPayment> {
                               ? CircularProgressIndicator()
                               : SingleChildScrollView(
                                   child: Column(
-                                    children: List.generate(
-                                      paidHostels.length,
-                                      (index) {
-                                        Hostels paidHostel = paidHostels[index];
-                                        late BookedHostels bookedHostel;
-                                        final isExpanded =
-                                            expandedIndex == index;
-                                        for (BookedHostels hostel in paid) {
-                                          if (hostel.hostel_name ==
-                                              paidHostel.name) {
-                                            bookedHostel = hostel;
-                                          }
+                                    children: List.generate(paidHostels.length, (
+                                      index,
+                                    ) {
+                                      Hostels paidHostel = paidHostels[index];
+                                      late BookedHostels bookedHostel;
+                                      final isExpanded = expandedIndex == index;
+                                      for (BookedHostels hostel in paid) {
+                                        if (hostel.hostel_name ==
+                                            paidHostel.name) {
+                                          bookedHostel = hostel;
                                         }
-                                        return Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
+                                      }
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
                                               setState(() {
                                                 expandedIndex = isExpanded
                                                     ? null
@@ -472,7 +471,10 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Container(
-                                                                  height: Constant.height * 0.05,
+                                                                  height:
+                                                                      Constant
+                                                                          .height *
+                                                                      0.05,
                                                                   color: Colors
                                                                       .white,
                                                                   // height:
@@ -485,11 +487,12 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                       elevation:
                                                                           0,
                                                                       shape: RoundedRectangleBorder(
-                                                                        side:
-                                                                            BorderSide.none,
-                                                                        borderRadius: BorderRadius.circular(
-                                                                          15.r,
-                                                                        ),
+                                                                        side: BorderSide
+                                                                            .none,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              15.r,
+                                                                            ),
                                                                       ),
                                                                       backgroundColor:
                                                                           const Color(
@@ -498,15 +501,16 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                     ),
                                                                     child: Align(
                                                                       child: SizedBox(
-                                                                        height: Constant.height * 0.025,
+                                                                        height:
+                                                                            Constant.height *
+                                                                            0.025,
                                                                         child: FittedBox(
                                                                           child: const Text(
                                                                             "View Receipt",
                                                                             style: TextStyle(
-                                                                              color:
-                                                                                  Colors.white,
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                  fontFamily: "Poppins"
+                                                                              color: Colors.white,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontFamily: "Poppins",
                                                                             ),
                                                                           ),
                                                                         ),
@@ -521,7 +525,8 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                     "Paid",
                                                                     style: TextStyle(
                                                                       fontWeight:
-                                                                          FontWeight.w600,
+                                                                          FontWeight
+                                                                              .w600,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -535,10 +540,9 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                 ),
                                               ),
                                             ),
-                                          ]
-                                        );
-                                      },
-                                    ),
+                                        ],
+                                      );
+                                    }),
                                   ),
 
                                   /*                                 Column(

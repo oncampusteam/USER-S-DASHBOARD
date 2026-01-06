@@ -1,20 +1,17 @@
 import 'dart:ui';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/bookings.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
-
-import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
-import 'package:on_campus/screens/user_information.dart';
-
 import 'package:on_campus/screens/personal_info.dart';
+import 'package:on_campus/screens/user_information.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/bookings.dart';
+import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -109,7 +106,8 @@ class _ProfileState extends State<Profile> {
                         fontFamily: "Roboto",
                         color: Colors.black,
                       ),
-                      )),
+                    ),
+                  ),
                 ),
                 content: SizedBox(
                   height: Constant.height * 0.025,
@@ -121,7 +119,8 @@ class _ProfileState extends State<Profile> {
                         fontFamily: "Roboto",
                         color: Color(0xFF7A7A7A),
                       ),
-                      )),
+                    ),
+                  ),
                 ),
                 actions: [
                   TextButton(
@@ -129,17 +128,18 @@ class _ProfileState extends State<Profile> {
                       Navigator.of(context).pop();
                     },
                     child: SizedBox(
-                  height: Constant.height * 0.03,
-                  child: FittedBox(
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Roboto",
-                        color: Colors.black,
+                      height: Constant.height * 0.03,
+                      child: FittedBox(
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Roboto",
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
-                      )),
-                ),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -156,32 +156,33 @@ class _ProfileState extends State<Profile> {
                       width: Constant.width * 0.2,
                       decoration: BoxDecoration(
                         color: Color(0xFF00EFD1),
-                        borderRadius: BorderRadius.circular(16.r)
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
-                  child: Align(
-                    child: SizedBox(
-                      height: Constant.height * 0.025,
-                      child: FittedBox(
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "Roboto",
-                            color: Colors.white,
+                      child: Align(
+                        child: SizedBox(
+                          height: Constant.height * 0.025,
+                          child: FittedBox(
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "Roboto",
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          )),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
                   ),
                 ],
               ),
-           );
-                },
+            );
+          },
         );
       }
     });
-    if(user != null){
+    if (user != null) {
       getUserInfo();
     }
   }
@@ -285,7 +286,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 10.h),
                   ListTile(
                     onTap: () {
-                      print("sldjdl${userInfo!.userInfoDone!}");
+                      debugPrint("sldjdl${userInfo!.userInfoDone!}");
                       user == null
                           ? showDialog(
                               context: context,
@@ -311,7 +312,7 @@ class _ProfileState extends State<Profile> {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
-          
+
                                           Get.to(
                                             () => LoginPage(index: 2),
                                             transition: Transition.fadeIn,

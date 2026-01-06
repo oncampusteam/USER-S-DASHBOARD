@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/screen_details.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/get_icon.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomestelHostelCategory extends StatefulWidget {
   const HomestelHostelCategory({super.key});
@@ -170,7 +170,7 @@ class _HomestelHostelCategoryState extends State<HomestelHostelCategory> {
                         itemBuilder: (BuildContext context, int index) {
                           Hostels hostel = allSchoolHostels[index];
                           String? string = hostel.hostel_images?[0];
-                          print(hostel.name);
+                          debugPrint(hostel.name);
                           return GestureDetector(
                             onTap: () async {
                               Get.to(

@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:on_campus/classes/classes.dart';
-import 'package:on_campus/classes/constants.dart';
-import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:on_campus/classes/classes.dart';
+import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
-import 'package:on_campus/screens/get_icon.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/hostels_detail.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+// import 'package:on_campus/screens/Home%20Page%20Views/home.dart';
+// import 'package:on_campus/screens/get_icon.dart';
+// import 'package:on_campus/screens/hostels_detail.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -138,7 +138,10 @@ class _SearchState extends State<Search> {
                                         //   bottomNav.currentPage.value = 2;
                                         // });
                                         Get.to(
-                                          () => const BottomNav(username: "", subindex: 2,),
+                                          () => const BottomNav(
+                                            username: "",
+                                            subindex: 2,
+                                          ),
                                           transition: Transition.fadeIn,
                                           curve: Curves.easeIn,
                                           duration: const Duration(
@@ -165,7 +168,8 @@ class _SearchState extends State<Search> {
                                     height: 30.h,
                                     width: 30.w,
                                     child: Image.asset(
-                                      "assets/search/menu.png")
+                                      "assets/search/menu.png",
+                                    ),
                                   ),
                                 ],
                               ),

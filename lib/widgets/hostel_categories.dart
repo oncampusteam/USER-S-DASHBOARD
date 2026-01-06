@@ -1,16 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
-import 'package:on_campus/classes/screen_details.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
-import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
 import 'package:on_campus/screens/get_icon.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
 
 class HostelCategory extends StatefulWidget {
   final String categoryType;
@@ -248,7 +248,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                             itemBuilder: (BuildContext context, int index) {
                               Hostels hostel = allPrivateHostels[index];
                               // String? string = hostel.hostel_images?[0];
-                              // print(hostel.name);
+                              // debugPrint(hostel.name);
                               return Column(
                                 children: [
                                   if (index == 0) SizedBox(height: 12.h),
@@ -287,8 +287,8 @@ class _HostelCategoryState extends State<HostelCategory> {
                             itemBuilder: (BuildContext context, int index) {
                               Hostels searchHostel = searchList[index];
                               // String? string = searchHostel.hostel_images?[0];
-                              // print(string);
-                              // print(searchHostel.name);
+                              // debugPrint(string);
+                              // debugPrint(searchHostel.name);
                               return Column(
                                 children: [
                                   if (index == 0) SizedBox(height: 12.h),
