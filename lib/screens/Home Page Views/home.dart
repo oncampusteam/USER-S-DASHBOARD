@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/screens/search.dart';
+import 'package:on_campus/widgets/shimmer.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
@@ -574,10 +575,15 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15.h),
                       isLoading
-                          ? Center(
-                              child: SpinKitThreeBounce(
-                                color: const Color.fromARGB(255, 0, 239, 209),
-                                size: 50.0,
+                          ? SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 5,
+                                itemBuilder: (_, __) => const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: HostelCardShimmer(),
+                                ),
                               ),
                             )
                           : HostelCard(
@@ -655,10 +661,15 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15.h),
                       isLoading
-                          ? Center(
-                              child: SpinKitThreeBounce(
-                                color: const Color.fromARGB(255, 0, 239, 209),
-                                size: 50.0,
+                          ? SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 5,
+                                itemBuilder: (_, __) => const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: HostelCardShimmer(),
+                                ),
                               ),
                             )
                           : Builder(
@@ -669,7 +680,7 @@ class _HomeState extends State<Home> {
                                 return SizedBox(
                                   height:
                                       Constant.height *
-                                      0.46 *
+                                      0.47 *
                                       (seeAllTop ? topHostels.length : 5),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -688,6 +699,7 @@ class _HomeState extends State<Home> {
                                 );
                               },
                             ),
+                      SizedBox(height: 20.h),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25.w),
                         child: RichText(
@@ -715,10 +727,15 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 20),
                       isLoading
-                          ? Center(
-                              child: SpinKitThreeBounce(
-                                color: const Color.fromARGB(255, 0, 239, 209),
-                                size: 50.0,
+                          ? SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 5,
+                                itemBuilder: (_, __) => const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: HostelCardShimmer(),
+                                ),
                               ),
                             )
                           : SizedBox(

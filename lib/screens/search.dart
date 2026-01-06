@@ -181,18 +181,8 @@ class _SearchState extends State<Search> {
                                 child: Align(
                                   child: Container(
                                     height: Constant.height * 0.055,
-
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(24.r),
-                                      // border: Border.all(color: Color(0xFF00EFD1)),
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //     offset: Offset(0, 1),
-                                      //     blurRadius: 4,
-                                      //     spreadRadius: 0,
-                                      //     color: Color.fromRGBO(0, 0, 0, 0.25),
-                                      //   ),
-                                      // ],
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(24.r),
@@ -230,22 +220,17 @@ class _SearchState extends State<Search> {
                                                   ),
                                                 ),
                                               ),
-                                              border: InputBorder.none,
-                                              // OutlineInputBorder(
-                                              //   borderRadius: BorderRadius.circular(24.r),
-                                              //   borderSide: const BorderSide(color: Color(0xFF00EFD1)),
-                                              // ),
-                                              //   focusedBorder: OutlineInputBorder(
-                                              //     borderRadius: BorderRadius.circular(16.r),
-                                              //     borderSide: const BorderSide(color: Colors.white),),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                              ),
                                             ),
                                           ),
                                           Positioned(
                                             bottom: 0,
                                             left: 20,
-                                            child: Container(
+                                            child: SizedBox(
                                               // color: Colors.red,
-                                              height: Constant.height * 0.05,
+                                              height: Constant.height * 0.045,
                                               width: 30.w,
                                               child: Image.asset(
                                                 "assets/hostel_category_widget/ic-search@4x.png",

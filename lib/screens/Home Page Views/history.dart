@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/paid_payment.dart';
+// import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -26,21 +26,21 @@ class _HistoryState extends State<History> {
   bool isPaidSelected = false;
   User? user = FirebaseAuth.instance.currentUser;
 
-  String formatDate(String inputDate) {
-    // Original date comes as "11-13-2025"
-    final parsedDate = DateFormat("MM-dd-yyyy").parse(inputDate);
+  // String formatDate(String inputDate) {
+  //   // Original date comes as "11-13-2025"
+  //   final parsedDate = DateFormat("MM-dd-yyyy").parse(inputDate);
 
-    // Format month (e.g. "Feb")
-    String month = DateFormat("MMM").format(parsedDate);
+  //   // Format month (e.g. "Feb")
+  //   String month = DateFormat("MMM").format(parsedDate);
 
-    // Format day and year (e.g. "13 2025")
-    String dayYear = DateFormat("d yyyy").format(parsedDate);
+  //   // Format day and year (e.g. "13 2025")
+  //   String dayYear = DateFormat("d yyyy").format(parsedDate);
 
-    debugPrint("this is the value of month: $month");
-    debugPrint("this is the value of dayYear: $dayYear");
+  //   debugPrint("this is the value of month: $month");
+  //   debugPrint("this is the value of dayYear: $dayYear");
 
-    return "$month\n$dayYear";
-  }
+  //   return "$month\n$dayYear";
+  // }
 
   List<String> format(String inputDate) {
     // Original date comes as "11-13-2025"
@@ -119,7 +119,7 @@ class _HistoryState extends State<History> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: const Color.fromARGB(63, 118, 182, 234).withOpacity(0.1),
+          color: const Color.fromRGBO(118, 182, 234, 0.1),
           child: Padding(
             padding: EdgeInsets.only(
               top: Constant.height * 0.06,
@@ -153,11 +153,16 @@ class _HistoryState extends State<History> {
                         widthFactor: MediaQuery.sizeOf(context).width.w,
                         child: Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            "Payment History",
-                            style: TextStyle(
-                              fontSize: 15.5.sp.clamp(0, 17.5),
-                              fontWeight: FontWeight.w600,
+                          child: SizedBox(
+                            height: Constant.height * 0.03,
+                            child: FittedBox(
+                              child: Text(
+                                "Payment History",
+                                style: TextStyle(
+                                  fontSize: 15.5.sp.clamp(0, 17.5),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -165,7 +170,7 @@ class _HistoryState extends State<History> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: 20.h),
                 Container(
                   height: 40,
                   margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -197,13 +202,18 @@ class _HistoryState extends State<History> {
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Text(
-                                "Paid",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: isPaidSelected
-                                      ? Colors.black
-                                      : Colors.grey,
+                              child: SizedBox(
+                                height: Constant.height * 0.025,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Paid",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: isPaidSelected
+                                          ? Colors.black
+                                          : Colors.grey,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -232,13 +242,18 @@ class _HistoryState extends State<History> {
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Text(
-                                "Pending",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: !isPaidSelected
-                                      ? Colors.black
-                                      : Colors.grey,
+                              child: SizedBox(
+                                height: Constant.height * 0.025,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Pending",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: !isPaidSelected
+                                          ? Colors.black
+                                          : Colors.grey,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -256,6 +271,7 @@ class _HistoryState extends State<History> {
                       ? Paid(key: const ValueKey('B'))
                       : Pending(key: const ValueKey('A')),
                 ),
+                // SizedBox(height: 500),
               ],
             ),
           ),
@@ -278,7 +294,7 @@ class _HistoryState extends State<History> {
         : SizedBox(
             // color: Colors.blue,
             key: key,
-            height: 800,
+            height: Constant.height - Constant.height * 0.2,
             child: ListView.builder(
               itemCount: pendingHostels.length,
               scrollDirection: Axis.vertical,
@@ -404,13 +420,21 @@ class _HistoryState extends State<History> {
                                                     ),
                                                   ),
                                                   SizedBox(width: 3),
-                                                  Text(
-                                                    "${pendingHostel.rate}",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: "Poppins",
-                                                      color: Color(0xFF111111),
+                                                  SizedBox(
+                                                    height:
+                                                        Constant.height * 0.025,
+                                                    child: FittedBox(
+                                                      child: Text(
+                                                        "${pendingHostel.rate}",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily: "Poppins",
+                                                          color: Color(
+                                                            0xFF111111,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -1008,10 +1032,10 @@ class _HistoryState extends State<History> {
             height: MediaQuery.of(context).size.height - 200,
             child: Center(child: Text("There are no paid hostels")),
           )
-        : Container(
+        : SizedBox(
             // color: Colors.blue,
             key: key,
-            height: 800,
+            height: Constant.height - Constant.height * 0.2,
             child: ListView.builder(
               itemCount: paidHostels.length,
               scrollDirection: Axis.vertical,
@@ -1023,7 +1047,7 @@ class _HistoryState extends State<History> {
                     bookedHostel = hostel;
                   }
                 }
-                final isExpanded = expandedIndex == index;
+                // final isExpanded = expandedIndex == index;
                 return GestureDetector(
                   onTap: () async {
                     Get.to(() => PaidPayment(user: user!));
@@ -1147,9 +1171,7 @@ class _HistoryState extends State<History> {
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontFamily: "Poppins",
-                                                          color: Color(
-                                                            0xFFFFFFFF,
-                                                          ),
+                                                          color: Colors.black,
                                                         ),
                                                       ),
                                                     ),

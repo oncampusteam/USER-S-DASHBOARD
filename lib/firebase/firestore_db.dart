@@ -2,10 +2,14 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/firebase/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_5.dart';
 
 //  UserModel? usermodel;
@@ -28,7 +32,7 @@ class FirestoreDb {
 
       return regionsList;
     } catch (e) {
-      debugPrint(e.toString());
+      print(e);
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
@@ -47,7 +51,7 @@ class FirestoreDb {
       List<Hostels> allPrivateHostels = querySnapshot.docs
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
-      debugPrint(allPrivateHostels.toString());
+      print(allPrivateHostels);
       for (var e in querySnapshot.docs) {
         String fullPath = e.reference.path;
 
@@ -57,12 +61,10 @@ class FirestoreDb {
         String region = pathSegments[1];
         String city = pathSegments[3];
         await e.reference.update({'region': region, 'city': city});
-        // debugPrint("Data: ${e.data().length}");
-        // debugPrint("Data-info: ${e.data()}");
       }
       return allPrivateHostels;
     } catch (e) {
-      debugPrint(e.toString());
+      print(e);
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -89,7 +91,7 @@ class FirestoreDb {
         String region = pathSegments[1];
         String university = pathSegments[3];
         await e.reference.update({'region': region, 'university': university});
-        debugPrint("${e.data().length}");
+        print(e.data().length);
       }
       return allSchoolHostels;
     } catch (e) {
@@ -117,13 +119,13 @@ class FirestoreDb {
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
       for (var e in querySnapshot.docs) {
-        debugPrint("${e.data()}");
+        print(e.data());
       }
 
       return popularHostels;
     } catch (e) {
-      debugPrint("Anfa oo");
-      debugPrint(e.toString());
+      print("Anfa oo");
+      print(e);
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -151,7 +153,7 @@ class FirestoreDb {
       roomTypes = querySnapshot.docs
           .map((e) => RoomTypes.fromJson(e.data()))
           .toList();
-      debugPrint(roomTypes.toString());
+      print(roomTypes);
 
       return roomTypes;
     } catch (e) {
@@ -177,12 +179,12 @@ class FirestoreDb {
       popu = querySnapshot.docs.map((e) => Hostels.fromJson(e.data())).toList();
 
       for (var e in querySnapshot.docs) {
-        debugPrint("popu: ${e.data()}");
+        print("popu: ${e.data()}");
       }
 
       return popu;
     } catch (e) {
-      debugPrint("An error occurred during Google sign-in: $e");
+      print("An error occurred during Google sign-in: $e");
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -242,7 +244,68 @@ class FirestoreDb {
         );
       }
     } catch (e) {
-      debugPrint("$e");
+      if (e is SocketException) {
+        // No internet (general device network failure)
+        Get.snackbar(
+          "No Internet",
+          "Check your internet connection",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else if (e is PlatformException &&
+          (e.code == 'network_error' ||
+              e.message?.contains('ApiException: 7') == true)) {
+        // Firebase/Google Play Services network error
+        Get.snackbar(
+          "No Internet",
+          "Check your internet connection",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        // Other error
+        Get.snackbar(
+          "Error",
+          "Something went wrong. Please try again.\n${e.toString()}",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    }
+  }
+
+  Future<void> signInWithPhone(final credential) async {
+    try {
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      final user = userCredential.user;
+      if (user != null) {
+        final userModel = UserModel(
+          email: user.email,
+          name: user.displayName,
+          id: user.uid,
+          userInfoDone: false,
+          phone: int.parse(user.phoneNumber ?? "0"),
+          gender: "",
+          program: "",
+          year: null,
+          guardian: "",
+          emergency1: null,
+          emergency2: null,
+        );
+
+        await db
+            .collection("Users")
+            .doc(user.uid)
+            .set(userModel.toJson(), SetOptions(merge: true));
+
+        // Step 6: Navigate with smooth transition
+
+        Get.to(
+          () => WelcomeScreen5(username: user.phoneNumber ?? "User"),
+          transition: Transition.fadeIn,
+          duration: Duration(milliseconds: 600),
+        );
+      }
+    } catch (e) {
       if (e is SocketException) {
         // No internet (general device network failure)
         Get.snackbar(
@@ -321,26 +384,22 @@ class FirestoreDb {
           //     // ]
           //   });
           // }
-          debugPrint('Updated document: ${doc.id}');
+          print('Updated document: ${doc.id}');
         } catch (e) {
-          debugPrint('Error updating document ${doc.id}: $e');
+          print('Error updating document ${doc.id}: $e');
         }
       }
 
-      debugPrint(
-        'Finished updating documents in "Private Hostels" collection.',
-      );
+      print('Finished updating documents in "Private Hostels" collection.');
     } catch (e) {
-      debugPrint(
-        'Error getting documents from "Private Hostels" collection: $e',
-      );
+      print('Error getting documents from "Private Hostels" collection: $e');
     }
   }
 
   Future<List<BookedHostels>> getBookedHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -352,10 +411,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
 
-    debugPrint("$bookedHostels");
+    print(bookedHostels);
     return bookedHostels;
   }
 
@@ -440,7 +499,7 @@ class FirestoreDb {
         'hostelsProcessed': processedCount,
       };
     } catch (e) {
-      debugPrint('Error setting up room structures: $e');
+      print('Error setting up room structures: $e');
       return {
         'success': false,
         'message': 'Failed to initialize room structures: ${e.toString()}',
@@ -448,15 +507,16 @@ class FirestoreDb {
     }
   }
 
-  Future<Hostels> getHostelsByName(String hostelName) async {
+  Future<Hostels> getHostelsByName(String hostel_name) async {
     late Hostels hostelByName;
     try {
       final querySnapshot = await db
           .collectionGroup("Private Hostels")
-          .where("name", isEqualTo: hostelName)
+          .where("name", isEqualTo: hostel_name)
           .get();
 
-      DocumentSnapshot<Map<String, dynamic>> query = querySnapshot.docs.first;
+      DocumentSnapshot<Map<String, dynamic>> query =
+          await querySnapshot.docs.first;
       hostelByName = Hostels.fromJson(query.data()!);
       String fullPath = query.reference.path;
 
@@ -473,7 +533,7 @@ class FirestoreDb {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-    debugPrint("hostelByName: $hostelByName");
+    print("hostelByName: $hostelByName");
 
     return hostelByName;
   }
@@ -503,7 +563,7 @@ class FirestoreDb {
 
       // Convert Firestore document to UserModel
       final userModel = UserModel.fromJson(docSnapshot.data()!);
-      debugPrint("User model: $userModel");
+      print("User model: $userModel");
       return userModel;
     } catch (e) {
       Get.snackbar(
@@ -518,7 +578,7 @@ class FirestoreDb {
   Future<List<BookedHostels>> getPaidHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -531,10 +591,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
 
-    debugPrint(bookedHostels.toString());
+    print(bookedHostels);
     return bookedHostels;
   }
 
@@ -552,10 +612,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      debugPrint(e.toString());
+      print(e.toString());
     }
 
-    debugPrint(bookedHostels.toString());
+    print(bookedHostels);
     return bookedHostels;
   }
 }

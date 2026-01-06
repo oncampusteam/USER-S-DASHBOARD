@@ -47,43 +47,6 @@ class _ProfileState extends State<Profile> {
     // Wait until the first frame is built before showing the dialog
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (user == null) {
-        // showDialog(
-        //   context: context,
-        //   barrierDismissible: false, // prevents closing when tapping outside
-        //   builder: (BuildContext context) {
-        //     return Center(
-        //       child: AlertDialog(
-        //         backgroundColor: Color(0xFF00EFD1),
-        //         shape: RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(15),
-        //         ),
-        //         title: const Text("Profile"),
-        //         content: const Text("Please login to continue"),
-        //         actions: [
-        //           TextButton(
-        //             onPressed: () {
-        //               Navigator.of(context).pop();
-        //             },
-        //             child: const Text("Cancel"),
-        //           ),
-        //           ElevatedButton(
-        //             onPressed: () {
-        //               Navigator.of(context).pop();
-        //               Get.to(
-        //                 () => LoginPage(index: 2),
-        //                 transition: Transition.fadeIn,
-        //                 curve: Curves.easeIn,
-        //                 duration: const Duration(seconds: 1),
-        //               );
-        //             },
-        //             child: const Text("Login"),
-        //           ),
-        //         ],
-        //       ),
-        //     );
-        //   },
-        // );
-
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -200,44 +163,20 @@ class _ProfileState extends State<Profile> {
               color: Colors.white,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios_rounded,
-                          size: 20,
-                          color: Colors.transparent,
-                        ),
-                        onPressed: () {}, // invisible placeholder
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Profile",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  Center(
+                    child: SizedBox(
+                      height: Constant.height * 0.04,
+                      width: Constant.width,
+                      child: FittedBox(
+                        child: Text(
+                          "Profile",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      // IconButton(
-                      //   icon: IconButton(
-                      //     icon: Image.asset(
-                      //       "assets/user_interface_icons/profile_screen/editprofile.png",
-                      //     ),
-                      //     onPressed: () {
-                      //       Get.to(
-                      //         () => PersonalInfo(),
-                      //         transition: Transition.fadeIn,
-                      //         duration: const Duration(milliseconds: 600),
-                      //         curve: Curves.easeIn,
-                      //       );
-                      //     },
-                      //   ),
-                      //   onPressed: () {},
-                      // ),
-                    ],
+                    ),
                   ),
                   Row(
                     children: [
@@ -286,33 +225,76 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 10.h),
                   ListTile(
                     onTap: () {
-                      debugPrint("sldjdl${userInfo!.userInfoDone!}");
+                      // debugPrint("sldjdl${userInfo!.userInfoDone!}");
                       user == null
                           ? showDialog(
                               context: context,
-                              barrierDismissible:
-                                  false, // prevents closing when tapping outside
-                              builder: (BuildContext context) {
-                                return Center(
+                              barrierDismissible: false,
+                              barrierColor: const Color.fromRGBO(0, 0, 0, 0.2),
+                              builder: (context) {
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 5,
+                                    sigmaY: 5,
+                                  ),
                                   child: AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                    backgroundColor: Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.3,
                                     ),
-                                    title: const Text("Profile"),
-                                    content: const Text(
-                                      "Please login to continue",
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                    ),
+                                    title: SizedBox(
+                                      height: Constant.height * 0.03,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Profile",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Roboto",
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: Constant.height * 0.025,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Please Sign In to Continue",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Roboto",
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text("Cancel"),
+                                        child: SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Roboto",
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
+                                      GestureDetector(
+                                        onTap: () {
                                           Navigator.of(context).pop();
-
                                           Get.to(
                                             () => LoginPage(index: 2),
                                             transition: Transition.fadeIn,
@@ -322,7 +304,31 @@ class _ProfileState extends State<Profile> {
                                             ),
                                           );
                                         },
-                                        child: const Text("Login"),
+                                        child: Container(
+                                          height: Constant.height * 0.04,
+                                          width: Constant.width * 0.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF00EFD1),
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
+                                          ),
+                                          child: Align(
+                                            child: SizedBox(
+                                              height: Constant.height * 0.025,
+                                              child: FittedBox(
+                                                child: const Text(
+                                                  "Login",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Roboto",
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -374,27 +380,71 @@ class _ProfileState extends State<Profile> {
                       user == null
                           ? showDialog(
                               context: context,
-                              barrierDismissible:
-                                  false, // prevents closing when tapping outside
-                              builder: (BuildContext context) {
-                                return Center(
+                              barrierDismissible: false,
+                              barrierColor: const Color.fromRGBO(0, 0, 0, 0.2),
+                              builder: (context) {
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 5,
+                                    sigmaY: 5,
+                                  ),
                                   child: AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                    backgroundColor: Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.3,
                                     ),
-                                    title: const Text("Profile"),
-                                    content: const Text(
-                                      "Please login to continue",
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                    ),
+                                    title: SizedBox(
+                                      height: Constant.height * 0.03,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Profile",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Roboto",
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: Constant.height * 0.025,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Please Sign In to Continue",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Roboto",
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text("Cancel"),
+                                        child: SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Roboto",
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
+                                      GestureDetector(
+                                        onTap: () {
                                           Navigator.of(context).pop();
                                           Get.to(
                                             () => LoginPage(index: 2),
@@ -405,7 +455,31 @@ class _ProfileState extends State<Profile> {
                                             ),
                                           );
                                         },
-                                        child: const Text("Login"),
+                                        child: Container(
+                                          height: Constant.height * 0.04,
+                                          width: Constant.width * 0.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF00EFD1),
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
+                                          ),
+                                          child: Align(
+                                            child: SizedBox(
+                                              height: Constant.height * 0.025,
+                                              child: FittedBox(
+                                                child: const Text(
+                                                  "Login",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Roboto",
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -445,27 +519,71 @@ class _ProfileState extends State<Profile> {
                       user == null
                           ? showDialog(
                               context: context,
-                              barrierDismissible:
-                                  false, // prevents closing when tapping outside
-                              builder: (BuildContext context) {
-                                return Center(
+                              barrierDismissible: false,
+                              barrierColor: const Color.fromRGBO(0, 0, 0, 0.2),
+                              builder: (context) {
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 5,
+                                    sigmaY: 5,
+                                  ),
                                   child: AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                    backgroundColor: Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.3,
                                     ),
-                                    title: const Text("Profile"),
-                                    content: const Text(
-                                      "Please login to continue",
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                    ),
+                                    title: SizedBox(
+                                      height: Constant.height * 0.03,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Profile",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Roboto",
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: Constant.height * 0.025,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Please Sign In to Continue",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Roboto",
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text("Cancel"),
+                                        child: SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Roboto",
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
+                                      GestureDetector(
+                                        onTap: () {
                                           Navigator.of(context).pop();
                                           Get.to(
                                             () => LoginPage(index: 2),
@@ -476,7 +594,31 @@ class _ProfileState extends State<Profile> {
                                             ),
                                           );
                                         },
-                                        child: const Text("Login"),
+                                        child: Container(
+                                          height: Constant.height * 0.04,
+                                          width: Constant.width * 0.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF00EFD1),
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
+                                          ),
+                                          child: Align(
+                                            child: SizedBox(
+                                              height: Constant.height * 0.025,
+                                              child: FittedBox(
+                                                child: const Text(
+                                                  "Login",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Roboto",
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -499,29 +641,78 @@ class _ProfileState extends State<Profile> {
                           user == null
                               ? showDialog(
                                   context: context,
-                                  barrierDismissible:
-                                      false, // prevents closing when tapping outside
-                                  builder: (BuildContext context) {
-                                    return Center(
+                                  barrierDismissible: false,
+                                  barrierColor: const Color.fromRGBO(
+                                    0,
+                                    0,
+                                    0,
+                                    0.2,
+                                  ),
+                                  builder: (context) {
+                                    return BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: 5,
+                                        sigmaY: 5,
+                                      ),
                                       child: AlertDialog(
+                                        backgroundColor: Color.fromRGBO(
+                                          255,
+                                          255,
+                                          255,
+                                          0.3,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                            15,
+                                            24.r,
                                           ),
                                         ),
-                                        title: const Text("Profile"),
-                                        content: const Text(
-                                          "Please login to continue",
+                                        title: SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: const Text(
+                                              "Profile",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Roboto",
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        content: SizedBox(
+                                          height: Constant.height * 0.025,
+                                          child: FittedBox(
+                                            child: const Text(
+                                              "Please Sign In to Continue",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: "Roboto",
+                                                color: Color(0xFF7A7A7A),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                            child: const Text("Cancel"),
+                                            child: SizedBox(
+                                              height: Constant.height * 0.03,
+                                              child: FittedBox(
+                                                child: Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Roboto",
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          ElevatedButton(
-                                            onPressed: () {
+                                          GestureDetector(
+                                            onTap: () {
                                               Navigator.of(context).pop();
                                               Get.to(
                                                 () => LoginPage(index: 2),
@@ -532,7 +723,32 @@ class _ProfileState extends State<Profile> {
                                                 ),
                                               );
                                             },
-                                            child: const Text("Login"),
+                                            child: Container(
+                                              height: Constant.height * 0.04,
+                                              width: Constant.width * 0.2,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF00EFD1),
+                                                borderRadius:
+                                                    BorderRadius.circular(16.r),
+                                              ),
+                                              child: Align(
+                                                child: SizedBox(
+                                                  height:
+                                                      Constant.height * 0.025,
+                                                  child: FittedBox(
+                                                    child: const Text(
+                                                      "Login",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontFamily: "Roboto",
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

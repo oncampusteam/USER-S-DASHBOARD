@@ -91,73 +91,72 @@ Widget utilities({
           GestureDetector(
             onTap: () {
               showModalBottomSheet(
+                backgroundColor: Colors.white,
                 context: context,
                 builder: (BuildContext context) {
-                  return Container(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            height: 4,
-                            width: 30,
-                            margin: EdgeInsets.symmetric(vertical: 15),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 75, 74, 74),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 4,
+                          width: 30,
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 75, 74, 74),
+                            borderRadius: BorderRadius.circular(2),
                           ),
-                          Text(
-                            type,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          type,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 30,
                           ),
-                          Padding(
+                          child: Divider(height: 10),
+                        ),
+                        Container(
+                          child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 30,
+                              horizontal: 30.0,
+                              vertical: 10,
                             ),
-                            child: Divider(height: 10),
-                          ),
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 30.0,
-                                vertical: 10,
-                              ),
-                              child: GridView.count(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 1,
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                childAspectRatio: 4.0,
-                                children: List.generate(value.length, (index) {
-                                  return Row(
-                                    children: [
-                                      getIcon(text: value[index] ?? "noicon"),
-                                      SizedBox(width: 5),
-                                      SizedBox(
-                                        height: Constant.height * 0.023,
-                                        width: security
-                                            ? Constant.width * 0.35
-                                            : Constant.width * 0.32,
-                                        child: FittedBox(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            value[index]?.capitalize ?? "",
-                                          ),
+                            child: GridView.count(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 1,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              childAspectRatio: 4.0,
+                              children: List.generate(value.length, (index) {
+                                return Row(
+                                  children: [
+                                    getIcon(text: value[index] ?? "noicon"),
+                                    SizedBox(width: 5),
+                                    SizedBox(
+                                      height: Constant.height * 0.023,
+                                      width: security
+                                          ? Constant.width * 0.35
+                                          : Constant.width * 0.32,
+                                      child: FittedBox(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          value[index]?.capitalize ?? "",
                                         ),
                                       ),
-                                    ],
-                                  );
-                                }),
-                              ),
+                                    ),
+                                  ],
+                                );
+                              }),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },
