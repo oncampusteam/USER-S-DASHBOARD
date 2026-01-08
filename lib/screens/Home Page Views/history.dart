@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/paid_payment.dart';
 // import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
 
@@ -309,7 +310,7 @@ class _HistoryState extends State<History> {
                 // final isExpanded = expandedIndex == index;
                 return GestureDetector(
                   onTap: () async {
-                    Get.to(() => PaidPayment(user: user!));
+                    Get.to(() => Payment(user: user!));
                   },
                   child: Column(
                     children: [
@@ -466,7 +467,9 @@ class _HistoryState extends State<History> {
                                                 SizedBox(
                                                   height:
                                                       Constant.height * 0.04,
+                                                      width: Constant.width * 0.6,
                                                   child: FittedBox(
+                                                    alignment: Alignment.centerLeft,
                                                     child: Text(
                                                       pendingHostel.name,
                                                       style: TextStyle(
@@ -1205,7 +1208,9 @@ class _HistoryState extends State<History> {
                                                 SizedBox(
                                                   height:
                                                       Constant.height * 0.04,
+                                                      width: Constant.width * 0.6,
                                                   child: FittedBox(
+                                                    alignment: Alignment.centerLeft,
                                                     child: Text(
                                                       paidHostel.name,
                                                       style: TextStyle(

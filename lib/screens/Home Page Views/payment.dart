@@ -29,9 +29,10 @@ class _PaymentState extends State<Payment> {
   List<Hostels> pendingHostels = [];
   User? user = FirebaseAuth.instance.currentUser;
 
-  String StructureDate(String hyphenDate) {
+  String structureDate(String hyphenDate) {
+    debugPrint("This is the value of date before the format: $hyphenDate");
     String inputDate = hyphenDate; // format: dd-MM-yyyy
-    DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
+    DateTime date = DateFormat("MM-dd-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
     debugPrint(formattedDate); // Output: July 10, 2025
@@ -118,142 +119,426 @@ class _PaymentState extends State<Payment> {
                     left: 0,
                     bottom: 0,
                     child: SingleChildScrollView(
-                      child: Container(
-                        // color: Colors.red,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: 10.h),
-                                  height: 40.h,
-                                  width: 40.w,
-                                  foregroundDecoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.03),
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Icon(
-                                      Icons.chevron_left,
-                                      color: Colors.black,
-                                      size: 24.w,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 75.w),
-                                Text(
-                                  "Pending Payment",
-                                  style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20.sp.clamp(0, 22),
-                                    color: const Color(0xFF323232),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                margin: EdgeInsets.only(right: 10.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 10.h),
                                 height: 40.h,
                                 width: 40.w,
-                                child: Icon(
-                                  Icons.close,
-                                  color: const Color(0xFF323232),
-                                  size: 14.h,
+                                foregroundDecoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.03),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.chevron_left,
+                                    color: Colors.black,
+                                    size: 24.w,
+                                  ),
                                 ),
                               ),
+                              SizedBox(width: 75.w),
+                              Text(
+                                "Pending Payment",
+                                style: TextStyle(
+                                  fontFamily: "Roboto",
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20.sp.clamp(0, 22),
+                                  color: const Color(0xFF323232),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10.h),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(
+                                  255,
+                                  255,
+                                  255,
+                                  0.6,
+                                ),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              height: 40.h,
+                              width: 40.w,
+                              child: Icon(
+                                Icons.close,
+                                color: const Color(0xFF323232),
+                                size: 14.h,
+                              ),
                             ),
-                            SizedBox(height: 5.h),
-                            Column(
-                              children: [
-                                isLoading
-                                    ? CircularProgressIndicator()
-                                    : SingleChildScrollView(
-                                        child: Column(
-                                          children: List.generate(pendingHostels.length, (
-                                            index,
-                                          ) {
-                                            Hostels pendingHostel =
-                                                pendingHostels[index];
-                                            late BookedHostels bookedHostel;
-                                            final isExpanded =
-                                                expandedIndex == index;
-                                            for (BookedHostels hostel
-                                                in pending) {
-                                              if (hostel.hostel_name ==
-                                                  pendingHostel.name) {
-                                                bookedHostel = hostel;
-                                              }
+                          ),
+                          SizedBox(height: 5.h),
+                          Column(
+                            children: [
+                              isLoading
+                                  ? CircularProgressIndicator()
+                                  : SingleChildScrollView(
+                                      child: Column(
+                                        children: List.generate(pendingHostels.length, (
+                                          index,
+                                        ) {
+                                          Hostels pendingHostel =
+                                              pendingHostels[index];
+                                          late BookedHostels bookedHostel;
+                                          // final isExpanded =
+                                          //     expandedIndex == index;
+                                          for (BookedHostels hostel
+                                              in pending) {
+                                            if (hostel.hostel_name ==
+                                                pendingHostel.name) {
+                                              bookedHostel = hostel;
                                             }
-                                            return Column(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      expandedIndex = isExpanded
-                                                          ? null
-                                                          : index; // toggle
-                                                    });
-                                                  },
-                                                  child: roomCard(
-                                                    pendingHostel:
-                                                        pendingHostel,
-                                                    bookedHostel: bookedHostel,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      Constant.height * 0.05,
-                                                ),
-                                                if (isExpanded)
-                                                  Container(
-                                                    color: Colors.white,
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                          horizontal: 20.h,
-                                                        ),
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                left: 15.0.w,
-                                                                top: 40.h,
-                                                                right: 15.0.w,
+                                          }
+                                          return Column(
+                                            children: [
+                                              roomCard(
+                                                pendingHostel: pendingHostel,
+                                                bookedHostel: bookedHostel,
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    Constant.height * 0.025,
+                                              ),
+                                              // if (isExpanded)
+                                              Container(
+                                                color: Colors.white,
+                      
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                            horizontal: 20.h,
+                                                          ),
+                                                      padding:
+                                                          EdgeInsets.only(
+                                                            left: 15.0.w,
+                                                            top: 40.h,
+                                                            right: 15.0.w,
+                                                          ),
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Booking Date",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
                                                               ),
-                                                          child: Column(
+                                                              Text(
+                                                                "${structureDate(bookedHostel.move_out!)} | 4:40 PM",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Check In",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                structureDate(
+                                                                  bookedHostel
+                                                                      .move_in!,
+                                                                ),
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Check Out",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                structureDate(
+                                                                  bookedHostel
+                                                                      .move_out!,
+                                                                ),
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Tenant",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "${bookedHostel.people_booking} person(s)",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10.h,
+                                                          ),
+                                                          const Divider(),
+                                                          SizedBox(
+                                                            height: 10.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Amount",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "GH₵ ${pendingHostel.amt_per_year}",
+                                                                style: TextStyle(
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        16,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Processing Fees",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "GH₵ 20",
+                                                                style: TextStyle(
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        16,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Tax (VAT)",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "GH₵ ${(pendingHostel.amt_per_year)! * 0.05}",
+                                                                style: TextStyle(
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        16,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                "Total",
+                                                                style: TextStyle(
+                                                                  fontSize: 12
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        14,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "GH₵ ${(((pendingHostel.amt_per_year)! * 0.05) + (pendingHostel.amt_per_year)!)}",
+                                                                style: TextStyle(
+                                                                  fontSize: 14
+                                                                      .sp
+                                                                      .clamp(
+                                                                        0,
+                                                                        16,
+                                                                      ),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10.h,
+                                                          ),
+                                                          Divider(
+                                                            height: .2.h,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5.h,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
                                                               Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
                                                                 children: [
-                                                                  Text(
-                                                                    "Booking Date",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
+                                                                  Image.asset(
+                                                                    "assets/payment/Simplification.png",
+                                                                    width:
+                                                                        25.w,
+                                                                    height:
+                                                                        25,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width:
+                                                                        5.w,
                                                                   ),
                                                                   Text(
-                                                                    "August 08, 2024 | 4:40 PM",
+                                                                    "Debit Card",
                                                                     style: TextStyle(
                                                                       fontSize: 12
                                                                           .sp
@@ -265,295 +550,51 @@ class _PaymentState extends State<Payment> {
                                                                   ),
                                                                 ],
                                                               ),
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Check In",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    StructureDate(
-                                                                      bookedHostel
-                                                                          .move_in!,
-                                                                    ),
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Check Out",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    StructureDate(
-                                                                      bookedHostel
-                                                                          .move_out!,
-                                                                    ),
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Tenant",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "${bookedHostel.people_booking} person(s)",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              const Divider(),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Amount",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "GH₵ ${pendingHostel.amt_per_year}",
-                                                                    style: TextStyle(
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            16,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Tax & Fees",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "GH₵ ${(pendingHostel.amt_per_year)! * 0.05}",
-                                                                    style: TextStyle(
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            16,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    "Total",
-                                                                    style: TextStyle(
-                                                                      fontSize: 12
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    "GH₵ ${(((pendingHostel.amt_per_year)! * 0.05) + (pendingHostel.amt_per_year)!)}",
-                                                                    style: TextStyle(
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            16,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10.h,
-                                                              ),
-                                                              Divider(
-                                                                height: .2.h,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 5.h,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      Image.asset(
-                                                                        "assets/payment/Simplification.png",
-                                                                        width:
-                                                                            25.w,
-                                                                        height:
-                                                                            25,
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            5.w,
-                                                                      ),
-                                                                      Text(
-                                                                        "Debit Card",
-                                                                        style: TextStyle(
-                                                                          fontSize: 12.sp.clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  TextButton(
-                                                                    child: Text(
-                                                                      "Change",
-                                                                      style: TextStyle(
-                                                                        color: const Color.fromARGB(
+                                                              TextButton(
+                                                                child: Text(
+                                                                  "Change",
+                                                                  style: TextStyle(
+                                                                    color:
+                                                                        const Color.fromARGB(
                                                                           255,
                                                                           33,
                                                                           243,
                                                                           201,
                                                                         ),
-                                                                        fontSize: 12
-                                                                            .sp
-                                                                            .clamp(
-                                                                              0,
-                                                                              14,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {},
+                                                                    fontSize: 12
+                                                                        .sp
+                                                                        .clamp(
+                                                                          0,
+                                                                          14,
+                                                                        ),
                                                                   ),
-                                                                ],
+                                                                ),
+                                                                onPressed:
+                                                                    () {},
                                                               ),
                                                             ],
                                                           ),
-                                                        ),
-                                                        Container(
-                                                          color: const Color(
-                                                            0xFFF5F8FF,
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: const Color(
+                                                        0xFFF5F8FF,
+                                                      ),
+                                                      height: 20.h,
+                                                    ),
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.only(
+                                                            top: 5.h,
                                                           ),
-                                                          height: 20.h,
-                                                        ),
-                                                        Container(
+                                                      width: Constant.width,
+                                                      child: Align(
+                                                        child: SizedBox(
                                                           // color: Colors.red,
                                                           height:
-                                                              Constant.height *
+                                                              Constant
+                                                                  .height *
                                                               0.06,
                                                           width:
                                                               MediaQuery.sizeOf(
@@ -570,8 +611,7 @@ class _PaymentState extends State<Payment> {
                                                                       pendingHostel,
                                                                   user: user,
                                                                   amount:
-                                                                      (((pendingHostel
-                                                                              .amt_per_year)! *
+                                                                      (((pendingHostel.amt_per_year)! *
                                                                           0.05) +
                                                                       (pendingHostel
                                                                           .amt_per_year)!),
@@ -579,10 +619,11 @@ class _PaymentState extends State<Payment> {
                                                                 transition:
                                                                     Transition
                                                                         .fadeIn,
-                                                                duration: Duration(
-                                                                  milliseconds:
-                                                                      300,
-                                                                ),
+                                                                duration:
+                                                                    Duration(
+                                                                      milliseconds:
+                                                                          300,
+                                                                    ),
                                                                 curve: Curves
                                                                     .easeIn,
                                                               );
@@ -590,8 +631,9 @@ class _PaymentState extends State<Payment> {
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
                                                               shape: RoundedRectangleBorder(
-                                                                side: BorderSide
-                                                                    .none,
+                                                                side:
+                                                                    BorderSide
+                                                                        .none,
                                                                 borderRadius:
                                                                     BorderRadius.circular(
                                                                       15.r,
@@ -624,16 +666,26 @@ class _PaymentState extends State<Payment> {
                                                             ),
                                                           ),
                                                         ),
-                                                        SizedBox(height: 10.h),
-                                                        Container(
-                                                          color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10.h),
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.only(
+                                                            bottom: 5.h,
+                                                          ),
+                                                      width: Constant.width,
+                                                      child: Align(
+                                                        child: SizedBox(
                                                           height:
-                                                              Constant.height *
+                                                              Constant
+                                                                  .height *
                                                               0.06,
                                                           width:
                                                               MediaQuery.sizeOf(
                                                                 context,
-                                                              ).width,
+                                                              ).width *
+                                                              0.9,
                                                           child: ElevatedButton(
                                                             onPressed: () {
                                                               showModalBottomSheet(
@@ -784,7 +836,7 @@ class _PaymentState extends State<Payment> {
                                                                                               isLoadingButton = false;
                                                                                             },
                                                                                           );
-
+                      
                                                                                           showModalBottomSheet(
                                                                                             context: context,
                                                                                             isScrollControlled: true,
@@ -830,7 +882,7 @@ class _PaymentState extends State<Payment> {
                                                                                                                         ),
                                                                                                                       ),
                                                                                                                     ),
-
+                      
                                                                                                                     SizedBox(
                                                                                                                       height:
                                                                                                                           Constant.height *
@@ -973,7 +1025,7 @@ class _PaymentState extends State<Payment> {
                                                                                               ),
                                                                                       ),
                                                                                     ),
-
+                      
                                                                                     SizedBox(
                                                                                       height: 60.h,
                                                                                       width: MediaQuery.sizeOf(
@@ -1022,8 +1074,9 @@ class _PaymentState extends State<Payment> {
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
                                                               shape: RoundedRectangleBorder(
-                                                                side: BorderSide
-                                                                    .none,
+                                                                side:
+                                                                    BorderSide
+                                                                        .none,
                                                                 borderRadius:
                                                                     BorderRadius.circular(
                                                                       15.r,
@@ -1050,20 +1103,21 @@ class _PaymentState extends State<Payment> {
                                                             ),
                                                           ),
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                              ],
-                                            );
-                                          }),
-                                        ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
                                       ),
-                              ],
-                            ),
-
-                            SizedBox(height: 100.h),
-                          ],
-                        ),
+                                    ),
+                            ],
+                          ),
+                      
+                          SizedBox(height: 100.h),
+                        ],
                       ),
                     ),
                   ),

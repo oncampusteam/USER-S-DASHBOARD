@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:on_campus/classes/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget roomCard({
   required Hostels pendingHostel,
@@ -72,6 +72,7 @@ Widget roomCard({
                 ),
               ),
             ),
+            SizedBox(width: 5.w,),
             Container(
               // color: Colors.yellow,
               width: Constant.width * 0.58,

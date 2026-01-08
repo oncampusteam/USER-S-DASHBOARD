@@ -123,7 +123,7 @@ class _PayableState extends State<Payable> {
                           ],
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Room 406",
@@ -137,14 +137,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Name",
@@ -156,7 +156,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "${widget.user?.displayName}",
@@ -170,14 +170,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Room type",
@@ -186,7 +186,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "4-in-a Room",
@@ -200,14 +200,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "No. of students",
@@ -225,14 +225,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Number of years",
@@ -241,6 +241,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "${widget.bookedHostel.duration} Year(s)",
@@ -254,14 +255,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Date of move in",
@@ -270,7 +271,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "${widget.bookedHostel.move_in}",
@@ -284,14 +285,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Date of move out",
@@ -309,14 +310,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Payment method",
@@ -325,7 +326,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Mobile Money",
@@ -336,14 +337,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Phone number",
@@ -352,7 +353,7 @@ class _PayableState extends State<Payable> {
                           ),
                         ),
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               // "${FirestoreDb.instance.getUserInfo(widget.user).}",
@@ -367,14 +368,14 @@ class _PayableState extends State<Payable> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Divider(thickness: .5),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          height: Constant.height * 0.03,
+                          height: Constant.height * 0.025,
                           child: FittedBox(
                             child: Text(
                               "Email address",
@@ -399,7 +400,7 @@ class _PayableState extends State<Payable> {
                 ),
               ),
             ),
-            SizedBox(height: 100),
+            // SizedBox(height: 100),
           ],
         ),
       ),

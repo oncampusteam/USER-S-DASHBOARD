@@ -115,7 +115,7 @@ class _PickcampusState extends State<Pickcampus> {
                                       MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
-                                      "Male",
+                                      "Male Hostel",
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: "Poppins",
@@ -140,7 +140,7 @@ class _PickcampusState extends State<Pickcampus> {
                                       MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
-                                      "Female",
+                                      "Female Hostel",
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xFF323232),
@@ -165,7 +165,7 @@ class _PickcampusState extends State<Pickcampus> {
                                       MediaQuery.of(context).size.height * 0.03,
                                   child: FittedBox(
                                     child: Text(
-                                      "No Preference",
+                                      "Mixed / Any Hostel",
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xFF323232),

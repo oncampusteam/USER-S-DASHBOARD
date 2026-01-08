@@ -180,7 +180,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                     ) {
                                       Hostels paidHostel = paidHostels[index];
                                       late BookedHostels bookedHostel;
-                                      final isExpanded = expandedIndex == index;
+                                      // final isExpanded = expandedIndex == index;
                                       for (BookedHostels hostel in paid) {
                                         if (hostel.hostel_name ==
                                             paidHostel.name) {
@@ -189,21 +189,12 @@ class _PaidPaymentState extends State<PaidPayment> {
                                       }
                                       return Column(
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                expandedIndex = isExpanded
-                                                    ? null
-                                                    : index; // toggle
-                                              });
-                                            },
-                                            child: roomCard(
-                                              pendingHostel: paidHostels[index],
-                                              bookedHostel: bookedHostel,
-                                            ),
+                                          roomCard(
+                                            pendingHostel: paidHostels[index],
+                                            bookedHostel: bookedHostel,
                                           ),
-                                          SizedBox(height: 20),
-                                          if (isExpanded)
+                                          SizedBox(height: 10),
+                                          // if (isExpanded)
                                             Container(
                                               margin: EdgeInsets.symmetric(
                                                 horizontal: 10.h,
@@ -252,7 +243,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -287,7 +278,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -322,7 +313,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -354,11 +345,11 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             const Divider(),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -393,7 +384,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -401,7 +392,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  "Tax & Fees",
+                                                                  "Tax (Vat)",
                                                                   style: TextStyle(
                                                                     fontSize: 12
                                                                         .sp
@@ -428,7 +419,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
                                                             Row(
                                                               mainAxisAlignment:
@@ -436,7 +427,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  "Total",
+                                                                  "Total Amount",
                                                                   style: TextStyle(
                                                                     fontSize: 12
                                                                         .sp
@@ -463,8 +454,41 @@ class _PaidPaymentState extends State<PaidPayment> {
                                                               ],
                                                             ),
                                                             SizedBox(
-                                                              height: 20.h,
+                                                              height: 10.h,
                                                             ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  "Transaction ID",
+                                                                  style: TextStyle(
+                                                                    fontSize: 12
+                                                                        .sp
+                                                                        .clamp(
+                                                                          0,
+                                                                          14,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "#TJFSLKHFDSLKFH",
+                                                                  style: TextStyle(
+                                                                    fontSize: 14
+                                                                        .sp
+                                                                        .clamp(
+                                                                          0,
+                                                                          16,
+                                                                        ),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(height: 10.h),
                                                             Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment

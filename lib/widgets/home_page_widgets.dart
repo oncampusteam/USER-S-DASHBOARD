@@ -22,6 +22,7 @@ Widget HostelCard({
     "Pay In Installment",
     "10% Discount",
   ];
+  
   return SizedBox(
     // color: Colors.pink,
     height: Constant.height * 0.44,
@@ -80,11 +81,14 @@ Widget hostelGestureCard({
   required String? string,
   required List<String> value,
   required int index,
+  // bool favorite = false,
 }) {
+
+  
   return GestureDetector(
     onTap: () {
       Get.to(
-        () => HostelDetails(hostel: hostel),
+        () => HostelDetails(hostel: hostel, favorite: favoriteBools[index]),
         transition: Transition.fadeIn,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeIn,
@@ -164,11 +168,14 @@ Widget hostelGestureCard({
                       child: GestureDetector(
                         onTap: () {
                           favoriteBools[index] = !favoriteBools[index];
+                          // favorite = favoriteBools[index];
+                          // debugPrint("This is the value of favorite in hostelGestureCard : $favorite");
                           onFavoriteTap();
                         },
                         child: Icon(
                           size: 20.h,
                           favoriteBools[index]
+                          // favorite
                               ? Icons.favorite
                               : Icons.favorite_border_outlined,
                           color: const Color.fromARGB(255, 0, 239, 209),
@@ -534,7 +541,7 @@ Widget hostelCardVariant({
       GestureDetector(
         onTap: () {
           Get.to(
-            () => HostelDetails(hostel: hostel),
+            () => HostelDetails(hostel: hostel, favorite: favorite),
             transition: Transition.fadeIn,
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeIn,

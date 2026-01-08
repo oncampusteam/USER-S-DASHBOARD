@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:on_campus/screens/filter.dart';
 import 'package:on_campus/classes/classes.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/classes/constants.dart';
@@ -24,6 +25,7 @@ TextEditingController searchController = TextEditingController();
 
 class _SearchState extends State<Search> {
   bool isLoading = true;
+  List<Hostels> filteredHostels = [];
 
   Future<void> getPopular() async {
     setState(() {
@@ -155,20 +157,37 @@ class _SearchState extends State<Search> {
                                     "assets/welcome_page_views/transparent_logo-removebg.png",
                                     height: 45.h,
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(
-                                        255,
-                                        255,
-                                        255,
-                                        .4,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => Filter(
+                                          hostels: hostels,
+                                          onApply: (filtered) {
+                                            setState(() {
+                                              filteredHostels = filtered;
+                                              print(
+                                                "filteredHostels:${filteredHostels}",
+                                              );
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                          255,
+                                          255,
+                                          255,
+                                          .4,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    height: 30.h,
-                                    width: 30.w,
-                                    child: Image.asset(
-                                      "assets/search/menu.png",
+                                      height: 30.h,
+                                      width: 30.w,
+                                      child: Image.asset(
+                                        "assets/search/menu.png",
+                                      ),
                                     ),
                                   ),
                                 ],

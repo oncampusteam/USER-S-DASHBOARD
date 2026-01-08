@@ -612,10 +612,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    debugPrint(bookedHostels.toString());
     return bookedHostels;
   }
 }

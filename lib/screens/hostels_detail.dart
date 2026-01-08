@@ -20,7 +20,12 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 class HostelDetails extends StatefulWidget {
   final Hostels hostel;
-  const HostelDetails({super.key, required this.hostel});
+  final bool favorite;
+  const HostelDetails({
+    super.key,
+    required this.hostel,
+    required this.favorite,
+  });
 
   @override
   State<HostelDetails> createState() => _HostelDetailsState();
@@ -28,9 +33,11 @@ class HostelDetails extends StatefulWidget {
 
 String gender = "";
 String selectedGender = "";
-
+ScrollController controller = ScrollController();
 List<TextEditingController> occupantNames = [];
 List<TextEditingController> occupantEmails = [];
+List<TextEditingController> occupantPhones = [];
+GlobalKey key = GlobalKey();
 
 class _HostelDetailsState extends State<HostelDetails> {
   int selectedIndex = 0;
@@ -40,8 +47,10 @@ class _HostelDetailsState extends State<HostelDetails> {
   User? user = FirebaseAuth.instance.currentUser;
 
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController dateController_movein = TextEditingController();
-  final TextEditingController dateController_moveout = TextEditingController();
+  final TextEditingController dateControllerMovein = TextEditingController(text: DateFormat('MM-dd-yyyy').format(DateTime.now()));
+  final TextEditingController dateControllerMoveout = TextEditingController(text: DateFormat('MM-dd-yyyy').format(DateTime(DateTime.now().year + 1,
+             DateTime.now().month,
+             DateTime.now().day)));
   final Map<String, GlobalKey> _sectionKeys = {};
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
@@ -77,15 +86,18 @@ class _HostelDetailsState extends State<HostelDetails> {
     required StateSetter setModalState,
     required List<TextEditingController> occupantNames,
     required List<TextEditingController> occupantEmails,
+    required List<TextEditingController> occupantPhones,
   }) {
     if (count >= 1 && count <= 4) {
       setModalState(() {
         occupantNames.clear();
         occupantEmails.clear();
+        occupantPhones.clear();
 
         for (int i = 0; i < count; i++) {
           occupantNames.add(TextEditingController());
           occupantEmails.add(TextEditingController());
+          occupantPhones.add(TextEditingController());
         }
       });
     } else {
@@ -97,36 +109,37 @@ class _HostelDetailsState extends State<HostelDetails> {
     }
   }
 
-  Future<void> _selectDate(
-    BuildContext context,
-    TextEditingController moveInController,
-    TextEditingController? moveOutController,
-  ) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+  // Future<void> _selectDate(
+  //   BuildContext context,
+  //   TextEditingController moveInController,
+  //   TextEditingController? moveOutController,
+  // )
+  //  async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2100),
+  //   );
 
-    if (pickedDate != null) {
-      setState(() {
-        // Set move-in date
-        moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       // Set move-in date
+  //       moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
 
-        // If move-out controller was provided, add 2 years automatically
-        if (moveOutController != null) {
-          final moveOutDate = DateTime(
-            pickedDate.year + duration,
-            pickedDate.month,
-            pickedDate.day,
-          );
+  //       // If move-out controller was provided, add 2 years automatically
+  //       if (moveOutController != null) {
+  //         final moveOutDate = DateTime(
+  //           pickedDate.year + duration,
+  //           pickedDate.month,
+  //           pickedDate.day,
+  //         );
 
-          moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
-        }
-      });
-    }
-  }
+  //         moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
+  //       }
+  //     });
+  //   }
+  // }
 
   dynamic showDate() {
     return showModalBottomSheet(
@@ -142,9 +155,13 @@ class _HostelDetailsState extends State<HostelDetails> {
     );
   }
 
+  late bool favorite;
   @override
   void initState() {
     super.initState();
+    debugPrint("This is the value from widget.fvorite : ${widget.favorite}");
+    favorite = widget.favorite;
+    debugPrint("this is the value of $favorite");
     getRoomTypes().then((_) {
       for (var room in roomTypes) {
         _sectionKeys[room.type ?? "null"] = GlobalKey();
@@ -444,9 +461,12 @@ class _HostelDetailsState extends State<HostelDetails> {
     TextEditingController emailAddress,
     List<TextEditingController> occupantEmails,
     List<TextEditingController> occupantNames,
+    List<TextEditingController> occupantPhones,
+    int Function() roomCapacity,
   ) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Container(
-      height: Constant.height * 0.75,
+      height: Constant.height * 0.85,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -457,6 +477,7 @@ class _HostelDetailsState extends State<HostelDetails> {
 
       padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.h),
       child: SingleChildScrollView(
+        controller: controller,
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -533,7 +554,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "4in Room Bedroom Apartment",
+                      "${roomCapacity()} in a Room Bedroom Apartment",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -588,6 +609,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                           setModalState: setModalState,
                           occupantNames: occupantNames,
                           occupantEmails: occupantEmails,
+                          occupantPhones: occupantPhones,
                         );
                         setModalState(() {});
                       }
@@ -628,16 +650,21 @@ class _HostelDetailsState extends State<HostelDetails> {
                       //   return 'Please enter a number';
                       // }
                       final num = int.parse(value ?? "1");
-                      if (num > 4) {
-                        return 'Enter a number between 1 and 4';
+                      if (num > roomCapacity()) {
+                        setState(() {
+                          // debugPrint("suppose to jump");
+                          controller.jumpTo(0);
+                        });
+                        return 'Enter a number between 1 and ${roomCapacity()}';
                       }
+
                       return null;
                     },
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, top: 4),
                     child: Text(
-                      "Min 1 - Max 4",
+                      "Min 1 - Max ${roomCapacity()}",
                       style: TextStyle(fontSize: 10),
                     ),
                   ),
@@ -676,10 +703,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.grey),
                               decoration: InputDecoration(
-                                labelText: "Full name",
+                                labelText: i == 0
+                                    ? "Full name of person Booking"
+                                    : "Full Name of person booking for",
                                 labelStyle: const TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 14,
+                                  fontSize: 10,
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -707,12 +736,130 @@ class _HostelDetailsState extends State<HostelDetails> {
                               keyboardType: TextInputType.name,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your name';
+                                  FocusScope.of(key.currentContext!).unfocus();
+                                  if (i == 0 || i== 1) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height *0.15);
+                                    });
+                                  }
+                                  if (i == 2 || i == 3) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height*0.9);
+                                    });
+                                  }
+                                  if (i == 4  || i == 5) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                    });
+                                  }
+                                  // if (i == 6 || i == 7) {
+                                  //   setState(() {
+                                  //     controller.jumpTo(Constant.height * 0.85 * (3));
+                                  //   });
+                                  // }
+                                  // if (i == 8 || i == 9) {
+                                  //   setState(() {
+                                  //     controller.jumpTo(Constant.height * 0.85 * (4));
+                                  //   });
+                                  // }
+                                  
+                                  return i == 0
+                                      ? "Please enter the name of the person booking"
+                                      : "Please the name of the person booking for";
                                 }
                                 return null;
                               },
                             ),
+                            SizedBox(height: 10.h),
+                            TextFormField(
+                              enableInteractiveSelection: false,
+                              controller: occupantPhones[i],
+                              cursorColor: Colors.black,
+                              style: const TextStyle(color: Colors.grey),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              decoration: InputDecoration(
+                                labelText: i == 0
+                                    ? "Enter the person booking phone number"
+                                    : "Enter the number of the person booking for",
+                                labelStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
 
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF00EFD1),
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    style: BorderStyle.none,
+                                    color: const Color.fromRGBO(
+                                      158,
+                                      158,
+                                      158,
+                                      0.3,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  FocusScope.of(key.currentContext!).unfocus();
+                                  if (i == 0 || i== 1) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height *0.15);
+                                    });
+                                  }
+                                  if (i == 2 || i == 3) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height*0.9);
+                                    });
+                                  }
+                                  if (i == 4  || i == 5) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                    });
+                                  }
+                                  return i == 0
+                                      ? 'Please enter the person booking phone number'
+                                      : "Please enter the person booking for phone number";
+                                }
+                                if(value.isNotEmpty){
+                                  if(value.length <10){
+                                    FocusScope.of(key.currentContext!).unfocus();
+                                  if (i == 0 || i== 1) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height *0.15);
+                                    });
+                                  }
+                                  if (i == 2 || i == 3) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height*0.9);
+                                    });
+                                  }
+                                  if (i == 4  || i == 5) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                    });
+                                  }
+                                  return "The Phone number is not up to 10";
+                                  }
+                                  
+                                }
+                                return null;
+                              },
+                            ),
                             SizedBox(height: 10.h),
                             TextFormField(
                               controller: occupantEmails[i],
@@ -720,10 +867,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                               style: const TextStyle(color: Colors.grey),
 
                               decoration: InputDecoration(
-                                labelText: "Occupant Email",
+                                labelText: i == 0
+                                    ? "Person booking email"
+                                    : "Occupant email",
                                 labelStyle: const TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 14,
+                                  fontSize: 10,
                                 ),
                                 filled: true,
                                 focusedBorder: OutlineInputBorder(
@@ -739,22 +888,50 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   borderSide: BorderSide(
                                     width: 1,
                                     style: BorderStyle.none,
-                                    color: Colors.grey.withOpacity(0.3),
+                                    color: const Color.fromRGBO(
+                                      158,
+                                      158,
+                                      158,
+                                      0.3,
+                                    ),
                                   ),
                                 ),
                               ),
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email address';
-                                }
+                                // if (value == null || value.isEmpty) {
+                                //   return i==0 ? 'Please enter the person booking email address': "Please enter the person booking for email address";
+                                // }
                                 final emailRegex = RegExp(
                                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                 );
 
                                 // 3️ Check if it matches
-                                if (!emailRegex.hasMatch(value)) {
-                                  return 'Enter a valid email address';
+                                if (value != "") {
+                                  // debugPrint(
+                                  //   "This is the value of value: $value",
+                                  // );
+                                   FocusScope.of(key.currentContext!).unfocus();
+                                  if (i == 0 || i== 1) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height *0.15);
+                                    });
+                                  }
+                                  if (i == 2 || i == 3) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height*0.9);
+                                    });
+                                  }
+                                  if (i == 4  || i == 5) {
+                                    setState(() {
+                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                    });
+                                  }
+                                  // return "The Phone number is not up to 10";
+                                  // }
+                                  if (!emailRegex.hasMatch(value ?? "")) {
+                                    return 'Enter a valid email address';
+                                  }
                                 }
                                 return null;
                               },
@@ -797,6 +974,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 setModalState: setModalState,
                                 occupantNames: occupantNames,
                                 occupantEmails: occupantEmails,
+                                occupantPhones: occupantPhones,
                               );
                               numPeople.text = "1";
                             }
@@ -838,10 +1016,11 @@ class _HostelDetailsState extends State<HostelDetails> {
 
                           List<Map<String, dynamic>> occupants = [];
 
-                          for (int i = 0; i < occupantNames.length; i++) {
+                          for (int i = 1; i < occupantNames.length; i++) {
                             occupants.add({
                               'name': occupantNames[i].text.trim(),
                               'email': occupantEmails[i].text.trim(),
+                              'phoneNumber': occupantPhones[i].text.trim(),
                             });
                           }
                           await FirebaseFirestore.instance
@@ -854,9 +1033,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                 'paid': false,
                                 'isDone': false,
                                 'people_booking': int.parse(numPeople.text),
-                                'name': name.text,
+                                'name': occupantNames[0].text,
                                 'occupants': occupants,
-                                'email': emailAddress.text,
+                                'email': occupantEmails[0].text,
+                                'phone_number': occupantPhones[0].text,
+                                'time': Timestamp.now(),
                               }, SetOptions(merge: true));
                           setModalState(() {
                             isLoading = false;
@@ -914,6 +1095,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                 ],
               ),
             ),
+            if (keyboardHeight > 0) SizedBox(height: keyboardHeight),
           ],
         ),
       ),
@@ -1067,16 +1249,17 @@ class _HostelDetailsState extends State<HostelDetails> {
               SizedBox(
                 height: 60,
                 child: TextFormField(
+                  focusNode: FocusNode(canRequestFocus: false),
                   cursorColor: Colors.white,
-                  controller: dateController_movein,
+                  controller: dateControllerMovein,
                   readOnly: true,
-                  onTap: () {
-                    _selectDate(
-                      context,
-                      dateController_movein,
-                      dateController_moveout,
-                    );
-                  },
+                  // onTap: () {
+                  //   _selectDate(
+                  //     context,
+                  //     dateControllerMovein,
+                  //     dateControllerMoveout,
+                  //   );
+                  // },
                   decoration: InputDecoration(
                     labelText: "date",
                     labelStyle: const TextStyle(color: Colors.grey),
@@ -1098,11 +1281,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                     suffix: IconButton(
                       icon: Icon(Icons.calendar_today),
                       onPressed: () {
-                        _selectDate(
-                          context,
-                          dateController_movein,
-                          dateController_moveout,
-                        );
+                        // _selectDate(
+                        //   context,
+                        //   dateControllerMovein,
+                        //   dateControllerMoveout,
+                        // );
                       },
                     ),
                   ),
@@ -1133,8 +1316,9 @@ class _HostelDetailsState extends State<HostelDetails> {
               SizedBox(
                 height: 60,
                 child: TextFormField(
+                  focusNode: FocusNode(canRequestFocus: false),
                   cursorColor: Colors.white,
-                  controller: dateController_moveout,
+                  controller: dateControllerMoveout,
                   readOnly: true,
                   decoration: InputDecoration(
                     labelText: "date",
@@ -1190,8 +1374,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                           .collection('Booked hostels')
                           .doc(widget.hostel.name) // Set your own ID
                           .set({
-                            'move_in': dateController_movein.text,
-                            'move_out': dateController_moveout.text,
+                            'move_in': dateControllerMovein.text,
+                            'move_out': dateControllerMoveout.text,
                             'isDone': true,
                           }, SetOptions(merge: true));
                       setModalState(() {
@@ -1414,37 +1598,53 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                     ),
                                                   ),
                                                   // SizedBox(width: 5.h),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                      right: 20.h,
-                                                    ),
-                                                    //
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                            255,
-                                                            255,
-                                                            255,
-                                                            0.6,
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        favorite = !favorite;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(
+                                                        right: 20.h,
+                                                      ),
+                                                      //
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color:
+                                                            const Color.fromRGBO(
+                                                              255,
+                                                              255,
+                                                              255,
+                                                              0.6,
+                                                            ),
+                                                      ),
+                                                      height: 45.h,
+                                                      width: 45.w,
+                                                      child: Stack(
+                                                        children: [
+                                                          Positioned(
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            bottom: 0,
+                                                            child: !favorite
+                                                                ? const Icon(
+                                                                    Icons
+                                                                        .favorite_border_outlined,
+                                                                    color: Colors
+                                                                        .black,
+                                                                  )
+                                                                : Icon(
+                                                                    Icons
+                                                                        .favorite,
+                                                                    color: Color(
+                                                                      0xFF00EFD1,
+                                                                    ),
+                                                                  ),
                                                           ),
-                                                    ),
-                                                    height: 45.h,
-                                                    width: 45.w,
-                                                    child: Stack(
-                                                      children: [
-                                                        Positioned(
-                                                          top: 0,
-                                                          left: 0,
-                                                          right: 0,
-                                                          bottom: 0,
-                                                          child: const Icon(
-                                                            Icons
-                                                                .favorite_border_outlined,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -3269,9 +3469,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             TextEditingController
                                                                             name =
                                                                                 TextEditingController();
-                                                                            TextEditingController
-                                                                            phoneNum =
-                                                                                TextEditingController();
+                                                                            // TextEditingController
+                                                                            // phoneNum =
+                                                                            //     TextEditingController();
                                                                             TextEditingController
                                                                             emailAddress =
                                                                                 TextEditingController();
@@ -3285,6 +3485,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             //   TextEditingController
                                                                             // >
                                                                             occupantEmails = [
+                                                                              TextEditingController(),
+                                                                            ];
+
+                                                                            occupantPhones = [
                                                                               TextEditingController(),
                                                                             ];
 
@@ -3302,25 +3506,100 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                       BuildContext context,
                                                                                     ) {
                                                                                       return StatefulBuilder(
+                                                                                        key: key,
                                                                                         builder:
                                                                                             (
                                                                                               BuildContext context,
                                                                                               StateSetter setModalState,
                                                                                             ) {
-                                                                                              return Padding(
+                                                                                              return Container(
+                                                                                                height:
+                                                                                                    Constant.height *
+                                                                                                    0.85,
+                                                                                                decoration: BoxDecoration(
+                                                                                                  color: Colors.white,
+                                                                                                  borderRadius: BorderRadius.only(
+                                                                                                    topLeft: Radius.circular(
+                                                                                                      20,
+                                                                                                    ),
+                                                                                                    topRight: Radius.circular(
+                                                                                                      20,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
                                                                                                 padding: EdgeInsets.only(
                                                                                                   bottom: MediaQuery.of(
                                                                                                     context,
                                                                                                   ).viewInsets.bottom,
                                                                                                 ),
-                                                                                                child: book(
-                                                                                                  setModalState,
-                                                                                                  numPeople,
-                                                                                                  name,
-                                                                                                  // phoneNum,
-                                                                                                  emailAddress,
-                                                                                                  occupantNames,
-                                                                                                  occupantEmails,
+                                                                                                child: ClipRRect(
+                                                                                                  borderRadius: BorderRadius.only(
+                                                                                                    topLeft: Radius.circular(
+                                                                                                      20,
+                                                                                                    ),
+                                                                                                    topRight: Radius.circular(
+                                                                                                      20,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  child: SingleChildScrollView(
+                                                                                                    // controller: controller,
+                                                                                                    child: book(
+                                                                                                      setModalState,
+                                                                                                      numPeople,
+                                                                                                      name,
+                                                                                                      // phoneNum,
+                                                                                                      emailAddress,
+                                                                                                      occupantNames,
+                                                                                                      occupantEmails,
+                                                                                                      occupantPhones,
+                                                                                                      () {
+                                                                                                        if (room.type !=
+                                                                                                            null) {
+                                                                                                          if (room.type ==
+                                                                                                              "1in1") {
+                                                                                                            return 1;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "2in1") {
+                                                                                                            return 2;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "3in1") {
+                                                                                                            return 3;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "4in1") {
+                                                                                                            return 4;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "5in1") {
+                                                                                                            return 5;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "6in1") {
+                                                                                                            return 6;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "7in1") {
+                                                                                                            return 7;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "8in1") {
+                                                                                                            return 8;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "9in1") {
+                                                                                                            return 9;
+                                                                                                          }
+                                                                                                          if (room.type ==
+                                                                                                              "10in1") {
+                                                                                                            return 10;
+                                                                                                          }
+                                                                                                        }
+                                                                                                        return 0;
+                                                                                                      },
+                                                                                                    ),
+                                                                                                  ),
                                                                                                 ),
                                                                                               );
                                                                                             },

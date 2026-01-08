@@ -158,6 +158,7 @@ class _ProfileState extends State<Profile> {
         body: Container(
           margin: EdgeInsets.only(top: Constant.height * 0.06),
           child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15.h),
               color: Colors.white,
