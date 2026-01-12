@@ -2,8 +2,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
@@ -37,8 +39,8 @@ class _HistoryState extends State<History> {
   //   // Format day and year (e.g. "13 2025")
   //   String dayYear = DateFormat("d yyyy").format(parsedDate);
 
-  //   debugPrint("this is the value of month: $month");
-  //   debugPrint("this is the value of dayYear: $dayYear");
+  //   //debugPrint("this is the value of month: $month");
+  //   //debugPrint("this is the value of dayYear: $dayYear");
 
   //   return "$month\n$dayYear";
   // }
@@ -53,8 +55,8 @@ class _HistoryState extends State<History> {
     // Format day and year (e.g. "13 2025")
     String dayYear = DateFormat("d yyyy").format(parsedDate);
 
-    debugPrint("this is the value of month: $month");
-    debugPrint("this is the value of dayYear: $dayYear");
+    //debugPrint("this is the value of month: $month");
+    //debugPrint("this is the value of dayYear: $dayYear");
 
     return [month, dayYear];
   }
@@ -78,10 +80,10 @@ class _HistoryState extends State<History> {
       if (user != null) {
         pending = await FirestoreDb.instance.getPendingHostels(user);
         paid = await FirestoreDb.instance.getPaidHostels(user);
-        debugPrint("Pending: $pending");
+        //debugPrint("Pending: $pending");
       }
     } catch (e) {
-      debugPrint("Error fetching payments: $e");
+      //debugPrint("Error fetching payments: $e");
     }
   }
 
@@ -97,7 +99,7 @@ class _HistoryState extends State<History> {
           pendingHostels.add(hostelDetails);
         }
       } else {
-        debugPrint("No pending hostels");
+        //debugPrint("No pending hostels");
       }
       if (paid.isNotEmpty) {
         for (BookedHostels hostel in paid) {
@@ -107,153 +109,74 @@ class _HistoryState extends State<History> {
           paidHostels.add(hostelDetails);
         }
       } else {
-        debugPrint("No paid hostels");
+        //debugPrint("No paid hostels");
       }
-      debugPrint("Pending Hostel Details: $pendingHostels");
+      //debugPrint("Pending Hostel Details: $pendingHostels");
     } catch (e) {
-      debugPrint("Error fetching hostel details: $e");
+      //debugPrint("Error fetching hostel details: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          color: const Color.fromRGBO(118, 182, 234, 0.1),
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: Constant.height * 0.06,
-              left: 20.w,
-              right: 20.w,
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 30.h),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 255, 255, .4),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        height: 40.h,
-                        width: 40.w,
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_outlined,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        widthFactor: MediaQuery.sizeOf(context).width.w,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            height: Constant.height * 0.03,
-                            child: FittedBox(
-                              child: Text(
-                                "Payment History",
-                                style: TextStyle(
-                                  fontSize: 15.5.sp.clamp(0, 17.5),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                Container(
-                  height: 40,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xfff1f1f1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
+    return PopScope(
+      canPop: false,
+      // onPopInvokedWithResult: (canpop, dynamic) {
+      //   Get.to(
+      //     () => BottomNav(username: userInformation["username"], subindex: 2),
+      //   );
+      // },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            color: const Color.fromRGBO(118, 182, 234, 0.1),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: Constant.height * 0.06,
+                left: 20.w,
+                right: 20.w,
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 30.h),
+                  Row(
                     children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => isPaidSelected = true),
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 400),
-                            transitionBuilder: (child, animation) =>
-                                FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                            child: AnimatedContainer(
-                              width: 130,
-                              height: 30,
-                              key: ValueKey(isPaidSelected), // IMPORTANT
-                              duration: const Duration(milliseconds: 400),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: isPaidSelected
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: SizedBox(
-                                height: Constant.height * 0.025,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Paid",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: isPaidSelected
-                                          ? Colors.black
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigator.of(context).pop();
+                          Get.to(
+                            () => BottomNav(
+                              username: userInformation["username"],
+                              subindex: 2,
                             ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 255, 255, .4),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          height: 40.h,
+                          width: 40.w,
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.black,
                           ),
                         ),
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => isPaidSelected = false),
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 400),
-                            transitionBuilder: (child, animation) =>
-                                FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                            child: AnimatedContainer(
-                              width: 130,
-                              height: 30,
-                              key: ValueKey(!isPaidSelected), // IMPORTANT
-                              duration: const Duration(milliseconds: 400),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: !isPaidSelected
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: SizedBox(
-                                height: Constant.height * 0.025,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Pending",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: !isPaidSelected
-                                          ? Colors.black
-                                          : Colors.grey,
-                                    ),
+                        child: Center(
+                          widthFactor: MediaQuery.sizeOf(context).width.w,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: Constant.height * 0.03,
+                              child: FittedBox(
+                                child: Text(
+                                  "Payment History",
+                                  style: TextStyle(
+                                    fontSize: 15.5.sp.clamp(0, 17.5),
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -263,17 +186,110 @@ class _HistoryState extends State<History> {
                       ),
                     ],
                   ),
-                ),
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  transitionBuilder: (child, animation) =>
-                      FadeTransition(opacity: animation, child: child),
-                  child: isPaidSelected
-                      ? Paid(key: const ValueKey('B'))
-                      : Pending(key: const ValueKey('A')),
-                ),
-                // SizedBox(height: 500),
-              ],
+                  SizedBox(height: 20.h),
+                  Container(
+                    height: 40,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xfff1f1f1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => setState(() => isPaidSelected = true),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 400),
+                              transitionBuilder: (child, animation) =>
+                                  FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  ),
+                              child: AnimatedContainer(
+                                width: 130,
+                                height: 30,
+                                key: ValueKey(isPaidSelected), // IMPORTANT
+                                duration: const Duration(milliseconds: 400),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: isPaidSelected
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SizedBox(
+                                  height: Constant.height * 0.025,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "Paid",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: isPaidSelected
+                                            ? Colors.black
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => setState(() => isPaidSelected = false),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 400),
+                              transitionBuilder: (child, animation) =>
+                                  FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  ),
+                              child: AnimatedContainer(
+                                width: 130,
+                                height: 30,
+                                key: ValueKey(!isPaidSelected), // IMPORTANT
+                                duration: const Duration(milliseconds: 400),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: !isPaidSelected
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SizedBox(
+                                  height: Constant.height * 0.025,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "Pending",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: !isPaidSelected
+                                            ? Colors.black
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 400),
+                    transitionBuilder: (child, animation) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: isPaidSelected
+                        ? Paid(key: const ValueKey('B'))
+                        : Pending(key: const ValueKey('A')),
+                  ),
+                  // SizedBox(height: 500),
+                ],
+              ),
             ),
           ),
         ),
@@ -310,7 +326,7 @@ class _HistoryState extends State<History> {
                 // final isExpanded = expandedIndex == index;
                 return GestureDetector(
                   onTap: () async {
-                    Get.to(() => Payment(user: user!));
+                    Get.to(() => Payment(user: user!, subject: "Payment"));
                   },
                   child: Column(
                     children: [
@@ -467,9 +483,10 @@ class _HistoryState extends State<History> {
                                                 SizedBox(
                                                   height:
                                                       Constant.height * 0.04,
-                                                      width: Constant.width * 0.6,
+                                                  width: Constant.width * 0.6,
                                                   child: FittedBox(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Text(
                                                       pendingHostel.name,
                                                       style: TextStyle(
@@ -1053,7 +1070,10 @@ class _HistoryState extends State<History> {
                 // final isExpanded = expandedIndex == index;
                 return GestureDetector(
                   onTap: () async {
-                    Get.to(() => PaidPayment(user: user!));
+                    Get.to(
+                      () =>
+                          PaidPayment(user: user!, subject: "Payment History"),
+                    );
                   },
                   child: Column(
                     children: [
@@ -1208,9 +1228,10 @@ class _HistoryState extends State<History> {
                                                 SizedBox(
                                                   height:
                                                       Constant.height * 0.04,
-                                                      width: Constant.width * 0.6,
+                                                  width: Constant.width * 0.6,
                                                   child: FittedBox(
-                                                    alignment: Alignment.centerLeft,
+                                                    alignment:
+                                                        Alignment.centerLeft,
                                                     child: Text(
                                                       paidHostel.name,
                                                       style: TextStyle(

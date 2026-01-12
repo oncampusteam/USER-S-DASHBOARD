@@ -941,7 +941,7 @@ Widget genderSelector({
     onTap: () {
       setModalState(() {
         selectedGender = gender;
-        // debugdebugPrint(selectedGender);
+        // debug//debugPrint(selectedGender);
       });
     },
     child: Container(
@@ -1270,7 +1270,7 @@ Widget setDate({
                       isLoading = false;
                     });
                     Get.to(
-                      () => Payment(user: user),
+                      () => Payment(user: user, subject: "Payment"),
                       transition: Transition.fadeIn,
                       duration: const Duration(milliseconds: 600),
                       curve: Curves.easeIn,

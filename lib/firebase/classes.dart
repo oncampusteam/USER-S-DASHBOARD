@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 Regions regionsFromJson(String str) => Regions.fromJson(json.decode(str));
 String regionsToJson(Regions data) => json.encode(data.toJson());
@@ -49,6 +48,8 @@ class Hostels {
     required this.region,
     required this.city,
     required this.university,
+    required this.latitude,
+    required this.longitude,
   });
 
   String name;
@@ -67,6 +68,8 @@ class Hostels {
   String? region;
   String? city;
   String? university;
+  String? latitude;
+  String? longitude;
 
   factory Hostels.fromJson(Map<String, dynamic> json) => Hostels(
     name: json["name"],
@@ -93,6 +96,8 @@ class Hostels {
     region: json["region"],
     city: json["city"],
     university: json["university"],
+    latitude: json["latitude"],
+    longitude: json["longitude"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -115,7 +120,22 @@ class Hostels {
     "region": region,
     "city": city,
     "university": university,
+    "latitude" : latitude,
+    "longitude" : longitude,
   };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Hostels &&
+        other.name == name &&
+        other.university == university &&
+        other.city == city;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, university, city);
 }
 
 // class SchoolHostels {

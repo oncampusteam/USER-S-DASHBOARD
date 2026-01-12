@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:on_campus/screens/search.dart';
 import 'package:on_campus/widgets/shimmer.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
+// import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:on_campus/screens/hostels_detail.dart';
 // import 'package:on_campus/widgets/homestel_hostel_category.dart';
 // import 'package:on_campus/widgets/hostel_categories.dart';
@@ -26,6 +27,11 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+List<bool> favoriteBools = [];
+List<bool> topFavoriteBools = [];
+List<bool> viewedFavoritebool = [];
+ValueNotifier popularBools = ValueNotifier<List<bool>>(favoriteBools);
+
 class _HomeState extends State<Home> {
   TextEditingController searchController = TextEditingController();
   bool favorite = false;
@@ -38,9 +44,6 @@ class _HomeState extends State<Home> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   User? user;
 
-  List<bool> favoriteBools = [];
-  List<bool> topFavoriteBools = [];
-  List<bool> viewedFavoritebool = [];
   bool isLoading = true;
   int num = 0;
 
@@ -52,10 +55,11 @@ class _HomeState extends State<Home> {
     List<Hostels> awaitTop = await FirestoreDb.instance.getPrivateHostels();
     awaitPopular.shuffle();
     awaitTop.shuffle();
-    setState(() {
+   if(mounted){
+     setState(() {
       hostels = awaitPopular;
       topHostels = awaitTop;
-      favoriteBools = List.generate(hostels.length, (index) {
+      popularBools.value = List.generate(hostels.length, (index) {
         return false;
       });
       topFavoriteBools = List.generate(topHostels.length, (index) {
@@ -70,6 +74,7 @@ class _HomeState extends State<Home> {
       // myLocations = awaitLocations;
       isLoading = false;
     });
+   }
   }
 
   // List<bool> favoritebools = [];
@@ -77,15 +82,29 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    // popularBools.addListener(() {
+    //   setState(() {
+    //     debugPrint("The value is changed");
+    //   });
+    // });
+    // debugPrint("InitState is running");
     setState(() {
       user = FirebaseAuth.instance.currentUser;
     });
+    userInformation["previously_viewed"].addListener(_update);
+    if (hostels.isEmpty || topHostels.isEmpty) {
+      debugPrint("I'm running");
+      getPopular();
+    }
+  }
 
-    getPopular();
+  void _update(){
+    debugPrint("Rebuild triggered");
+      setState(() {});
   }
 
   String getFirstName() {
-    debugPrint(widget.username);
+    // debugPrint(widget.username);
     String text = widget.username ?? "${user?.displayName}";
     if (text.trim().isEmpty) return '';
     return text.trim().split(' ').first;
@@ -93,6 +112,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("${userInformation["previously_viewed"].value} at home");
+    // debugPrint("${favoriteBools[0]}   ##############");
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -587,14 +608,14 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           : HostelCard(
-                              hostels: hostels,
-                              seeAllPopular: seeAllPopular,
-                              favoriteBools: favoriteBools,
-                              onFavoriteTap: () {
-                                debugPrint("on favorite tap is called");
-                                setState(() {});
-                              },
-                            ),
+                            hostels: hostels,
+                            seeAllPopular: seeAllPopular,
+                            favoriteBools: popularBools.value,
+                            onFavoriteTap: () {
+                              debugPrint("on favorite tap is called");
+                              setState(() {});
+                            },
+                          ),
                       SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
@@ -674,9 +695,6 @@ class _HomeState extends State<Home> {
                             )
                           : Builder(
                               builder: (context) {
-                                debugPrint(
-                                  "topHostels length : ${topHostels.length}",
-                                );
                                 return SizedBox(
                                   height:
                                       Constant.height *
@@ -700,72 +718,80 @@ class _HomeState extends State<Home> {
                               },
                             ),
                       SizedBox(height: 20.h),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 25.w),
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Previously",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22.sp.clamp(0, 22),
-                              fontFamily: "Poppins-Bold",
-                              letterSpacing: 0.15.w,
-                            ),
+                      if (userInformation["previously_viewed"].value.isNotEmpty)
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextSpan(
-                                text: " Viewed",
-                                style: TextStyle(
-                                  color: const Color.fromARGB(255, 0, 239, 209),
-                                  fontSize: 22.sp.clamp(0, 22),
-                                  fontFamily: "Poppins-Bold",
-                                  letterSpacing: 0.15.w,
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 25.w),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Previously",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22.sp.clamp(0, 22),
+                                      fontFamily: "Poppins-Bold",
+                                      letterSpacing: 0.15.w,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: " Viewed",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                            255,
+                                            0,
+                                            239,
+                                            209,
+                                          ),
+                                          fontSize: 22.sp.clamp(0, 22),
+                                          fontFamily: "Poppins-Bold",
+                                          letterSpacing: 0.15.w,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              SizedBox(
+                                // margin: EdgeInsets.only(bottom: 5.h),
+                                // color: Colors.red,
+                                height: Constant.height * 0.4,
+                                // width: 225.w,
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount:
+                                      userInformation["previously_viewed"]
+                                          .value
+                                          .length,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        if (index == 0) SizedBox(width: 20.w),
+                                        hostelCardVariant(
+                                          type: "previously",
+                                          hostel:
+                                              userInformation["previously_viewed"]
+                                                  .value
+                                                  .toList()[index],
+                                          favorite: favorite,
+                                          triggerRebuild: () {
+                                            setState(() {});
+                                          },
+                                        ),
+                                        if (index + 1 == hostels.length)
+                                          SizedBox(width: 20.w),
+                                      ],
+                                    );
+                                  },
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      isLoading
-                          ? SizedBox(
-                              height: 300,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5,
-                                itemBuilder: (_, __) => const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: HostelCardShimmer(),
-                                ),
-                              ),
-                            )
-                          : SizedBox(
-                              // margin: EdgeInsets.only(bottom: 5.h),
-                              // color: Colors.red,
-                              height: Constant.height * 0.4,
-                              // width: 225.w,
-                              width: MediaQuery.of(context).size.width,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: hostels.length,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    children: [
-                                      if (index == 0) SizedBox(width: 20.w),
-                                      hostelCardVariant(
-                                        hostel: hostels[index],
-                                        favorite: favorite,
-                                        triggerRebuild: () {
-                                          setState(() {});
-                                        },
-                                      ),
-                                      if (index + 1 == hostels.length)
-                                        SizedBox(width: 20.w),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
                       SizedBox(height: 20),
 
                       SizedBox(height: 10.h),
@@ -993,8 +1019,10 @@ class _HomeState extends State<Home> {
                                         width: 20.w,
                                       ),
                                     ),
-                                    SizedBox(
+                                    Container(
+                                      // color: Colors.red,
                                       height: Constant.height * 0.022,
+                                      width: Constant.width * 0.2,
                                       child: FittedBox(
                                         child: Text(
                                           " Whatsapp Us",
@@ -1032,7 +1060,9 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                     SizedBox(
+                                      // color: Colors.green,
                                       height: Constant.height * 0.02,
+                                      width: Constant.width * 0.25,
                                       child: FittedBox(
                                         child: Text(
                                           " Speak to an Expert",

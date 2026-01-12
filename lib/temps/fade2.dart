@@ -25,30 +25,30 @@ class _SwipeFadeWidgetState extends State<SwipeFadeWidget> {
       child: Scaffold(
         body: GestureDetector(
           // onHorizontalDragStart: (details) {
-          //   debugPrint(
+          //   //debugPrint(
           //       "This is the global position of the drag: ${details.globalPosition}");
-          //   debugPrint(
+          //   //debugPrint(
           //       "This is the local position of the drag: ${details.localPosition}");
           // },
           onHorizontalDragEnd: (details) {
-            // debugPrint("#####");
+            // //debugPrint("#####");
             if (swipeDirection == "left") {
-              debugPrint("Drag from right");
-              debugPrint("${details.velocity}");
+              //debugPrint("Drag from right");
+              //debugPrint("${details.velocity}");
               if (swipePosition > 0.5) {
                 setState(() {
-                  debugPrint("Swipe Position is greater than 0.5");
+                  //debugPrint("Swipe Position is greater than 0.5");
                   swipePosition = 1;
                   opacities[currentPosition] = 1 - swipePosition;
                   opacities[nextPosition] = swipePosition;
-                  debugPrint(
-                    "This is the vale of swipe Position at the end of the drag: $swipePosition",
-                  );
+                  //debugPrint(
+                  //   "This is the vale of swipe Position at the end of the drag: $swipePosition",
+                  // );
                   opacities[currentPosition] = 0;
                   if (currentPosition == 2) {
                     currentPosition = 2;
                   } else {
-                    debugPrint("Current Position is increasing");
+                    //debugPrint("Current Position is increasing");
                     currentPosition++;
                     opacities[currentPosition] = 1;
                     if (nextPosition == 2) {
@@ -62,14 +62,14 @@ class _SwipeFadeWidgetState extends State<SwipeFadeWidget> {
                 });
               } else if (swipePosition < 0.5) {
                 setState(() {
-                  debugPrint("Swipe Position is less than 0.5");
+                  //debugPrint("Swipe Position is less than 0.5");
                   if (currentPosition == 2) {
-                    debugPrint("Don't do anything");
+                    //debugPrint("Don't do anything");
                   } else {
                     swipePosition = 0;
                     opacities[currentPosition] = 1 - swipePosition;
                     opacities[nextPosition] = swipePosition;
-                    // debugPrint(
+                    // //debugPrint(
                     //     "This is the vale of swipe Position at the end of the drag: $swipePosition");
                   }
                 });
@@ -79,10 +79,10 @@ class _SwipeFadeWidgetState extends State<SwipeFadeWidget> {
           },
           onHorizontalDragUpdate: (details) {
             if (details.primaryDelta! < 0) {
-              debugPrint("Right to left swipe");
+              //debugPrint("Right to left swipe");
               setState(() {
                 if (currentPosition == 2) {
-                  debugPrint("CurrentPosition is 2 and there is no update");
+                  //debugPrint("CurrentPosition is 2 and there is no update");
                 } else {
                   swipeDirection = "left";
                   delta = (details.primaryDelta! / 300) * -1;
@@ -95,17 +95,17 @@ class _SwipeFadeWidgetState extends State<SwipeFadeWidget> {
                   opacities[currentPosition] = 1 - swipePosition;
                   opacities[nextPosition] = swipePosition;
 
-                  debugPrint("Swipe Position: $swipePosition");
-                  debugPrint("Primary Delta: ${details.primaryDelta!}");
-                  debugPrint("Delta: $delta");
+                  //debugPrint("Swipe Position: $swipePosition");
+                  //debugPrint("Primary Delta: ${details.primaryDelta!}");
+                  //debugPrint("Delta: $delta");
                 }
                 // Assuming 300 is the width of the area you're swiping across
               });
             }
 
             if (details.primaryDelta! > 0 && details.localPosition.dx > 0) {
-              debugPrint("Left to Right swipe");
-              debugPrint("This is the value of swipePosition: $swipePosition");
+              //debugPrint("Left to Right swipe");
+              //debugPrint("This is the value of swipePosition: $swipePosition");
               if (swipePosition > 0.5) {
                 setState(() {
                   swipePosition = 0;
@@ -124,17 +124,17 @@ class _SwipeFadeWidgetState extends State<SwipeFadeWidget> {
               // Clamp swipePosition to keep it between 0 and 1
               swipePosition_ = swipePosition_.clamp(0.0, 1.0);
 
-              debugPrint("Swipe Position: $swipePosition_");
-              debugPrint("Primary Delta: ${details.primaryDelta!}");
-              debugPrint("Delta: $delta_");
+              //debugPrint("Swipe Position: $swipePosition_");
+              //debugPrint("Primary Delta: ${details.primaryDelta!}");
+              //debugPrint("Delta: $delta_");
 
               // if (details.primaryDelta! > 0.5) {
-              //   debugPrint("Swipe is greater than 5");
+              //   //debugPrint("Swipe is greater than 5");
               //   if (currentPosition == 0) {
               //     swipePosition_ = 0;
               //   }
               // } else if (details.primaryDelta! < 0.5) {
-              //   debugPrint("Swipe is less than 5");
+              //   //debugPrint("Swipe is less than 5");
               //   if (currentPosition == 0) {
               //     swipePosition_ = 0;
               //   }

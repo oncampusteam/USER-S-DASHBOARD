@@ -32,7 +32,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
 
     controller.addListener(() {
       if (controller.indexIsChanging) {
-        debugPrint("animation start");
+        //debugPrint("animation start");
         pageController.animateToPage(
           controller.index,
           duration: const Duration(milliseconds: 300),
@@ -46,7 +46,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
   @override
   Widget build(BuildContext context) {
     // controller.index = selectedIndex;
-    debugPrint("Initial Value of controller.index : ${controller.index}");
+    //debugPrint("Initial Value of controller.index : ${controller.index}");
     return Material(
       child: Scaffold(
         body: SizedBox(
@@ -134,7 +134,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      debugPrint("${controller.index}");
+                      //debugPrint("${controller.index}");
 
                       if (controller.index <= 3) {
                         if (controller.index == 3) {
@@ -198,7 +198,7 @@ class _WelcomePageViewsState extends State<WelcomePageViews>
               //   child: GestureDetector(
               //     onTap: () {
               //       setState(() {
-              //         debugdebugPrint("${controller.index}");
+              //         debug//debugPrint("${controller.index}");
 
               //         if (controller.index <= 3) {
               //           if (controller.index == 3) {
@@ -326,7 +326,7 @@ class _WelcomeLoginPageControllerState
       controller: pageController,
       onPageChanged: (int page) {
         // if (currentPage == 3) {
-        debugPrint("currentPage = 3");
+        //debugPrint("currentPage = 3");
         setState(() {
           welcomeLoginPage = page;
           // controller.animateTo(page);

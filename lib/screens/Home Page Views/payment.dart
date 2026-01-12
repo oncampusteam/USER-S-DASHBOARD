@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/screens/payable.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
@@ -13,7 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Payment extends StatefulWidget {
   final User user;
-  const Payment({super.key, required this.user});
+  final String subject;
+  const Payment({super.key, required this.user, required this.subject});
 
   @override
   State<Payment> createState() => _PaymentState();
@@ -30,12 +32,12 @@ class _PaymentState extends State<Payment> {
   User? user = FirebaseAuth.instance.currentUser;
 
   String structureDate(String hyphenDate) {
-    debugPrint("This is the value of date before the format: $hyphenDate");
+    //debugPrint("This is the value of date before the format: $hyphenDate");
     String inputDate = hyphenDate; // format: dd-MM-yyyy
     DateTime date = DateFormat("MM-dd-yyyy").parse(inputDate);
 
     String formattedDate = DateFormat("MMMM dd, yyyy").format(date);
-    debugPrint(formattedDate); // Output: July 10, 2025
+    //debugPrint(formattedDate); // Output: July 10, 2025
     return (formattedDate);
   }
 
@@ -70,10 +72,10 @@ class _PaymentState extends State<Payment> {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         pending = await FirestoreDb.instance.getPendingHostels(user);
-        debugPrint("Pending: $pending");
+        //debugPrint("Pending: $pending");
       }
     } catch (e) {
-      debugPrint("Error fetching payments: $e");
+      //debugPrint("Error fetching payments: $e");
     }
   }
 
@@ -89,11 +91,11 @@ class _PaymentState extends State<Payment> {
           pendingHostels.add(hostelDetails);
         }
       } else {
-        debugPrint("No pending hostels");
+        //debugPrint("No pending hostels");
       }
-      debugPrint("Pending Hostel Details: $pendingHostels");
+      //debugPrint("Pending Hostel Details: $pendingHostels");
     } catch (e) {
-      debugPrint("Error fetching hostel details: $e");
+      //debugPrint("Error fetching hostel details: $e");
     }
   }
 
@@ -137,7 +139,13 @@ class _PaymentState extends State<Payment> {
                                 ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.pop(context);
+                                    // Navigator.pop(context);
+                                    Get.to(
+                                      () => BottomNav(
+                                        username: userInformation["username"],
+                                        subindex: 2,
+                                      ),
+                                    );
                                   },
                                   child: Icon(
                                     Icons.chevron_left,
@@ -147,13 +155,18 @@ class _PaymentState extends State<Payment> {
                                 ),
                               ),
                               SizedBox(width: 75.w),
-                              Text(
-                                "Pending Payment",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20.sp.clamp(0, 22),
-                                  color: const Color(0xFF323232),
+                              SizedBox(
+                                height: Constant.height * 0.035,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Pending ${widget.subject}",
+                                    style: TextStyle(
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.sp.clamp(0, 22),
+                                      color: const Color(0xFF323232),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -163,12 +176,7 @@ class _PaymentState extends State<Payment> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10.h),
                               decoration: BoxDecoration(
-                                color: const Color.fromRGBO(
-                                  255,
-                                  255,
-                                  255,
-                                  0.6,
-                                ),
+                                color: const Color.fromRGBO(255, 255, 255, 0.6),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               height: 40.h,
@@ -209,13 +217,12 @@ class _PaymentState extends State<Payment> {
                                                 bookedHostel: bookedHostel,
                                               ),
                                               SizedBox(
-                                                height:
-                                                    Constant.height * 0.025,
+                                                height: Constant.height * 0.025,
                                               ),
                                               // if (isExpanded)
                                               Container(
                                                 color: Colors.white,
-                      
+
                                                 child: Column(
                                                   children: [
                                                     Container(
@@ -223,12 +230,11 @@ class _PaymentState extends State<Payment> {
                                                           EdgeInsets.symmetric(
                                                             horizontal: 20.h,
                                                           ),
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                            left: 15.0.w,
-                                                            top: 40.h,
-                                                            right: 15.0.w,
-                                                          ),
+                                                      padding: EdgeInsets.only(
+                                                        left: 15.0.w,
+                                                        top: 40.h,
+                                                        right: 15.0.w,
+                                                      ),
                                                       child: Column(
                                                         children: [
                                                           Row(
@@ -509,12 +515,8 @@ class _PaymentState extends State<Payment> {
                                                           SizedBox(
                                                             height: 10.h,
                                                           ),
-                                                          Divider(
-                                                            height: .2.h,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5.h,
-                                                          ),
+                                                          Divider(height: .2.h),
+                                                          SizedBox(height: 5.h),
                                                           Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
@@ -524,18 +526,15 @@ class _PaymentState extends State<Payment> {
                                                                 children: [
                                                                   Image.asset(
                                                                     "assets/payment/Simplification.png",
-                                                                    width:
-                                                                        25.w,
-                                                                    height:
-                                                                        25,
+                                                                    width: 25.w,
+                                                                    height: 25,
                                                                     color: Colors
                                                                         .black,
                                                                     fit: BoxFit
                                                                         .cover,
                                                                   ),
                                                                   SizedBox(
-                                                                    width:
-                                                                        5.w,
+                                                                    width: 5.w,
                                                                   ),
                                                                   Text(
                                                                     "Debit Card",
@@ -584,17 +583,15 @@ class _PaymentState extends State<Payment> {
                                                       height: 20.h,
                                                     ),
                                                     Container(
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                            top: 5.h,
-                                                          ),
+                                                      padding: EdgeInsets.only(
+                                                        top: 5.h,
+                                                      ),
                                                       width: Constant.width,
                                                       child: Align(
                                                         child: SizedBox(
                                                           // color: Colors.red,
                                                           height:
-                                                              Constant
-                                                                  .height *
+                                                              Constant.height *
                                                               0.06,
                                                           width:
                                                               MediaQuery.sizeOf(
@@ -611,7 +608,8 @@ class _PaymentState extends State<Payment> {
                                                                       pendingHostel,
                                                                   user: user,
                                                                   amount:
-                                                                      (((pendingHostel.amt_per_year)! *
+                                                                      (((pendingHostel
+                                                                              .amt_per_year)! *
                                                                           0.05) +
                                                                       (pendingHostel
                                                                           .amt_per_year)!),
@@ -619,11 +617,10 @@ class _PaymentState extends State<Payment> {
                                                                 transition:
                                                                     Transition
                                                                         .fadeIn,
-                                                                duration:
-                                                                    Duration(
-                                                                      milliseconds:
-                                                                          300,
-                                                                    ),
+                                                                duration: Duration(
+                                                                  milliseconds:
+                                                                      300,
+                                                                ),
                                                                 curve: Curves
                                                                     .easeIn,
                                                               );
@@ -631,9 +628,8 @@ class _PaymentState extends State<Payment> {
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
                                                               shape: RoundedRectangleBorder(
-                                                                side:
-                                                                    BorderSide
-                                                                        .none,
+                                                                side: BorderSide
+                                                                    .none,
                                                                 borderRadius:
                                                                     BorderRadius.circular(
                                                                       15.r,
@@ -670,16 +666,14 @@ class _PaymentState extends State<Payment> {
                                                     ),
                                                     SizedBox(height: 10.h),
                                                     Container(
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                            bottom: 5.h,
-                                                          ),
+                                                      padding: EdgeInsets.only(
+                                                        bottom: 5.h,
+                                                      ),
                                                       width: Constant.width,
                                                       child: Align(
                                                         child: SizedBox(
                                                           height:
-                                                              Constant
-                                                                  .height *
+                                                              Constant.height *
                                                               0.06,
                                                           width:
                                                               MediaQuery.sizeOf(
@@ -836,7 +830,7 @@ class _PaymentState extends State<Payment> {
                                                                                               isLoadingButton = false;
                                                                                             },
                                                                                           );
-                      
+
                                                                                           showModalBottomSheet(
                                                                                             context: context,
                                                                                             isScrollControlled: true,
@@ -882,7 +876,7 @@ class _PaymentState extends State<Payment> {
                                                                                                                         ),
                                                                                                                       ),
                                                                                                                     ),
-                      
+
                                                                                                                     SizedBox(
                                                                                                                       height:
                                                                                                                           Constant.height *
@@ -1025,7 +1019,7 @@ class _PaymentState extends State<Payment> {
                                                                                               ),
                                                                                       ),
                                                                                     ),
-                      
+
                                                                                     SizedBox(
                                                                                       height: 60.h,
                                                                                       width: MediaQuery.sizeOf(
@@ -1074,9 +1068,8 @@ class _PaymentState extends State<Payment> {
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
                                                               shape: RoundedRectangleBorder(
-                                                                side:
-                                                                    BorderSide
-                                                                        .none,
+                                                                side: BorderSide
+                                                                    .none,
                                                                 borderRadius:
                                                                     BorderRadius.circular(
                                                                       15.r,
@@ -1115,7 +1108,7 @@ class _PaymentState extends State<Payment> {
                                     ),
                             ],
                           ),
-                      
+
                           SizedBox(height: 100.h),
                         ],
                       ),

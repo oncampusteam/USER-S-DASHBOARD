@@ -19,7 +19,7 @@ class ScreenDetails {
     double temp =
         (percent / 100) *
         (quantityToScale == "Width" ? ScreenWidth : ScreenHeight);
-    debugPrint("Percentage of the dimension using: $temp");
+    //debugPrint("Percentage of the dimension using: $temp");
     return temp;
   }
 }

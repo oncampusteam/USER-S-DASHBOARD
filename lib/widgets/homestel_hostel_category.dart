@@ -170,7 +170,7 @@
 //                         itemBuilder: (BuildContext context, int index) {
 //                           Hostels hostel = allSchoolHostels[index];
 //                           String? string = hostel.hostel_images?[0];
-//                           debugPrint(hostel.name);
+//                           //debugPrint(hostel.name);
 //                           return GestureDetector(
 //                             onTap: () async {
 //                               Get.to(

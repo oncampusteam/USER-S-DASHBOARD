@@ -35,6 +35,7 @@ class _HostelCategoryState extends State<HostelCategory> {
         .getPrivateHostels();
     awaitPrivateHostels.shuffle();
     if (awaitPrivateHostels.isNotEmpty) {
+    if(mounted){
       setState(() {
         allPrivateHostels = awaitPrivateHostels;
         favoriteBools = List.generate(allPrivateHostels.length, (index) {
@@ -42,6 +43,7 @@ class _HostelCategoryState extends State<HostelCategory> {
         });
         isLoading = false;
       });
+    }
     }
   }
 
@@ -248,7 +250,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                             itemBuilder: (BuildContext context, int index) {
                               Hostels hostel = allPrivateHostels[index];
                               // String? string = hostel.hostel_images?[0];
-                              // debugPrint(hostel.name);
+                              // //debugPrint(hostel.name);
                               return Column(
                                 children: [
                                   if (index == 0) SizedBox(height: 12.h),
@@ -256,6 +258,8 @@ class _HostelCategoryState extends State<HostelCategory> {
                                     hostel: hostel,
                                     favorite: favoriteBools[index],
                                     variant: true,
+                                    // index: index,
+                                    type: "search",
                                     triggerRebuild: () {
                                       setState(() {
                                         favoriteBools[index] =
@@ -287,8 +291,8 @@ class _HostelCategoryState extends State<HostelCategory> {
                             itemBuilder: (BuildContext context, int index) {
                               Hostels searchHostel = searchList[index];
                               // String? string = searchHostel.hostel_images?[0];
-                              // debugPrint(string);
-                              // debugPrint(searchHostel.name);
+                              // //debugPrint(string);
+                              // //debugPrint(searchHostel.name);
                               return Column(
                                 children: [
                                   if (index == 0) SizedBox(height: 12.h),
@@ -296,6 +300,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                                     hostel: searchHostel,
                                     favorite: true,
                                     variant: true,
+                                    type: "search",
                                     triggerRebuild: () {
                                       setState(() {});
                                     },

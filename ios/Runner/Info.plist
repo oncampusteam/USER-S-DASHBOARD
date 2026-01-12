@@ -45,5 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>On Campus wants to use your location on map and track it</key>
+	<string>NSLocationAlwaysAndWhenInUseUsageDescription</string>
+	<key>On Campus wants to use your location on map and track it</key>
+	<string>location</string>
+	<key>UIBackgroundModes</key>
 </dict>
 </plist>

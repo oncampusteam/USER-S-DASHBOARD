@@ -1,30 +1,44 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:on_campus/classes/classes.dart';
+import 'package:on_campus/firebase/consts.dart';
 import 'package:on_campus/screens/enquire.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:on_campus/widgets/hostel_details_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
+import 'package:on_campus/screens/Home Page Views/home.dart' as home;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+
+// import 'package:on_campus/classes/user_file.dart';
 // import 'package:on_campus/screens/get_icon.dart';
 
 class HostelDetails extends StatefulWidget {
   final Hostels hostel;
   final bool favorite;
+  final int index;
+  final String type;
   const HostelDetails({
     super.key,
     required this.hostel,
     required this.favorite,
+    required this.index,
+    required this.type,
   });
 
   @override
@@ -46,11 +60,133 @@ class _HostelDetailsState extends State<HostelDetails> {
   bool isChecked = false;
   User? user = FirebaseAuth.instance.currentUser;
 
+  LatLng? initialPose;
+  LatLng? currentPosition;
+
+  Future<void> _cameraToPosition(LatLng pos) async {
+    final GoogleMapController controller = await _mapController.future;
+    CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
+    await controller.animateCamera(
+      CameraUpdate.newCameraPosition(_newCameraPosition),
+    );
+  }
+
+
+  Location location = Location();
+
+  Future<void> getLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    LocationData locationData;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+
+    location.onLocationChanged.listen((LocationData currentLocation) async {
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
+        setState(() {
+          currentPosition = LatLng(
+            currentLocation.latitude!,
+            currentLocation.longitude!,
+          );
+
+          //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
+          // _cameraToPosition(currentPosition!);
+        });
+      }
+      final coords = await getPolylinePoints();
+      generatePolyLineFromPoints(coords);
+
+      setState(() {});
+    });
+  }
+
+
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
+
+  Map<PolylineId, Polyline> polylines = {};
+
+  void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.black,
+      points: polylineCoordinates,
+      width: 8,
+    );
+    setState(() {
+      polylines[id] = polyline;
+    });
+  }
+
+  Future<List<LatLng>> getPolylinePoints() async {
+    List<LatLng> polylineCoordinates = [];
+    PolylinePoints polylinePoints = PolylinePoints(apiKey: GOOGLE_MAPS_API_KEY);
+    RoutesApiRequest request = RoutesApiRequest(
+      origin: PointLatLng(
+        currentPosition!.latitude,
+        currentPosition!.longitude,
+      ),
+      destination: PointLatLng(initialPose!.latitude, initialPose!.longitude),
+      travelMode: TravelMode.driving,
+      routingPreference: RoutingPreference.trafficAware,
+    );
+
+    // Get route using Routes API
+    RoutesApiResponse response = await polylinePoints
+        .getRouteBetweenCoordinatesV2(request: request);
+
+    if (response.routes.isNotEmpty) {
+      debugPrint('Duration: ${response.routes.first.durationMinutes} minutes');
+      print('Distance: ${response.routes.first.distanceKm} km');
+
+      // Get polyline points
+      List<PointLatLng> points = response.routes.first.polylinePoints ?? [];
+      points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      Get.snackbar("Error", "${response.errorMessage}");
+      debugPrint(response.errorMessage);
+    }
+    return polylineCoordinates;
+  }
+
+
+  
+
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController dateControllerMovein = TextEditingController(text: DateFormat('MM-dd-yyyy').format(DateTime.now()));
-  final TextEditingController dateControllerMoveout = TextEditingController(text: DateFormat('MM-dd-yyyy').format(DateTime(DateTime.now().year + 1,
-             DateTime.now().month,
-             DateTime.now().day)));
+  final TextEditingController dateControllerMovein = TextEditingController(
+    text: DateFormat('MM-dd-yyyy').format(DateTime.now()),
+  );
+  final TextEditingController dateControllerMoveout = TextEditingController(
+    text: DateFormat('MM-dd-yyyy').format(
+      DateTime(
+        DateTime.now().year + 1,
+        DateTime.now().month,
+        DateTime.now().day,
+      ),
+    ),
+  );
+
+  
   final Map<String, GlobalKey> _sectionKeys = {};
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
@@ -109,59 +245,14 @@ class _HostelDetailsState extends State<HostelDetails> {
     }
   }
 
-  // Future<void> _selectDate(
-  //   BuildContext context,
-  //   TextEditingController moveInController,
-  //   TextEditingController? moveOutController,
-  // )
-  //  async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2100),
-  //   );
-
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       // Set move-in date
-  //       moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
-
-  //       // If move-out controller was provided, add 2 years automatically
-  //       if (moveOutController != null) {
-  //         final moveOutDate = DateTime(
-  //           pickedDate.year + duration,
-  //           pickedDate.month,
-  //           pickedDate.day,
-  //         );
-
-  //         moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
-  //       }
-  //     });
-  //   }
-  // }
-
-  dynamic showDate() {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setModalState) {
-            return setDate(setModalState);
-          },
-        );
-      },
-    );
-  }
-
   late bool favorite;
   @override
   void initState() {
     super.initState();
-    debugPrint("This is the value from widget.fvorite : ${widget.favorite}");
+
+    //debugPrint("This is the value from widget.fvorite : ${widget.favorite}");
     favorite = widget.favorite;
-    debugPrint("this is the value of $favorite");
+    //debugPrint("this is the value of $favorite");
     getRoomTypes().then((_) {
       for (var room in roomTypes) {
         _sectionKeys[room.type ?? "null"] = GlobalKey();
@@ -171,6 +262,24 @@ class _HostelDetailsState extends State<HostelDetails> {
       }
     });
     // occupantFields(1);
+
+    final lat = double.tryParse(widget.hostel.latitude ?? '');
+    final lng = double.tryParse(widget.hostel.longitude ?? '');
+
+    if (lat != null && lng != null) {
+      initialPose = LatLng(lat, lng);
+    } else {
+      initialPose = const LatLng(6.73968, -1.56516);
+      debugPrint('Invalid hostel coordinates');
+    }
+    getLocation().then(
+      (_) => {
+        getPolylinePoints().then(
+          (coordinates) => {generatePolyLineFromPoints(coordinates)},
+        ),
+      },
+    );
+    
   }
 
   @override
@@ -208,6 +317,52 @@ class _HostelDetailsState extends State<HostelDetails> {
   ];
 
   int duration = 1;
+
+  // Future<void> _selectDate(
+  //   BuildContext context,
+  //   TextEditingController moveInController,
+  //   TextEditingController? moveOutController,
+  // ) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2100),
+  //   );
+
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       // Set move-in date
+  //       moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
+
+  //       // If move-out controller was provided, add 2 years automatically
+  //       if (moveOutController != null) {
+  //         final moveOutDate = DateTime(
+  //           pickedDate.year + widget.duration,
+  //           pickedDate.month,
+  //           pickedDate.day,
+  //         );
+
+  //         // moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
+  //       }
+  //     });
+  //   }
+  // }
+
+
+   dynamic showDate() {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return setDate(setModalState);
+          },
+        );
+      },
+    );
+  }
 
   Widget selectWidget(StateSetter setModalState) {
     return Container(
@@ -413,6 +568,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                     isLoading = false;
                   });
                   showDate();
+                  // setDate(setModalState);
                 },
                 child: isLoading
                     ? Align(
@@ -652,7 +808,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                       final num = int.parse(value ?? "1");
                       if (num > roomCapacity()) {
                         setState(() {
-                          // debugPrint("suppose to jump");
+                          // //debugPrint("suppose to jump");
                           controller.jumpTo(0);
                         });
                         return 'Enter a number between 1 and ${roomCapacity()}';
@@ -737,19 +893,21 @@ class _HostelDetailsState extends State<HostelDetails> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   FocusScope.of(key.currentContext!).unfocus();
-                                  if (i == 0 || i== 1) {
+                                  if (i == 0 || i == 1) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height *0.15);
+                                      controller.jumpTo(Constant.height * 0.15);
                                     });
                                   }
                                   if (i == 2 || i == 3) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height*0.9);
+                                      controller.jumpTo(Constant.height * 0.9);
                                     });
                                   }
-                                  if (i == 4  || i == 5) {
+                                  if (i == 4 || i == 5) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                      controller.jumpTo(
+                                        Constant.height * 0.9 * (2),
+                                      );
                                     });
                                   }
                                   // if (i == 6 || i == 7) {
@@ -762,7 +920,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                   //     controller.jumpTo(Constant.height * 0.85 * (4));
                                   //   });
                                   // }
-                                  
+
                                   return i == 0
                                       ? "Please enter the name of the person booking"
                                       : "Please the name of the person booking for";
@@ -816,46 +974,55 @@ class _HostelDetailsState extends State<HostelDetails> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   FocusScope.of(key.currentContext!).unfocus();
-                                  if (i == 0 || i== 1) {
+                                  if (i == 0 || i == 1) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height *0.15);
+                                      controller.jumpTo(Constant.height * 0.15);
                                     });
                                   }
                                   if (i == 2 || i == 3) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height*0.9);
+                                      controller.jumpTo(Constant.height * 0.9);
                                     });
                                   }
-                                  if (i == 4  || i == 5) {
+                                  if (i == 4 || i == 5) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                      controller.jumpTo(
+                                        Constant.height * 0.9 * (2),
+                                      );
                                     });
                                   }
                                   return i == 0
                                       ? 'Please enter the person booking phone number'
                                       : "Please enter the person booking for phone number";
                                 }
-                                if(value.isNotEmpty){
-                                  if(value.length <10){
-                                    FocusScope.of(key.currentContext!).unfocus();
-                                  if (i == 0 || i== 1) {
-                                    setState(() {
-                                      controller.jumpTo(Constant.height *0.15);
-                                    });
+                                if (value.isNotEmpty) {
+                                  if (value.length < 10) {
+                                    FocusScope.of(
+                                      key.currentContext!,
+                                    ).unfocus();
+                                    if (i == 0 || i == 1) {
+                                      setState(() {
+                                        controller.jumpTo(
+                                          Constant.height * 0.15,
+                                        );
+                                      });
+                                    }
+                                    if (i == 2 || i == 3) {
+                                      setState(() {
+                                        controller.jumpTo(
+                                          Constant.height * 0.9,
+                                        );
+                                      });
+                                    }
+                                    if (i == 4 || i == 5) {
+                                      setState(() {
+                                        controller.jumpTo(
+                                          Constant.height * 0.9 * (2),
+                                        );
+                                      });
+                                    }
+                                    return "The Phone number is not up to 10";
                                   }
-                                  if (i == 2 || i == 3) {
-                                    setState(() {
-                                      controller.jumpTo(Constant.height*0.9);
-                                    });
-                                  }
-                                  if (i == 4  || i == 5) {
-                                    setState(() {
-                                      controller.jumpTo(Constant.height * 0.9 * (2));
-                                    });
-                                  }
-                                  return "The Phone number is not up to 10";
-                                  }
-                                  
                                 }
                                 return null;
                               },
@@ -908,23 +1075,25 @@ class _HostelDetailsState extends State<HostelDetails> {
 
                                 // 3️ Check if it matches
                                 if (value != "") {
-                                  // debugPrint(
+                                  // //debugPrint(
                                   //   "This is the value of value: $value",
                                   // );
-                                   FocusScope.of(key.currentContext!).unfocus();
-                                  if (i == 0 || i== 1) {
+                                  FocusScope.of(key.currentContext!).unfocus();
+                                  if (i == 0 || i == 1) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height *0.15);
+                                      controller.jumpTo(Constant.height * 0.15);
                                     });
                                   }
                                   if (i == 2 || i == 3) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height*0.9);
+                                      controller.jumpTo(Constant.height * 0.9);
                                     });
                                   }
-                                  if (i == 4  || i == 5) {
+                                  if (i == 4 || i == 5) {
                                     setState(() {
-                                      controller.jumpTo(Constant.height * 0.9 * (2));
+                                      controller.jumpTo(
+                                        Constant.height * 0.9 * (2),
+                                      );
                                     });
                                   }
                                   // return "The Phone number is not up to 10";
@@ -1382,7 +1551,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                         isLoading = false;
                       });
                       Get.to(
-                        () => Payment(user: user),
+                        () => Payment(user: user, subject: "Payment"),
                         transition: Transition.fadeIn,
                         duration: const Duration(milliseconds: 600),
                         curve: Curves.easeIn,
@@ -1527,8 +1696,15 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               GestureDetector(
-                                                onTap: () {
+                                                onTap: () async {
                                                   Navigator.pop(context);
+                                                  // await Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(builder: (_) => BottomNav(username: userInformation["username"])),
+                                                  //   );
+                                                  // setState(() {
+                                                  //   debugPrint("Setting state");
+                                                  // });
                                                 },
                                                 child: Container(
                                                   margin: EdgeInsets.only(
@@ -1600,8 +1776,25 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   // SizedBox(width: 5.h),
                                                   GestureDetector(
                                                     onTap: () {
+                                                      debugPrint(
+                                                        "This is the value of index: ${widget.index}",
+                                                      );
+                                                      debugPrint(
+                                                        "This is the value at index: ${home.popularBools.value[widget.index]}",
+                                                      );
                                                       setState(() {
                                                         favorite = !favorite;
+                                                        if (widget.type ==
+                                                            "popular") {
+                                                          home
+                                                                  .popularBools
+                                                                  .value[widget
+                                                                  .index] =
+                                                              favorite;
+                                                        }
+                                                        debugPrint(
+                                                          "This is the value at index after tap: ${home.popularBools.value[widget.index]}",
+                                                        );
                                                       });
                                                     },
                                                     child: Container(
@@ -2198,35 +2391,28 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(5).r,
-                                            ),
-                                            child: OutlinedButton(
-                                              onPressed: () {},
-                                              style: OutlinedButton.styleFrom(
-                                                foregroundColor: Colors.black87,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        16.r,
-                                                      ),
-                                                ),
-                                                side: BorderSide(
-                                                  width: 1.w,
-                                                  color: Colors.black,
-                                                ),
+                                                  BorderRadius.circular(16).r,
+                                              border: Border.all(
+                                                color: Colors.black,
                                               ),
+                                            ),
+                                            child: Align(
                                               child: SizedBox(
                                                 height: Constant.height * 0.022,
                                                 child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
                                                       "assets/hostels_detail/photo.png",
                                                       fit: BoxFit.contain,
                                                     ),
-                                                    SizedBox(
+                                                    Container(
+                                                      // color: Colors.amber,
                                                       height:
                                                           Constant.height *
                                                           0.021,
+                                                      // width: Constant.width * 0.1,
                                                       child: FittedBox(
                                                         child: Text(
                                                           " Photos",
@@ -2252,27 +2438,18 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(5).r,
-                                            ),
-                                            child: OutlinedButton(
-                                              onPressed: () {},
-                                              style: OutlinedButton.styleFrom(
-                                                foregroundColor: Colors.black87,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        16.r,
-                                                      ),
-                                                ),
-                                                side: BorderSide(
-                                                  width: 1.w,
-                                                  color: Colors.black,
-                                                ),
+                                                  BorderRadius.circular(16.r),
+                                              border: Border.all(
+                                                color: Colors.black,
                                               ),
+                                            ),
+                                            child: Align(
                                               child: SizedBox(
                                                 height: Constant.height * 0.02,
                                                 width: Constant.width * 0.28,
                                                 child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
                                                       "assets/hostels_detail/video.png",
@@ -2307,52 +2484,42 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(5).r,
-                                            ),
-                                            child: OutlinedButton(
-                                              onPressed: () {},
-                                              style: OutlinedButton.styleFrom(
-                                                foregroundColor: Colors.black87,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        16.r,
-                                                      ),
-                                                ),
-                                                side: BorderSide(
-                                                  width: 1.w,
-                                                  color: Colors.black,
-                                                ),
+                                                  BorderRadius.circular(16.r),
+                                              border: Border.all(
+                                                color: Colors.black,
                                               ),
-                                              child: SizedBox(
-                                                height: Constant.height * 0.045,
-                                                width: Constant.width * 0.27,
-                                                child: Row(
-                                                  children: [
-                                                    Image.asset(
-                                                      "assets/hostels_detail/360 Degree Rotate.png",
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                    SizedBox(
-                                                      height:
-                                                          Constant.height *
-                                                          0.021,
-                                                      child: FittedBox(
-                                                        child: Text(
-                                                          " View",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Work Sans",
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 13.sp
-                                                                .clamp(0, 13),
+                                            ),
+                                            child: SizedBox(
+                                              height: Constant.height * 0.045,
+                                              width: Constant.width * 0.27,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/hostels_detail/360 Degree Rotate.png",
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        Constant.height * 0.021,
+                                                    child: FittedBox(
+                                                      child: Text(
+                                                        " View",
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "Work Sans",
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 13.sp.clamp(
+                                                            0,
+                                                            13,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
@@ -4036,21 +4203,62 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           ),
                                           SizedBox(height: 20.h),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0.w,
-                                            ),
-                                            child: SizedBox(
-                                              width: MediaQuery.sizeOf(
-                                                context,
-                                              ).width.w,
-                                              height: 400.h,
-                                              // color: Colors.red,
-                                              child: Image.asset(
-                                                "assets/hostels_detail/screenshot.png",
-                                                fit: BoxFit.cover,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0.w,
+                                      ),
+                                      child: SizedBox(
+                                        width: MediaQuery.sizeOf(
+                                          context,
+                                        ).width.w,
+                                        height: 400.h,
+                                        // color: Colors.red,
+                                        child: currentPosition == null
+                                            ? CircularProgressIndicator()
+                                            : GoogleMap(
+                                                onMapCreated:
+                                                    ((
+                                                      GoogleMapController
+                                                      controller,
+                                                    ) => _mapController
+                                                        .complete(controller)),
+                                                initialCameraPosition:
+                                                    CameraPosition(
+                                                      target: currentPosition!,
+                                                      zoom: 13,
+                                                    ),
+                                                markers: {
+                                                  Marker(
+                                                    markerId: MarkerId(
+                                                      "CurrentLocation",
+                                                    ),
+                                                    icon:
+                                                        BitmapDescriptor.defaultMarkerWithHue(
+                                                          BitmapDescriptor
+                                                              .hueBlue,
+                                                        ),
+                                                    position: currentPosition!,
+                                                    infoWindow: InfoWindow(
+                                                      title: "My Location",
+                                                    ),
+                                                  ),
+                                                  Marker(
+                                                    markerId: MarkerId(
+                                                      widget.hostel.name,
+                                                    ),
+                                                    icon: BitmapDescriptor
+                                                        .defaultMarker,
+                                                    position: initialPose!,
+                                                    infoWindow: InfoWindow(
+                                                      title: widget.hostel.name,
+                                                    ),
+                                                  ),
+                                                },
+                                                polylines: Set<Polyline>.of(
+                                                  polylines.values,
+                                                ),
                                               ),
-                                            ),
-                                          ),
+                                      ),
+                                    ),
                                         ],
                                       ),
                                     ),
@@ -4630,7 +4838,7 @@ Widget genderSelector(StateSetter setModalState, String gender) {
     onTap: () {
       setModalState(() {
         selectedGender = gender;
-        debugPrint(selectedGender);
+        //debugPrint(selectedGender);
       });
     },
     child: Container(

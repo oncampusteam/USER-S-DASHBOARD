@@ -9,6 +9,8 @@ import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/screens/personal_info.dart';
 import 'package:on_campus/screens/user_information.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/third-party-auth/google_sign_in.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/history.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/bookings.dart';
 import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
@@ -34,7 +36,7 @@ class _ProfileState extends State<Profile> {
     setState(() {
       userInfo = userInformation;
     });
-    debugPrint("hey: ${userInfo?.userInfoDone ?? "Not Done"} ");
+    //debugPrint("hey: ${userInfo?.userInfoDone ?? "Not Done"} ");
 
     setState(() {
       isLoading = false;
@@ -226,7 +228,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 10.h),
                   ListTile(
                     onTap: () {
-                      // debugPrint("sldjdl${userInfo!.userInfoDone!}");
+                      // //debugPrint("sldjdl${userInfo!.userInfoDone!}");
                       user == null
                           ? showDialog(
                               context: context,
@@ -951,33 +953,150 @@ class _ProfileState extends State<Profile> {
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Profile'),
-                                  content: const Text(
-                                    'Are you sure you want to logout',
+                              barrierDismissible: false,
+                              barrierColor: const Color.fromRGBO(0, 0, 0, 0.2),
+                              builder: (context) {
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 5,
+                                    sigmaY: 5,
                                   ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(
-                                          context,
-                                        ).pop(); // closes the dialog
-                                      },
-                                      child: const Text('NO'),
+                                  child: AlertDialog(
+                                    backgroundColor: Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.3,
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        FirebaseAuth.instance.signOut();
-                                        Navigator.of(context).pop();
-                                        setState(() {}); // closes the dialog
-                                      },
-                                      child: const Text('YES'),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24.r),
                                     ),
-                                  ],
+                                    title: SizedBox(
+                                      height: Constant.height * 0.03,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Profile",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Roboto",
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: Constant.height * 0.05,
+                                      child: FittedBox(
+                                        child: const Text(
+                                          "Are you sure you want to\nlogout",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Roboto",
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: SizedBox(
+                                          height: Constant.height * 0.03,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "No",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Roboto",
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          final FlutterSecureStorage
+                                          secureStorage =
+                                              FlutterSecureStorage();
+                                          FirebaseAuth.instance.signOut();
+                                          googleSignIn.signOut();
+                                          secureStorage.write(
+                                            key: "isLogIn",
+                                            value: "false",
+                                          );
+                                          // Navigator.of(context).pop();
+                                          Get.to(
+                                            () => LoginPage(index: 2),
+                                            transition: Transition.fadeIn,
+                                            curve: Curves.easeIn,
+                                            duration: const Duration(
+                                              seconds: 1,
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          height: Constant.height * 0.04,
+                                          width: Constant.width * 0.2,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF00EFD1),
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
+                                          ),
+                                          child: Align(
+                                            child: SizedBox(
+                                              height: Constant.height * 0.025,
+                                              child: FittedBox(
+                                                child: const Text(
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Roboto",
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               },
                             );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return AlertDialog(
+                            //       title: const Text('Profile'),
+                            //       content: const Text(
+                            //         'Are you sure you want to logout',
+                            //       ),
+                            //       actions: [
+                            //         TextButton(
+                            //           onPressed: () {
+                            //             Navigator.of(
+                            //               context,
+                            //             ).pop(); // closes the dialog
+                            //           },
+                            //           child: const Text('NO'),
+                            //         ),
+                            //         TextButton(
+                            //           onPressed: () {
+                            //             FirebaseAuth.instance.signOut();
+                            //             Navigator.of(context).pop();
+                            //             setState(() {}); // closes the dialog
+                            //           },
+                            //           child: const Text('YES'),
+                            //         ),
+                            //       ],
+                            //     );
+                            //   },
+                            // );
                           },
                           leading: IconButton(
                             icon: SvgPicture.asset(

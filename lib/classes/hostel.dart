@@ -6,12 +6,17 @@ class Hostel {
   final String price;
   final String rate;
   final String category;
-  Hostel(
-      {required this.imageUrl,
-      required this.hotelName,
-      required this.location,
-      required this.roomCapacity,
-      required this.price,
-      required this.rate,
-      required this.category});
+  final String latitude;
+  final String longitude;
+  Hostel({
+    required this.imageUrl,
+    required this.hotelName,
+    required this.location,
+    required this.roomCapacity,
+    required this.price,
+    required this.rate,
+    required this.category,
+    required this.latitude,
+    required this.longitude,
+  });
 }

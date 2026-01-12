@@ -1,11 +1,12 @@
-import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-// import 'package:on_campus/Screens/GetStartedScreen/getStartedScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
 import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/phone.dart';
-import 'package:on_campus/firebase/firestore_db.dart';
+// import 'package:on_campus/Screens/GetStartedScreen/getStartedScreen.dart';
 
 class LoginPage extends StatefulWidget {
   final int index;
@@ -16,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -37,9 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 392.h,
                 width: 375.w,
-                child: Image.asset(
-                  "assets/loginPage/Group 7.png",
-                ),
+                child: Image.asset("assets/loginPage/Group 7.png"),
               ),
               SizedBox(
                 // color: Colors.blue,
@@ -115,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                             // color: Colors.red,
                             child: FittedBox(
                               child: Text(
-                               "Get the opportunity to stay at incredible",
+                                "Get the opportunity to stay at incredible",
                                 style: TextStyle(
                                   fontFamily: "Poppins-Light",
                                   fontSize: 14.sp,
@@ -144,42 +142,46 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 5.h,),
+                          SizedBox(height: 5.h),
                           SizedBox(
-                height: MediaQuery.of(context).size.height * 0.025,
-                child: DotsIndicator(
-                  position: 0,
-                  dotsCount: 3,
-                  decorator: DotsDecorator(
-                    size: Size(9.h, 7.w),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    color: const Color.fromARGB(100, 158, 158, 158),
-                    activeColor: const Color.fromARGB(255, 0, 239, 209),
-                    activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    activeSize: Size(51.w, 7.h),
-                  ),
-                ),
-                ),
+                            height: MediaQuery.of(context).size.height * 0.025,
+                            child: DotsIndicator(
+                              position: 0,
+                              dotsCount: 3,
+                              decorator: DotsDecorator(
+                                size: Size(9.h, 7.w),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                color: const Color.fromARGB(100, 158, 158, 158),
+                                activeColor: const Color.fromARGB(
+                                  255,
+                                  0,
+                                  239,
+                                  209,
+                                ),
+                                activeShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                activeSize: Size(51.w, 7.h),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    
                   ],
                 ),
               ),
-              
+
               GestureDetector(
-                onTap: (){
-                  Get.to(()=> Phone());
+                onTap: () {
+                  Get.to(() => Phone());
                 },
                 child: Container(
                   height: 48.h,
                   width: 346.w,
-                  
+
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 0.81),
                     border: Border.all(color: const Color(0XFFE5E5E5)),
@@ -191,9 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 32.h,
                         width: 32.w,
                         padding: EdgeInsets.only(left: 5.w),
-                        child: Image.asset(
-                          "assets/loginPage/Phone.png",
-                        ),
+                        child: Image.asset("assets/loginPage/Phone.png"),
                       ),
                       Expanded(
                         child: Align(
@@ -215,14 +215,14 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 10.h),
               InkWell(
                 onTap: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await FirestoreDb.instance.signInWithGoogle();
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await FirestoreDb.instance.signInWithGoogle();
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
                 child: Container(
                   height: 48.h,
                   width: 346.w,
@@ -237,9 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 32.h,
                         width: 32.w,
                         padding: EdgeInsets.only(left: 5.w),
-                        child: Image.asset(
-                          "assets/loginPage/google.png",
-                        ),
+                        child: Image.asset("assets/loginPage/google.png"),
                       ),
                       Expanded(
                         child: Align(
@@ -247,7 +245,9 @@ class _LoginPageState extends State<LoginPage> {
                             height: 20.h,
                             child: FittedBox(
                               child: Text(
-                                !isLoading ? "Sign In with Google": "Please wait",
+                                !isLoading
+                                    ? "Sign In with Google"
+                                    : "Please wait",
                                 style: TextStyle(fontFamily: "Ag button"),
                               ),
                             ),
@@ -273,9 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 32.h,
                       width: 32.w,
                       padding: EdgeInsets.only(left: 5.w),
-                      child: Image.asset(
-                        "assets/loginPage/apple.png",
-                      ),
+                      child: Image.asset("assets/loginPage/apple.png"),
                     ),
                     Expanded(
                       child: Align(
@@ -296,6 +294,9 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 15.h),
               GestureDetector(
                 onTap: () {
+                  final FlutterSecureStorage secureStorage =
+                      FlutterSecureStorage();
+                  secureStorage.write(key: "isfirstOpen", value: "false");
                   Get.to(
                     () => const WelcomeScreen4(),
                     transition: Transition.fadeIn,

@@ -21,14 +21,14 @@ class GoogleAuth {
 
   static Future<dynamic> signUpWithGoogle() async {
     // _googleSignIn.signOut();
-    debugPrint(
-      "Starting the execution of the signUpWithGoogle.................................",
-    );
+    //debugPrint(
+    //   "Starting the execution of the signUpWithGoogle.................................",
+    // );
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      debugPrint(
-        "GoogleUser: $googleUser############################################",
-      );
+      //debugPrint(
+      //   "GoogleUser: $googleUser############################################",
+      // );
       if (googleUser != null) {
         username = googleUser.displayName?.toUpperCase() ?? "";
         email = googleUser.email;
@@ -41,13 +41,13 @@ class GoogleAuth {
           idToken: googleAuth.idToken,
         );
 
-        debugPrint("Google Auth Provider credential done...........");
+        //debugPrint("Google Auth Provider credential done...........");
 
         final userCredential = await FirebaseAuth.instance.signInWithCredential(
           credential,
         );
 
-        debugPrint("Should Push..................................");
+        //debugPrint("Should Push..................................");
 
         Get.to(
           () => const WelcomeScreen4(),
@@ -57,24 +57,24 @@ class GoogleAuth {
         );
         return userCredential;
       }
-      debugPrint("GoogleUsr is null..............");
+      //debugPrint("GoogleUsr is null..............");
       _googleSignIn.signOut();
       return UserCredential as UserCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == "network-request-failed") {
-        debugPrint(
-          "There is network issue. Please check your internet connection.........................................",
-        );
+        //debugPrint(
+        //   "There is network issue. Please check your internet connection.........................................",
+        // );
         return "network-request-failed";
       } else {
-        debugPrint("this is the errorCode : $e");
+        //debugPrint("this is the errorCode : $e");
         return '';
       }
     } on PlatformException catch (e) {
       if (e.code == "network_error") {
-        debugPrint(
-          "There is no internet connection................................................",
-        );
+        //debugPrint(
+        //   "There is no internet connection................................................",
+        // );
         Get.rawSnackbar(
           messageText: const Text(
             "PLEASE CONNECT TO THE INTERNET",
@@ -89,9 +89,9 @@ class GoogleAuth {
         return "network-request-failed";
       }
     } catch (e) {
-      debugPrint(
-        "This is the eror : $e .............................................",
-      );
+      //debugPrint(
+      //   "This is the eror : $e .............................................",
+      // );
     }
   }
 }
@@ -105,12 +105,12 @@ class GoogleAuth {
 
 // class AuthController extends GetxController {
 //   static Future<UserCredential?> signUpWithGoogle() async {
-//     debugPrint("Starting the execution of signUpWithGoogle...");
+//     //debugPrint("Starting the execution of signUpWithGoogle...");
 
 //     try {
 //       // Attempt to sign in with Google
 //       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-//       debugPrint("GoogleUser: $googleUser");
+//       //debugPrint("GoogleUser: $googleUser");
 
 //       if (googleUser != null) {
 //         // Retrieve user's display name and email
@@ -118,12 +118,12 @@ class GoogleAuth {
 //             googleUser.displayName?.toUpperCase() ?? "Unknown";
 //         final String email = googleUser.email;
 
-//         debugPrint("User Name: $username, Email: $email");
+//         //debugPrint("User Name: $username, Email: $email");
 
 //         // Obtain authentication details from the request
 //         final GoogleSignInAuthentication googleAuth =
 //             await googleUser.authentication;
-//         debugPrint("Google Authentication retrieved.");
+//         //debugPrint("Google Authentication retrieved.");
 
 //         // Create a new credential
 //         final AuthCredential credential = GoogleAuthProvider.credential(
@@ -131,12 +131,12 @@ class GoogleAuth {
 //           idToken: googleAuth.idToken,
 //         );
 
-//         debugPrint("Firebase credential created.");
+//         //debugPrint("Firebase credential created.");
 
 //         // Sign in to Firebase with the credential
 //         final UserCredential userCredential =
 //             await FirebaseAuth.instance.signInWithCredential(credential);
-//         debugPrint("Firebase sign-in successful: ${userCredential.user}");
+//         //debugPrint("Firebase sign-in successful: ${userCredential.user}");
 
 //         // Navigate to the next screen
 //         Get.to(() => const WelcomeScreen4(),
@@ -146,20 +146,20 @@ class GoogleAuth {
 
 //         return userCredential;
 //       } else {
-//         debugPrint("Google sign-in returned null (user canceled or failed).");
+//         //debugPrint("Google sign-in returned null (user canceled or failed).");
 //         return null;
 //       }
 //     } on FirebaseAuthException catch (e) {
 //       if (e.code == "network-request-failed") {
-//         debugPrint("Network error: Check your internet connection.");
+//         //debugPrint("Network error: Check your internet connection.");
 //         return null;
 //       } else {
-//         debugPrint("FirebaseAuthException: ${e.message}");
+//         //debugPrint("FirebaseAuthException: ${e.message}");
 //         return null;
 //       }
 //     } on PlatformException catch (e) {
 //       if (e.code == "network_error") {
-//         debugPrint("PlatformException: No internet connection.");
+//         //debugPrint("PlatformException: No internet connection.");
 //         Get.rawSnackbar(
 //           messageText: const Text("PLEASE CONNECT TO THE INTERNET",
 //               style: TextStyle(color: Colors.white, fontSize: 14)),
@@ -172,8 +172,8 @@ class GoogleAuth {
 //         return null;
 //       }
 //     } catch (e, stackTrace) {
-//       debugPrint("Unexpected error: $e");
-//       debugPrint("Stack trace: $stackTrace");
+//       //debugPrint("Unexpected error: $e");
+//       //debugPrint("Stack trace: $stackTrace");
 //       return null;
 //     }
 //   }

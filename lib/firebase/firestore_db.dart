@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/firebase/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_4.dart';
 import 'package:on_campus/screens/Welcome%20Screens/welcome_screen_5.dart';
@@ -32,7 +33,7 @@ class FirestoreDb {
 
       return regionsList;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
@@ -51,7 +52,7 @@ class FirestoreDb {
       List<Hostels> allPrivateHostels = querySnapshot.docs
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
-      print(allPrivateHostels);
+      // print(allPrivateHostels);
       for (var e in querySnapshot.docs) {
         String fullPath = e.reference.path;
 
@@ -64,7 +65,7 @@ class FirestoreDb {
       }
       return allPrivateHostels;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -118,14 +119,14 @@ class FirestoreDb {
       popularHostels = querySnapshot.docs
           .map((e) => Hostels.fromJson(e.data()))
           .toList();
-      for (var e in querySnapshot.docs) {
-        print(e.data());
-      }
+      // for (var e in querySnapshot.docs) {
+      //   print(e.data());
+      // }
 
       return popularHostels;
     } catch (e) {
-      print("Anfa oo");
-      print(e);
+      // print("Anfa oo");
+      debugPrint(e.toString());
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -153,7 +154,7 @@ class FirestoreDb {
       roomTypes = querySnapshot.docs
           .map((e) => RoomTypes.fromJson(e.data()))
           .toList();
-      print(roomTypes);
+      // debugPrint(roomTypes.toString());
 
       return roomTypes;
     } catch (e) {
@@ -178,13 +179,13 @@ class FirestoreDb {
 
       popu = querySnapshot.docs.map((e) => Hostels.fromJson(e.data())).toList();
 
-      for (var e in querySnapshot.docs) {
-        print("popu: ${e.data()}");
-      }
+      // for (var e in querySnapshot.docs) {
+      //   print("popu: ${e.data()}");
+      // }
 
       return popu;
     } catch (e) {
-      print("An error occurred during Google sign-in: $e");
+      debugPrint("An error occurred during Google sign-in: $e");
       Get.snackbar(
         "Error",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
@@ -242,6 +243,11 @@ class FirestoreDb {
           transition: Transition.fadeIn,
           duration: Duration(milliseconds: 600),
         );
+        final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+        secureStorage.write(key: "isLogIn", value: "true");
+        secureStorage.write(key: "username", value: user.displayName ?? "");
+        secureStorage.write(key: "user_email", value: user.email ?? "");
+        secureStorage.write(key: "isfirstOpen", value: "false");
       }
     } catch (e) {
       if (e is SocketException) {
@@ -384,22 +390,22 @@ class FirestoreDb {
           //     // ]
           //   });
           // }
-          print('Updated document: ${doc.id}');
+          // debugPrint('Updated document: ${doc.id}');
         } catch (e) {
-          print('Error updating document ${doc.id}: $e');
+          debugPrint('Error updating document ${doc.id}: $e');
         }
       }
 
-      print('Finished updating documents in "Private Hostels" collection.');
+      // debugPrint('Finished updating documents in "Private Hostels" collection.');
     } catch (e) {
-      print('Error getting documents from "Private Hostels" collection: $e');
+      debugPrint('Error getting documents from "Private Hostels" collection: $e');
     }
   }
 
   Future<List<BookedHostels>> getBookedHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -411,10 +417,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    // print(bookedHostels);
     return bookedHostels;
   }
 
@@ -499,7 +505,7 @@ class FirestoreDb {
         'hostelsProcessed': processedCount,
       };
     } catch (e) {
-      print('Error setting up room structures: $e');
+      debugPrint('Error setting up room structures: $e');
       return {
         'success': false,
         'message': 'Failed to initialize room structures: ${e.toString()}',
@@ -533,7 +539,7 @@ class FirestoreDb {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-    print("hostelByName: $hostelByName");
+    // print("hostelByName: $hostelByName");
 
     return hostelByName;
   }
@@ -563,7 +569,7 @@ class FirestoreDb {
 
       // Convert Firestore document to UserModel
       final userModel = UserModel.fromJson(docSnapshot.data()!);
-      print("User model: $userModel");
+      // print("User model: $userModel");
       return userModel;
     } catch (e) {
       Get.snackbar(
@@ -578,7 +584,7 @@ class FirestoreDb {
   Future<List<BookedHostels>> getPaidHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
     try {} catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
@@ -591,10 +597,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
-    print(bookedHostels);
+    // print(bookedHostels);
     return bookedHostels;
   }
 
@@ -612,10 +618,10 @@ class FirestoreDb {
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
     } catch (e) {
-      debugPrint(e.toString());
+      //debugPrint(e.toString());
     }
 
-    debugPrint(bookedHostels.toString());
+    //debugPrint(bookedHostels.toString());
     return bookedHostels;
   }
 }

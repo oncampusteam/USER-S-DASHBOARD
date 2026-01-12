@@ -491,7 +491,7 @@
 //                           itemCount: searchList.length,
 //                           itemBuilder: (BuildContext context, int index) {
 //                             Hostels searchHostel = searchList[index];
-//                             debugPrint(searchHostel.name);
+//                             //debugPrint(searchHostel.name);
 //                             return GestureDetector(
 //                               onTap: () {
 //                                 Get.to(

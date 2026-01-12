@@ -2,11 +2,17 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_campus/firebase_options.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/initialPage_0.dart';
 import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/welcome_page_views.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/widgets/notification_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/loginPage.dart';
+// import 'package:on_campus/screens/Welcome%20Screens/signUp%20Screens/temp.dart';
 // import 'package:on_campus/screens/initial_page.dart';
 
 void main() async {
@@ -19,6 +25,7 @@ void main() async {
   // );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.init();
   runApp(const MyApp());
 }
 
@@ -32,7 +39,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-
     return GetMaterialApp(
       // title: 'Flutter Demo',
       theme: ThemeData(
@@ -66,10 +72,32 @@ class StartupScreen extends StatefulWidget {
 
 class _StartupScreenState extends State<StartupScreen> {
   late Future<void> future;
+  // late String isLogIn;
+  Future<List<bool>> asyncs() async {
+    final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+    String isLogIn = await secureStorage.read(key: "isLogIn") ?? "";
+    String isfirstOpen = await secureStorage.read(key: "isfirstOpen") ?? "";
+    await Future.delayed(Duration(seconds: 5));
+    bool islogin = false;
+    bool isfirstopen = false;
+    if (isLogIn == "true") {
+      userInformation['username'] = await secureStorage.read(key: "username");
+      userInformation['user_email'] = await secureStorage.read(
+        key: "user_email",
+      );
+      islogin = true;
+      // return true;
+    }
+    if (isLogIn == "") islogin = false;
+    if (isfirstOpen == "false") isfirstopen = false;
+    if (isfirstOpen == "") isfirstopen = true;
+    return [islogin, isfirstopen];
+  }
+
   @override
   void initState() {
     super.initState();
-    future = Future.delayed(const Duration(seconds: 5));
+    future = asyncs();
   }
 
   final PageController pageController = PageController();
@@ -89,11 +117,26 @@ class _StartupScreenState extends State<StartupScreen> {
         designSize: const Size(430, 932),
         minTextAdapt: true,
         builder: (BuildContext context, widget) {
-          return FutureBuilder(
-            future: future,
+          return FutureBuilder<List<bool>>(
+            future: asyncs(),
             builder: (context, snapshot) {
+              //debugPrint(
+              //   "This is the value of snapshot data : ${snapshot.data}",
+              // );
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Material(child: const Initialpage0());
+              }
+              if (snapshot.data?[0] ?? false) {
+                return Material(
+                  child: BottomNav(
+                    subindex: 2,
+                    username: userInformation["username"],
+                  ),
+                );
+              }
+              bool isfirstOpen = snapshot.data?[1] ?? false;
+              if ( !isfirstOpen) {
+                return Material(child: Material(child: LoginPage(index: 2)));
               }
               return Material(child: const WelcomePageViews());
               // return Material(child:Scaffold(

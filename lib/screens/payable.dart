@@ -449,9 +449,7 @@ class _PayableState extends State<Payable> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      barrierColor: Colors.black.withOpacity(
-                        0.3,
-                      ), // Dim background
+                      barrierColor: const Color.fromRGBO(0, 0, 0, 0.3), // Dim background
                       builder: (context) {
                         return BackdropFilter(
                           filter: ImageFilter.blur(

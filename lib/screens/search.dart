@@ -346,6 +346,7 @@ class _SearchState extends State<Search> {
                                             if (index == 0)
                                               SizedBox(width: 20.w),
                                             hostelCardVariant(
+                                              type: "mostSearch",
                                               hostel: hostels[index],
                                               favorite: true,
                                               variant2: true,
@@ -423,6 +424,7 @@ class _SearchState extends State<Search> {
                                             if (index == 0)
                                               SizedBox(width: 20.w),
                                             hostelCardVariant(
+                                              type: "recommended",
                                               hostel: recommendedHostels[index],
                                               favorite: true,
                                               variant2: true,

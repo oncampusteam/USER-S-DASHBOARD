@@ -381,9 +381,9 @@ class _PickcampusState extends State<Pickcampus> {
                                     onTap: () {
                                       setState(() {
                                         selectedIndex = index;
-                                        debugPrint(
-                                          "this is the value of selected :r ${reg.name}",
-                                        );
+                                        //debugPrint(
+                                          // "this is the value of selected :r ${reg.name}",
+                                        // );
                                       });
                                     },
                                     child: AnimatedContainer(

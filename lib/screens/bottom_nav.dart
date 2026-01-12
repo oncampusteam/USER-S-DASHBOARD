@@ -43,7 +43,7 @@ class _BottomNavState extends State<BottomNav> {
   void initState() {
     super.initState();
     currentPage.addListener(() {
-      debugPrint("It's changed");
+      //debugPrint("It's changed");
       setState(() {
         currentpage = currentPage.value;
       });

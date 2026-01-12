@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// ignore_for_file: avoid_debugPrint
+// ignore_for_file: avoid_//debugPrint
 
 // import 'src/sign_in_button.dart';
 
@@ -19,10 +19,11 @@ const List<String> scopes = <String>[
   'https://www.googleapis.com/auth/contacts.readonly',
 ];
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
+GoogleSignIn googleSignIn = GoogleSignIn(
   // Optional clientId
   // clientId: 'your-client_id.apps.googleusercontent.com',
   scopes: scopes,
+  serverClientId: "116893640761-omfcbe890c7k17fqv7kmv1sdjjac1ds1.apps.googleusercontent.com"
 );
 // #enddocregion Initialize
 
@@ -48,7 +49,7 @@ class _SignInDemoState extends State<SignInDemo> {
   void initState() {
     super.initState();
 
-    _googleSignIn.onCurrentUserChanged.listen((
+    googleSignIn.onCurrentUserChanged.listen((
       GoogleSignInAccount? account,
     ) async {
       // #docregion CanAccessScopes
@@ -56,7 +57,7 @@ class _SignInDemoState extends State<SignInDemo> {
       bool isAuthorized = account != null;
       // However, on web...
       if (kIsWeb && account != null) {
-        isAuthorized = await _googleSignIn.canAccessScopes(scopes);
+        isAuthorized = await googleSignIn.canAccessScopes(scopes);
       }
       // #enddocregion CanAccessScopes
 
@@ -72,12 +73,12 @@ class _SignInDemoState extends State<SignInDemo> {
       }
     });
 
-    // In the web, _googleSignIn.signInSilently() triggers the One Tap UX.
+    // In the web, googleSignIn.signInSilently() triggers the One Tap UX.
     //
     // It is recommended by Google Identity Services to render both the One Tap UX
     // and the Google Sign In button together to "reduce friction and improve
     // sign-in rates" ([docs](https://developers.google.com/identity/gsi/web/guides/display-button#html)).
-    _googleSignIn.signInSilently();
+    googleSignIn.signInSilently();
   }
 
   // Calls the People API REST endpoint for the signed-in user to retrieve information.
@@ -98,9 +99,9 @@ class _SignInDemoState extends State<SignInDemo> {
             'People API gave a ${response.statusCode} '
             'response. Check logs for details.';
       });
-      debugPrint(
-        'People API ${response.statusCode} response: ${response.body}',
-      );
+      //debugPrint(
+      //   'People API ${response.statusCode} response: ${response.body}',
+      // );
       return;
     }
     final Map<String, dynamic> data =
@@ -147,9 +148,9 @@ class _SignInDemoState extends State<SignInDemo> {
   // #docregion SignIn
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      await googleSignIn.signIn();
     } catch (error) {
-      debugPrint(error.toString());
+      //debugPrint(error.toString());
     }
   }
   // #enddocregion SignIn
@@ -162,7 +163,7 @@ class _SignInDemoState extends State<SignInDemo> {
   // On the web, this must be called from an user interaction (button click).
   // #docregion RequestScopes
   Future<void> _handleAuthorizeScopes() async {
-    final bool isAuthorized = await _googleSignIn.requestScopes(scopes);
+    final bool isAuthorized = await googleSignIn.requestScopes(scopes);
     // #enddocregion RequestScopes
     setState(() {
       _isAuthorized = isAuthorized;
@@ -174,7 +175,7 @@ class _SignInDemoState extends State<SignInDemo> {
     // #enddocregion RequestScopes
   }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+  Future<void> _handleSignOut() => googleSignIn.disconnect();
 
   Widget _buildBody() {
     final GoogleSignInAccount? user = _currentUser;

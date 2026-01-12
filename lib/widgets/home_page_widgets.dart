@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/screens/get_icon.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/classes/user_file.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
@@ -22,7 +23,7 @@ Widget HostelCard({
     "Pay In Installment",
     "10% Discount",
   ];
-  
+
   return SizedBox(
     // color: Colors.pink,
     height: Constant.height * 0.44,
@@ -33,7 +34,7 @@ Widget HostelCard({
           ? const BouncingScrollPhysics()
           : NeverScrollableScrollPhysics(),
       scrollDirection: !variant ? Axis.horizontal : Axis.vertical,
-      itemCount: seeAllPopular ? hostels.length : 5,
+      itemCount: hostels.isEmpty ? 0 : (seeAllPopular ? hostels.length : 5),
       itemBuilder: (context, index) {
         Hostels hostel = hostels[index];
         String? string = hostel.hostel_images?[0];
@@ -42,6 +43,7 @@ Widget HostelCard({
                 children: [
                   if (index == 0) SizedBox(width: 25.h),
                   hostelGestureCard(
+                    type: "popular",
                     hostel: hostel,
                     favoriteBools: favoriteBools,
                     onFavoriteTap: onFavoriteTap,
@@ -56,6 +58,7 @@ Widget HostelCard({
             : Column(
                 children: [
                   hostelGestureCard(
+                    type: "top",
                     hostel: hostel,
                     favoriteBools: favoriteBools,
                     onFavoriteTap: onFavoriteTap,
@@ -81,14 +84,16 @@ Widget hostelGestureCard({
   required String? string,
   required List<String> value,
   required int index,
+  required String type,
   // bool favorite = false,
 }) {
-
-  
   return GestureDetector(
     onTap: () {
+      debugPrint("It has been tapped 2");
+      userInformation["previously_viewed"].value.add(hostel);
+      onFavoriteTap();
       Get.to(
-        () => HostelDetails(hostel: hostel, favorite: favoriteBools[index]),
+        () => HostelDetails(hostel: hostel, favorite: favoriteBools[index], index: index, type: type),
         transition: Transition.fadeIn,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeIn,
@@ -169,13 +174,13 @@ Widget hostelGestureCard({
                         onTap: () {
                           favoriteBools[index] = !favoriteBools[index];
                           // favorite = favoriteBools[index];
-                          // debugPrint("This is the value of favorite in hostelGestureCard : $favorite");
+                          // //debugPrint("This is the value of favorite in hostelGestureCard : $favorite");
                           onFavoriteTap();
                         },
                         child: Icon(
                           size: 20.h,
                           favoriteBools[index]
-                          // favorite
+                              // favorite
                               ? Icons.favorite
                               : Icons.favorite_border_outlined,
                           color: const Color.fromARGB(255, 0, 239, 209),
@@ -531,6 +536,7 @@ Widget hostelCardVariant({
   required bool favorite,
   required void Function() triggerRebuild,
   bool variant = false,
+  required String type,
   int index = 0,
   bool variant2 = false,
 }) {
@@ -540,8 +546,11 @@ Widget hostelCardVariant({
       // if (index == 0) SizedBox(width: 20.w),
       GestureDetector(
         onTap: () {
+          debugPrint("It has been tapped");
+          userInformation["previously_viewed"].value.add(hostel);
+          triggerRebuild();
           Get.to(
-            () => HostelDetails(hostel: hostel, favorite: favorite),
+            () => HostelDetails(hostel: hostel, favorite: favorite, index: index, type: type),
             transition: Transition.fadeIn,
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeIn,
@@ -621,11 +630,11 @@ Widget hostelCardVariant({
                         child: GestureDetector(
                           onTap: () {
                             // setState(() {
-                            // debugdebugPrint(
+                            // debug//debugPrint(
                             //   "This is the value of favorite before flip: $favorite",
                             // );
                             // favorite = !favorite;
-                            // debugdebugPrint(
+                            // debug//debugPrint(
                             //   "This is the value of favorite: $favorite",
                             // );
                             triggerRebuild();
