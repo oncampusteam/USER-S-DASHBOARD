@@ -571,6 +571,7 @@ class Receipt extends StatelessWidget {
                     height: 10.h,
                   ),
                   Container(
+                    width: Constant.width * 0.3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.r),
                       color: Color(0xFFF1F5F9)
@@ -578,6 +579,7 @@ class Receipt extends StatelessWidget {
                     child: Align(
                       child: SizedBox(
                         height: Constant.height * 0.025,
+                        width: Constant.width * 0.25,
                         child: FittedBox(
                           child: Text(
                             "#GH-TRX-8829304",
@@ -600,11 +602,16 @@ class Receipt extends StatelessWidget {
   Widget _secureText() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Icon(Icons.lock, color: Colors.green),
+      children: [
+        Icon(Icons.lock_outline_rounded, color: Colors.green),
         SizedBox(width: 8),
-        Text("Payments are secure and encrypted",
-            style: TextStyle(color: Colors.grey))
+        SizedBox(
+          height: Constant.height * 0.025,
+          child: FittedBox(
+            child: Text("Payments are secure and encrypted",
+                style: TextStyle(color: Colors.grey)),
+          ),
+        )
       ],
     );
   }
@@ -612,19 +619,27 @@ class Receipt extends StatelessWidget {
   Widget _downloadButton() {
   return SizedBox(
     width: double.infinity,
+    height: Constant.height * 0.06,
     child: ElevatedButton.icon(
       onPressed: () async {
         final file = await generateReceiptPdf();
         OpenFilex.open(file.path);
         debugPrint("PDF saved at: ${file.path}");
       },
-      icon: const Icon(Icons.download),
-      label: const Text("Download Receipt (PDF)"),
+      icon: Image.asset("assets/initialPage0/download-2.png"),
+      label: const Text(
+        "Download Receipt (PDF)",
+        style: TextStyle(
+          fontFamily: "Inter",
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+        ),
+        ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF23D3C3),
+        backgroundColor: const Color(0xFF2BEED4),
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(16.r),
         ),
       ),
     ),

@@ -33,9 +33,12 @@ class _ProfileState extends State<Profile> {
       isLoading = true;
     });
     UserModel? userInformation = await FirestoreDb.instance.getUserInfo(user);
-    setState(() {
-      userInfo = userInformation;
-    });
+    // made changes here check if it's working, if not remove mounted and find another way to fix error 
+    if(mounted){
+      setState(() {
+        userInfo = userInformation;
+      });
+    }
     //debugPrint("hey: ${userInfo?.userInfoDone ?? "Not Done"} ");
 
     setState(() {
