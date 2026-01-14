@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/screens/filter.dart';
 import 'package:on_campus/classes/classes.dart';
+import 'package:on_campus/screens/receipt.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
@@ -455,7 +456,9 @@ class _SearchState extends State<Search> {
       floatingActionButton: SizedBox(
         width: 90,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(()=> Receipt());
+          },
 
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,

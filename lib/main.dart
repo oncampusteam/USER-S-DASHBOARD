@@ -120,6 +120,11 @@ class _StartupScreenState extends State<StartupScreen> {
           return FutureBuilder<List<bool>>(
             future: asyncs(),
             builder: (context, snapshot) {
+              NotificationService.show(
+                title: "Booking Confirmed",
+                body: "Your hostel room has been reserved",
+              );
+
               //debugPrint(
               //   "This is the value of snapshot data : ${snapshot.data}",
               // );
