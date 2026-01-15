@@ -68,6 +68,7 @@ dependencies:
   open_filex: ^4.7.0
   connectivity_plus: ^7.0.0
   internet_connection_checker_plus: ^2.9.1+2
+  url_launcher: ^6.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -124,6 +125,7 @@ flutter:
     - assets/welcomeImage_6/
     - assets/coming_soon/
     - assets/empty_state/
+    - assets/notification/
 
     #user interface icons
     - assets/user_interface_icons/ai_icons/

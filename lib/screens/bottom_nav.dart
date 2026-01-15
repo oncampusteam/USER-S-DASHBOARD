@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/widgets/custompainter.dart';
@@ -46,9 +47,7 @@ class _BottomNavState extends State<BottomNav> {
     super.initState();
     currentPage.addListener(() {
       //debugPrint("It's changed");
-      setState(() {
-        currentpage = currentPage.value;
-      });
+     
     });
     currentpage = widget.subindex ?? 2;
   }
@@ -69,6 +68,21 @@ class _BottomNavState extends State<BottomNav> {
                 title: "No Connection",
                 content: "Oops! It seems you're currently offline.",
                 imagePath: "assets/empty_state/no_internet.png",
+                buttonText: "Retry",
+                buttonTap: ()async{
+                  bool connected = await networkService.checkNow();
+                  setState(() {
+                    if(!connected){
+                      Get.snackbar("No Internet", "Check your connection",
+                      snackPosition: SnackPosition.BOTTOM);
+                    }
+                    // if(connected){
+                    //   setState(() {
+                        
+                    //   });
+                    // }
+                  });
+                },
               );
             }
             return Stack(

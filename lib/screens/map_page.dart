@@ -80,7 +80,8 @@ class _MapPageState extends State<MapPage> {
     location.onLocationChanged.listen((LocationData currentLocation) {
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
-        setState(() {
+        if(mounted){
+          setState(() {
           currentPosition = LatLng(
             currentLocation.latitude!,
             currentLocation.longitude!,
@@ -89,6 +90,7 @@ class _MapPageState extends State<MapPage> {
           //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
           // _cameraToPosition(currentPosition!);
         });
+        }
       }
     });
   }

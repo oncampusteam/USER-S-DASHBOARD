@@ -52,6 +52,8 @@ class Hostels {
     required this.longitude,
   });
 
+  Hostels.empty() : name = "";
+
   String name;
   int? amt_per_year;
   String? description;
@@ -97,7 +99,7 @@ class Hostels {
     city: json["city"],
     university: json["university"],
     latitude: json["latitude"],
-    longitude: json["longitude"]
+    longitude: json["longitude"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -120,8 +122,8 @@ class Hostels {
     "region": region,
     "city": city,
     "university": university,
-    "latitude" : latitude,
-    "longitude" : longitude,
+    "latitude": latitude,
+    "longitude": longitude,
   };
 
   @override

@@ -41,10 +41,12 @@ class _ProfileState extends State<Profile> {
     }
     //debugPrint("hey: ${userInfo?.userInfoDone ?? "Not Done"} ");
 
-    setState(() {
-      isLoading = false;
-    });
-  }
+    if(mounted){
+      setState(() {
+          isLoading = false;
+        });
+    }
+    }
 
   @override
   void initState() {

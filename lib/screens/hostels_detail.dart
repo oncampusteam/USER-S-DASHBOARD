@@ -16,6 +16,7 @@ import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:on_campus/screens/hostels_detail_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:on_campus/widgets/hostel_details_widgets.dart';
@@ -100,7 +101,8 @@ class _HostelDetailsState extends State<HostelDetails> {
     location.onLocationChanged.listen((LocationData currentLocation) async {
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
-        setState(() {
+        if(mounted){
+          setState(() {
           currentPosition = LatLng(
             currentLocation.latitude!,
             currentLocation.longitude!,
@@ -109,11 +111,14 @@ class _HostelDetailsState extends State<HostelDetails> {
           //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
           // _cameraToPosition(currentPosition!);
         });
+        }
       }
       final coords = await getPolylinePoints();
       generatePolyLineFromPoints(coords);
 
-      setState(() {});
+     if(mounted){
+       setState(() {});
+     }
     });
   }
 
@@ -131,9 +136,12 @@ class _HostelDetailsState extends State<HostelDetails> {
       points: polylineCoordinates,
       width: 8,
     );
-    setState(() {
+    // Made changes, if not working remove mounted and find a way to fix the solution ##NOTICE
+    if(mounted){
+      setState(() {
       polylines[id] = polyline;
     });
+    }
   }
 
   Future<List<LatLng>> getPolylinePoints() async {
@@ -207,9 +215,11 @@ class _HostelDetailsState extends State<HostelDetails> {
   }
 
   Future<void> getRoomTypes() async {
-    setState(() {
+    if(mounted){
+      setState(() {
       isLoading = true;
     });
+    }
     roomTypes = await FirestoreDb.instance.roomTypes(widget.hostel);
 
     setState(() {
@@ -4206,57 +4216,30 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 10.0.w,
                                       ),
-                                      child: SizedBox(
-                                        width: MediaQuery.sizeOf(
-                                          context,
-                                        ).width.w,
-                                        height: 400.h,
-                                        // color: Colors.red,
-                                        child: currentPosition == null
-                                            ? CircularProgressIndicator()
-                                            : GoogleMap(
-                                                onMapCreated:
-                                                    ((
-                                                      GoogleMapController
-                                                      controller,
-                                                    ) => _mapController
-                                                        .complete(controller)),
-                                                initialCameraPosition:
-                                                    CameraPosition(
-                                                      target: currentPosition!,
-                                                      zoom: 13,
-                                                    ),
-                                                markers: {
-                                                  Marker(
-                                                    markerId: MarkerId(
-                                                      "CurrentLocation",
-                                                    ),
-                                                    icon:
-                                                        BitmapDescriptor.defaultMarkerWithHue(
-                                                          BitmapDescriptor
-                                                              .hueBlue,
-                                                        ),
-                                                    position: currentPosition!,
-                                                    infoWindow: InfoWindow(
-                                                      title: "My Location",
-                                                    ),
-                                                  ),
-                                                  Marker(
-                                                    markerId: MarkerId(
-                                                      widget.hostel.name,
-                                                    ),
-                                                    icon: BitmapDescriptor
-                                                        .defaultMarker,
-                                                    position: initialPose!,
-                                                    infoWindow: InfoWindow(
-                                                      title: widget.hostel.name,
-                                                    ),
-                                                  ),
-                                                },
-                                                polylines: Set<Polyline>.of(
-                                                  polylines.values,
-                                                ),
-                                              ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.to(
+                                            () => HostelsDetailMap(
+                                              hostel: widget.hostel,
+                                            ),
+                                            transition: Transition.fadeIn,
+                                            duration: const Duration(
+                                              milliseconds: 800,
+                                            ),
+                                            curve: Curves.easeIn,
+                                          );
+                                        },
+                                        child: SizedBox(
+                                          width: MediaQuery.sizeOf(
+                                            context,
+                                          ).width.w,
+                                          height: 400.h,
+                                          // color: Colors.red,
+                                          child: Image.asset(
+                                            "assets/hostels_detail/view location.png",
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                         ],

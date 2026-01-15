@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/screens/search.dart';
 import 'package:on_campus/widgets/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'package:on_campus/classes/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
+import 'package:on_campus/screens/notification_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,7 +34,44 @@ List<bool> topFavoriteBools = [];
 List<bool> viewedFavoritebool = [];
 ValueNotifier popularBools = ValueNotifier<List<bool>>(favoriteBools);
 
+
+
+
 class _HomeState extends State<Home> {
+
+
+  
+
+Future<void> help(String phone, String message) async {
+  final whatsappUrl = Uri.parse(
+    "https://wa.me/$phone?text=${Uri.encodeComponent(message)}",
+  );
+
+  final smsUrl = Uri.parse(
+    "sms:$phone?body=${Uri.encodeComponent(message)}",
+  );
+
+  if (await canLaunchUrl(whatsappUrl)) {
+    await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    return;
+  }
+
+  if (await canLaunchUrl(smsUrl)) {
+    await launchUrl(smsUrl);
+    return;
+  }
+
+  Get.snackbar(
+        "Error",
+        "Can't Launch Whatsap or SMS",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+}
+
+
+
+
+
   TextEditingController searchController = TextEditingController();
   bool favorite = false;
   bool seeAllPopular = false;
@@ -55,26 +94,26 @@ class _HomeState extends State<Home> {
     List<Hostels> awaitTop = await FirestoreDb.instance.getPrivateHostels();
     awaitPopular.shuffle();
     awaitTop.shuffle();
-   if(mounted){
-     setState(() {
-      hostels = awaitPopular;
-      topHostels = awaitTop;
-      popularBools.value = List.generate(hostels.length, (index) {
-        return false;
+    if (mounted) {
+      setState(() {
+        hostels = awaitPopular;
+        topHostels = awaitTop;
+        popularBools.value = List.generate(hostels.length, (index) {
+          return false;
+        });
+        topFavoriteBools = List.generate(topHostels.length, (index) {
+          return false;
+        });
+        // topHostelsLength =
+        //   (seeAllTop ? topHostels.length : topHostels.length / 2.ceil()).toInt();
+        //   for (int i = 0; i <= hostels.length - 1; i++) {
+        //   favoritebools.add(false);
+        //   debugdebugPrint("");
+        // }
+        // myLocations = awaitLocations;
+        isLoading = false;
       });
-      topFavoriteBools = List.generate(topHostels.length, (index) {
-        return false;
-      });
-      // topHostelsLength =
-      //   (seeAllTop ? topHostels.length : topHostels.length / 2.ceil()).toInt();
-      //   for (int i = 0; i <= hostels.length - 1; i++) {
-      //   favoritebools.add(false);
-      //   debugdebugPrint("");
-      // }
-      // myLocations = awaitLocations;
-      isLoading = false;
-    });
-   }
+    }
   }
 
   // List<bool> favoritebools = [];
@@ -98,9 +137,9 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void _update(){
+  void _update() {
     debugPrint("Rebuild triggered");
-      setState(() {});
+    setState(() {});
   }
 
   String getFirstName() {
@@ -339,60 +378,67 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Container(
-                                height: 40.h,
-                                width: 40.w,
-                                // padding: EdgeInsets.all(5.r),
-                                decoration: BoxDecoration(
-                                  // color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Color(0xFF00EFD1)),
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      height: 30.h,
-                                      width: 30.w,
-                                      "assets/home/hugeicons--notification-01 (1).svg",
-                                      // colorFilter: ColorFilter.mode(Color(0xFF00EFD1), blend),
-                                      // fit: BoxFit.cover
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => NotificationScreen());
+                                },
+                                child: Container(
+                                  height: 40.h,
+                                  width: 40.w,
+                                  // padding: EdgeInsets.all(5.r),
+                                  decoration: BoxDecoration(
+                                    // color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Color(0xFF00EFD1),
                                     ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: EdgeInsets.all(2.5),
-                                        width: 20.w,
-                                        height: 20.h,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Align(
-                                          child: Container(
-                                            width: 15.w,
-                                            height: 15.h,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF00EFD1),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Align(
-                                              child: Text(
-                                                "1",
-                                                style: TextStyle(
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.white,
-                                                  fontSize: 7.sp,
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        height: 30.h,
+                                        width: 30.w,
+                                        "assets/home/hugeicons--notification-01 (1).svg",
+                                        // colorFilter: ColorFilter.mode(Color(0xFF00EFD1), blend),
+                                        // fit: BoxFit.cover
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Container(
+                                          padding: EdgeInsets.all(2.5),
+                                          width: 20.w,
+                                          height: 20.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Align(
+                                            child: Container(
+                                              width: 15.w,
+                                              height: 15.h,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF00EFD1),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Align(
+                                                child: Text(
+                                                  "1",
+                                                  style: TextStyle(
+                                                    fontFamily: "Poppins",
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.white,
+                                                    fontSize: 7.sp,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -608,14 +654,16 @@ class _HomeState extends State<Home> {
                               ),
                             )
                           : HostelCard(
-                            hostels: hostels,
-                            seeAllPopular: seeAllPopular,
-                            favoriteBools: popularBools.value,
-                            onFavoriteTap: () {
-                              debugPrint("on favorite tap is called");
-                              setState(() {});
-                            },
-                          ),
+                              hostels: hostels,
+                              seeAllPopular: seeAllPopular,
+                              favoriteBools: popularBools.value,
+                              onFavoriteTap: () {
+                                debugPrint("on favorite tap is called");
+                                setState(() {
+                                  
+                                });
+                              },
+                            ),
                       SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
@@ -1019,18 +1067,26 @@ class _HomeState extends State<Home> {
                                         width: 20.w,
                                       ),
                                     ),
-                                    Container(
-                                      // color: Colors.red,
-                                      height: Constant.height * 0.022,
-                                      width: Constant.width * 0.2,
-                                      child: FittedBox(
-                                        child: Text(
-                                          " Whatsapp Us",
-                                          style: TextStyle(
-                                            fontFamily: "Plus Jakarta Sans",
-                                            fontSize: 14.sp.clamp(0, 14),
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
+                                    GestureDetector(
+                                      onTap: (){
+                                        help(
+                                            "233592873549",
+                                            "Hello, I'll need help on how to book👋",
+                                          );
+                                      },
+                                      child: SizedBox(
+                                        // color: Colors.red,
+                                        height: Constant.height * 0.022,
+                                        width: Constant.width * 0.2,
+                                        child: FittedBox(
+                                          child: Text(
+                                            " Whatsapp Us",
+                                            style: TextStyle(
+                                              fontFamily: "Plus Jakarta Sans",
+                                              fontSize: 14.sp.clamp(0, 14),
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),

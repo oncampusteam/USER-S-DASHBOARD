@@ -93,7 +93,12 @@ Widget hostelGestureCard({
       userInformation["previously_viewed"].value.add(hostel);
       onFavoriteTap();
       Get.to(
-        () => HostelDetails(hostel: hostel, favorite: favoriteBools[index], index: index, type: type),
+        () => HostelDetails(
+          hostel: hostel,
+          favorite: favoriteBools[index],
+          index: index,
+          type: type,
+        ),
         transition: Transition.fadeIn,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeIn,
@@ -173,6 +178,14 @@ Widget hostelGestureCard({
                       child: GestureDetector(
                         onTap: () {
                           favoriteBools[index] = !favoriteBools[index];
+                          if (favoriteBools[index]) {
+                            userInformation["wish_list"].add(hostel);
+                          }
+                          if (!favoriteBools[index]) {
+                            // debugPrint("Removing.........");
+                            userInformation["wish_list"].remove(hostel);
+                          }
+                          debugPrint("${userInformation["wish_list"]}");
                           // favorite = favoriteBools[index];
                           // //debugPrint("This is the value of favorite in hostelGestureCard : $favorite");
                           onFavoriteTap();
@@ -550,7 +563,12 @@ Widget hostelCardVariant({
           userInformation["previously_viewed"].value.add(hostel);
           triggerRebuild();
           Get.to(
-            () => HostelDetails(hostel: hostel, favorite: favorite, index: index, type: type),
+            () => HostelDetails(
+              hostel: hostel,
+              favorite: favorite,
+              index: index,
+              type: type,
+            ),
             transition: Transition.fadeIn,
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeIn,
@@ -886,68 +904,89 @@ Widget hostelCardVariant({
                                       ((hostel.amenities!.length / 2).ceil())
                                 : 0;
                             int offset = length != 0 ? i + 1 : 0;
-                            return Row(
-                              children: [
-                                if (index3 + offset == i + 1)
-                                  SizedBox(width: 15.h),
-                                Container(
-                                  margin: EdgeInsets.only(left: 0, right: 5.w),
-                                  padding: EdgeInsets.only(
-                                    left: 5.w,
-                                    top: .5.h,
-                                    bottom: .5.h,
-                                    right: 10.w,
-                                  ),
-                                  height: Constant.height * 0.04,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    border: Border.all(
-                                      color: Color(0xFF7A7A7A),
-                                    ),
-                                  ),
-                                  // width: 40,
-                                  // height: 20,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: FittedBox(
-                                      child: SizedBox(
-                                        height: Constant.height * 0.035,
-                                        child: Row(
-                                          children: [
-                                            // SizedBox(width: 15.h),
-                                            SizedBox(
-                                              height: Constant.height * 0.03,
-                                              width: Constant.width * 0.05,
-                                              child: FittedBox(
-                                                child: GetIcon(
-                                                  text:
-                                                      hostel.amenities![index3 +
-                                                          offset] ??
-                                                      "noicon",
-                                                ),
+                            return Builder(
+                              builder: (context) {
+                                try {
+                                  return Row(
+                                    children: [
+                                      if (index3 + offset == i + 1)
+                                        SizedBox(width: 15.h),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          left: 0,
+                                          right: 5.w,
+                                        ),
+                                        padding: EdgeInsets.only(
+                                          left: 5.w,
+                                          top: .5.h,
+                                          bottom: .5.h,
+                                          right: 10.w,
+                                        ),
+                                        height: Constant.height * 0.04,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            5.r,
+                                          ),
+                                          border: Border.all(
+                                            color: Color(0xFF7A7A7A),
+                                          ),
+                                        ),
+                                        // width: 40,
+                                        // height: 20,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: FittedBox(
+                                            child: SizedBox(
+                                              height: Constant.height * 0.035,
+                                              child: Row(
+                                                children: [
+                                                  // SizedBox(width: 15.h),
+                                                  SizedBox(
+                                                    height:
+                                                        Constant.height * 0.03,
+                                                    width:
+                                                        Constant.width * 0.05,
+                                                    child: FittedBox(
+                                                      child: GetIcon(
+                                                        text:
+                                                            hostel
+                                                                .amenities![index3 +
+                                                                offset] ??
+                                                            "noicon",
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    hostel
+                                                            .amenities![index3 +
+                                                                offset]
+                                                            ?.capitalize ??
+                                                        "none",
+                                                    style: TextStyle(
+                                                      fontFamily: "Work Sans",
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 13.sp,
+                                                      color: Color(0xFF555555),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              hostel
-                                                      .amenities![index3 +
-                                                          offset]
-                                                      ?.capitalize ??
-                                                  "none",
-                                              style: TextStyle(
-                                                fontFamily: "Work Sans",
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 13.sp,
-                                                color: Color(0xFF555555),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                    ],
+                                  );
+                                } catch (e) {
+                                  debugPrint(
+                                    "This is the error in hostel_categories.dart : $e",
+                                  );
+                                  debugPrint(hostel.name);
+                                  return Container();
+                                }
+                              },
                             );
                           },
                         ),
