@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
+import 'package:on_campus/screens/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
@@ -33,20 +34,20 @@ class _ProfileState extends State<Profile> {
       isLoading = true;
     });
     UserModel? userInformation = await FirestoreDb.instance.getUserInfo(user);
-    // made changes here check if it's working, if not remove mounted and find another way to fix error 
-    if(mounted){
+    // made changes here check if it's working, if not remove mounted and find another way to fix error
+    if (mounted) {
       setState(() {
         userInfo = userInformation;
       });
     }
     //debugPrint("hey: ${userInfo?.userInfoDone ?? "Not Done"} ");
 
-    if(mounted){
+    if (mounted) {
       setState(() {
-          isLoading = false;
-        });
+        isLoading = false;
+      });
     }
-    }
+  }
 
   @override
   void initState() {
@@ -785,26 +786,31 @@ class _ProfileState extends State<Profile> {
                     visualDensity: VisualDensity.compact,
                   ),
                   Divider(color: Colors.grey.withOpacity(0.1)),
-                  ListTile(
-                    leading: IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/user_interface_icons/profile_screen/heart.svg",
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => Wishlist());
+                    },
+                    child: ListTile(
+                      leading: IconButton(
+                        icon: SvgPicture.asset(
+                          "assets/user_interface_icons/profile_screen/heart.svg",
+                        ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
-                    ),
-                    title: Text("Wishlist"),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 15,
-                        color: Colors.black.withOpacity(0.5),
+                      title: Text("Wishlist"),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          size: 15,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
+                      style: ListTileStyle.drawer,
+                      contentPadding: EdgeInsets.all(0),
+                      dense: true,
+                      visualDensity: VisualDensity.compact,
                     ),
-                    style: ListTileStyle.drawer,
-                    contentPadding: EdgeInsets.all(0),
-                    dense: true,
-                    visualDensity: VisualDensity.compact,
                   ),
                   Divider(color: Colors.grey.withOpacity(0.1)),
                   ListTile(

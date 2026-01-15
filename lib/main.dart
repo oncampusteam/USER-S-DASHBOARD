@@ -142,20 +142,6 @@ class _StartupScreenState extends State<StartupScreen> {
                 return Material(child: Material(child: LoginPage(index: 2)));
               }
               return Material(child: const WelcomePageViews());
-              // return Material(child:Scaffold(
-              //   body: Center(
-              //     child: Column(
-              //       children: [
-              //         SizedBox(height : 200.h),
-              //         Text("this is a"),
-              //         Container(
-              //             padding: EdgeInsets.symmetric(horizontal: 10.h),
-              //             height: 60,
-              //             child: CustomBottomNavBar(height: 60, dip: 50))
-              //       ],
-              //     ),
-              //   ),
-              // ));
             },
           );
         },
