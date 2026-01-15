@@ -168,7 +168,7 @@ class _HostelsDetailMapState extends State<HostelsDetailMap> {
         ],
       ),
       body: currentPosition == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),))
           : GoogleMap(
               onMapCreated: ((GoogleMapController controller) =>
                   _mapController.complete(controller)),

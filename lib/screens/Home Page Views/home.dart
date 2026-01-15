@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:on_campus/screens/search.dart';
 import 'package:on_campus/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,43 +35,29 @@ List<bool> topFavoriteBools = [];
 List<bool> viewedFavoritebool = [];
 ValueNotifier popularBools = ValueNotifier<List<bool>>(favoriteBools);
 
-
-
-
 class _HomeState extends State<Home> {
+  Future<void> openWhatsApp(String phone, String message) async {
+    final encoded = Uri.encodeComponent(message);
 
+    final whatsappUri = Uri.parse("whatsapp://send?phone=$phone&text=$encoded");
 
-  
+    final smsUri = Uri.parse("sms:$phone?body=$encoded");
 
-Future<void> help(String phone, String message) async {
-  final whatsappUrl = Uri.parse(
-    "https://wa.me/$phone?text=${Uri.encodeComponent(message)}",
-  );
-
-  final smsUrl = Uri.parse(
-    "sms:$phone?body=${Uri.encodeComponent(message)}",
-  );
-
-  if (await canLaunchUrl(whatsappUrl)) {
-    await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    return;
+    if (await canLaunchUrl(whatsappUri)) {
+      await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
+    } else {
+      await launchUrl(smsUri, mode: LaunchMode.externalApplication);
+    }
   }
 
-  if (await canLaunchUrl(smsUrl)) {
-    await launchUrl(smsUrl);
-    return;
+  void openDialer(String phoneNumber) async {
+    final Uri telUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(telUri)) {
+      await launchUrl(telUri);
+    } else {
+      debugPrint('Could not open dialer.');
+    }
   }
-
-  Get.snackbar(
-        "Error",
-        "Can't Launch Whatsap or SMS",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-}
-
-
-
-
 
   TextEditingController searchController = TextEditingController();
   bool favorite = false;
@@ -659,9 +646,7 @@ Future<void> help(String phone, String message) async {
                               favoriteBools: popularBools.value,
                               onFavoriteTap: () {
                                 debugPrint("on favorite tap is called");
-                                setState(() {
-                                  
-                                });
+                                setState(() {});
                               },
                             ),
                       SizedBox(height: 15.h),
@@ -1068,11 +1053,11 @@ Future<void> help(String phone, String message) async {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: (){
-                                        help(
-                                            "233592873549",
-                                            "Hello, I'll need help on how to book👋",
-                                          );
+                                      onTap: () async {
+                                        await openWhatsApp(
+                                          "233509999001",
+                                          "Hello, I'll need help on how to book👋",
+                                        );
                                       },
                                       child: SizedBox(
                                         // color: Colors.red,
@@ -1096,41 +1081,46 @@ Future<void> help(String phone, String message) async {
                               ),
                             ),
 
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15.h),
-                              height: Constant.height * 0.045,
-                              // width: 130.w,
-                              width: Constant.width * 0.39,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                color: Color(0xFFEDEDED),
-                              ),
-                              child: Align(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      child: Image.asset(
-                                        "assets/home/customer-service.png",
-                                        height: 20.h,
-                                        width: 20.w,
+                            GestureDetector(
+                              onTap: () {
+                                openDialer("+233552296265");
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 15.h),
+                                height: Constant.height * 0.045,
+                                // width: 130.w,
+                                width: Constant.width * 0.39,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  color: Color(0xFFEDEDED),
+                                ),
+                                child: Align(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        child: Image.asset(
+                                          "assets/home/customer-service.png",
+                                          height: 20.h,
+                                          width: 20.w,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      // color: Colors.green,
-                                      height: Constant.height * 0.02,
-                                      width: Constant.width * 0.25,
-                                      child: FittedBox(
-                                        child: Text(
-                                          " Speak to an Expert",
-                                          style: TextStyle(
-                                            fontFamily: "Plus Jakarta Sans",
-                                            fontSize: 14.sp.clamp(0, 14),
-                                            fontWeight: FontWeight.w600,
+                                      SizedBox(
+                                        // color: Colors.green,
+                                        height: Constant.height * 0.02,
+                                        width: Constant.width * 0.25,
+                                        child: FittedBox(
+                                          child: Text(
+                                            " Speak to an Expert",
+                                            style: TextStyle(
+                                              fontFamily: "Plus Jakarta Sans",
+                                              fontSize: 14.sp.clamp(0, 14),
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

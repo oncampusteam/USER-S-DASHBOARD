@@ -2982,7 +2982,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     ),
                                   ),
                                   isLoading
-                                      ? CircularProgressIndicator()
+                                      ? CircularProgressIndicator(color: Color(0xFF00EFD1),)
                                       : SingleChildScrollView(
                                           controller: _scrollController,
                                           child: Column(

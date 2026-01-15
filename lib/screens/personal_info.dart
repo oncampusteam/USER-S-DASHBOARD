@@ -707,7 +707,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
 
   Widget UserInfo() {
-    return isLoading ? CircularProgressIndicator() : Container();
+    return isLoading ? CircularProgressIndicator(color: Color(0xFF00EFD1),) : Container();
   }
 
   dynamic confrimScrollSheet() {
@@ -998,7 +998,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                     ),
                     SizedBox(height: 6),
                     isLoading
-                        ? CircularProgressIndicator()
+                        ? CircularProgressIndicator(color: Color(0xFF00EFD1),)
                         : Container(
                             height: MediaQuery.of(context).size.height + 30,
                             padding: EdgeInsets.symmetric(vertical: 20),

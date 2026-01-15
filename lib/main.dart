@@ -136,6 +136,7 @@ class _StartupScreenState extends State<StartupScreen> {
                   ),
                 );
               }
+              // this is the day that the ord has made
               bool isfirstOpen = snapshot.data?[1] ?? false;
               if ( !isfirstOpen) {
                 return Material(child: Material(child: LoginPage(index: 2)));

@@ -276,7 +276,7 @@ class _BookingsState extends State<Bookings> {
     return isLoading
         ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),)),
           )
         : pendingHostels.isEmpty
         ? SizedBox(
@@ -675,7 +675,7 @@ class _BookingsState extends State<Bookings> {
     return isLoading
         ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),)),
           )
         : paidHostels.isEmpty
         ? SizedBox(

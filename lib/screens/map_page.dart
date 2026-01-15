@@ -119,7 +119,7 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       body: currentPosition == null || widget.hostels == []
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),))
           : GoogleMap(
               onMapCreated: ((GoogleMapController controller) =>
                   _mapController.complete(controller)),

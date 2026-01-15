@@ -180,7 +180,7 @@ class _PhoneState extends State<Phone> {
                   ),
                 ),
                 child: isLoading
-                    ? CircularProgressIndicator()
+                    ? CircularProgressIndicator(color: Color(0xFF00EFD1),)
                     : Text(
                         'Send OTP',
                         style: TextStyle(

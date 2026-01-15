@@ -688,7 +688,7 @@ class _PaidPaymentState extends State<PaidPayment> {
                         Column(
                           children: [
                             isLoading
-                                ? CircularProgressIndicator()
+                                ? CircularProgressIndicator(color: Color(0xFF00EFD1),)
                                 : SingleChildScrollView(
                                     child: Column(
                                       children: List.generate(paidHostels.length, (
