@@ -5,6 +5,7 @@ import 'package:on_campus/firebase_options.dart';
 import 'package:on_campus/classes/user_file.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:on_campus/screens/bottom_nav.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:on_campus/screens/initialPage_0.dart';
 import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/welcome_page_views.dart';
@@ -24,6 +25,7 @@ void main() async {
   //   ),
   // );
   WidgetsFlutterBinding.ensureInitialized();
+   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.init();
   runApp(const MyApp());

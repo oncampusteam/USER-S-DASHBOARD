@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:paystack_for_flutter/paystack_for_flutter.dart';
@@ -28,7 +29,8 @@ class Payable extends StatefulWidget {
 }
 
 class _PayableState extends State<Payable> {
-  String secretKey = "sk_test_13937ae4f88036bbec93c978710a821d598fe708";
+  // String secretKey = "sk_test_13937ae4f88036bbec93c978710a821d598fe708";
+  String secretKey = dotenv.env['PAYSTACK_SECRET_KEY']!;
 
   @override
   Widget build(BuildContext context) {
