@@ -70,6 +70,7 @@ dependencies:
   internet_connection_checker_plus: ^2.9.1+2
   url_launcher: ^6.3.2
   flutter_dotenv: ^6.0.0
+  shared_preferences: ^2.5.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

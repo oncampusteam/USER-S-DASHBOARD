@@ -7,14 +7,13 @@ import 'package:on_campus/classes/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/firebase/favorites_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:on_campus/firebase/recently_viewed_controller.dart';
 
 Widget HostelCard({
-  // required Map<String, dynamic> hostelsInfo,
   required List<Hostels> hostels,
   required bool seeAllPopular,
-  required List<bool> favoriteBools,
-  required VoidCallback onFavoriteTap,
   bool variant = false,
 }) {
   List<String> value = [
@@ -25,9 +24,7 @@ Widget HostelCard({
   ];
 
   return SizedBox(
-    // color: Colors.pink,
     height: Constant.height * 0.44,
-    // width: MediaQuery.of(context).size.width,
     width: Constant.width,
     child: ListView.builder(
       physics: !variant
@@ -45,8 +42,6 @@ Widget HostelCard({
                   hostelGestureCard(
                     type: "popular",
                     hostel: hostel,
-                    favoriteBools: favoriteBools,
-                    onFavoriteTap: onFavoriteTap,
                     string: string,
                     value: value,
                     index: index,
@@ -60,8 +55,6 @@ Widget HostelCard({
                   hostelGestureCard(
                     type: "top",
                     hostel: hostel,
-                    favoriteBools: favoriteBools,
-                    onFavoriteTap: onFavoriteTap,
                     string: string,
                     value: value,
                     index: index,
@@ -76,29 +69,19 @@ Widget HostelCard({
 }
 
 Widget hostelGestureCard({
-  // required Map<String, dynamic> hostelsInfo,
   required Hostels hostel,
-  required List<bool> favoriteBools,
-  required VoidCallback onFavoriteTap,
   bool variant = false,
   required String? string,
   required List<String> value,
   required int index,
   required String type,
-  // bool favorite = false,
 }) {
   return GestureDetector(
     onTap: () {
-      debugPrint("It has been tapped 2");
-      userInformation["previously_viewed"].value.add(hostel);
-      onFavoriteTap();
+      final RecentlyViewedController recentCtrl = Get.find();
+      recentCtrl.addRecentlyViewed(hostel.id);
       Get.to(
-        () => HostelDetails(
-          hostel: hostel,
-          favorite: favoriteBools[index],
-          index: index,
-          type: type,
-        ),
+        () => HostelDetails(hostel: hostel),
         transition: Transition.fadeIn,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeIn,
@@ -175,30 +158,19 @@ Widget hostelGestureCard({
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          favoriteBools[index] = !favoriteBools[index];
-                          if (favoriteBools[index]) {
-                            userInformation["wish_list"].add(hostel);
-                          }
-                          if (!favoriteBools[index]) {
-                            // debugPrint("Removing.........");
-                            userInformation["wish_list"].remove(hostel);
-                          }
-                          debugPrint("${userInformation["wish_list"]}");
-                          // favorite = favoriteBools[index];
-                          // //debugPrint("This is the value of favorite in hostelGestureCard : $favorite");
-                          onFavoriteTap();
-                        },
-                        child: Icon(
-                          size: 20.h,
-                          favoriteBools[index]
-                              // favorite
-                              ? Icons.favorite
-                              : Icons.favorite_border_outlined,
-                          color: const Color.fromARGB(255, 0, 239, 209),
-                        ),
-                      ),
+                      child: Obx(() {
+                        final FavoritesController favCtrl = Get.put(FavoritesController());
+                        final isFav = favCtrl.isFavorite(hostel.id);
+
+                        return GestureDetector(
+                          onTap: () => favCtrl.toggleFavorite(hostel.id),
+
+                          child: Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            color: Color.fromARGB(255, 0, 239, 209),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ),
@@ -279,7 +251,6 @@ Widget hostelGestureCard({
             ),
           ),
           Container(
-            // color: Colors.yellow,
             padding: !variant
                 ? EdgeInsets.only(right: 5.h, left: 10.h)
                 : EdgeInsets.symmetric(horizontal: 25.h),
@@ -546,8 +517,6 @@ Widget hostelGestureCard({
 
 Widget hostelCardVariant({
   required Hostels hostel,
-  required bool favorite,
-  required void Function() triggerRebuild,
   bool variant = false,
   required String type,
   int index = 0,
@@ -556,19 +525,12 @@ Widget hostelCardVariant({
   int length = hostel.amenities?.length ?? 0;
   return Row(
     children: [
-      // if (index == 0) SizedBox(width: 20.w),
       GestureDetector(
         onTap: () {
-          debugPrint("It has been tapped");
-          userInformation["previously_viewed"].value.add(hostel);
-          triggerRebuild();
+          final RecentlyViewedController recentCtrl = Get.find();
+          recentCtrl.addRecentlyViewed(hostel.id);
           Get.to(
-            () => HostelDetails(
-              hostel: hostel,
-              favorite: favorite,
-              index: index,
-              type: type,
-            ),
+            () => HostelDetails(hostel: hostel),
             transition: Transition.fadeIn,
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeIn,
@@ -625,9 +587,7 @@ Widget hostelCardVariant({
                         left: 0,
                         child: Container(
                           height: Constant.height * 0.25,
-                          // width: 245.w,
                           decoration: BoxDecoration(
-                            // color: Colors.brown,
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: ClipRRect(
@@ -644,34 +604,29 @@ Widget hostelCardVariant({
                       Positioned(
                         top: 5.h,
                         right: 5.w,
-                        // left: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            // setState(() {
-                            // debug//debugPrint(
-                            //   "This is the value of favorite before flip: $favorite",
-                            // );
-                            // favorite = !favorite;
-                            // debug//debugPrint(
-                            //   "This is the value of favorite: $favorite",
-                            // );
-                            triggerRebuild();
-                            // });
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 35,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              size: 20.h,
-                              favorite
-                                  ? Icons.favorite_outlined
-                                  : Icons.favorite_border_outlined,
-                              color: const Color.fromARGB(255, 0, 239, 209),
-                            ),
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Obx(() {
+                              final FavoritesController favCtrl = Get.put(FavoritesController());
+                              final isFav = favCtrl.isFavorite(hostel.id);
+
+                              return GestureDetector(
+                                onTap: () => favCtrl.toggleFavorite(hostel.id),
+
+                                child: Icon(
+                                  isFav
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: Color.fromARGB(255, 0, 239, 209),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),

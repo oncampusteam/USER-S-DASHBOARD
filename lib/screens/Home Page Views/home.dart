@@ -11,10 +11,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
+import 'package:on_campus/firebase/hostelController.dart';
+import 'package:on_campus/widgets/hostel_categories.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
 import 'package:on_campus/screens/notification_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_campus/screens/bottom_nav.dart' as bottomNav;
+import 'package:on_campus/firebase/recently_viewed_controller.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:on_campus/screens/hostels_detail.dart';
 // import 'package:on_campus/widgets/homestel_hostel_category.dart';
@@ -29,11 +32,6 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
-List<bool> favoriteBools = [];
-List<bool> topFavoriteBools = [];
-List<bool> viewedFavoritebool = [];
-ValueNotifier popularBools = ValueNotifier<List<bool>>(favoriteBools);
 
 class _HomeState extends State<Home> {
   Future<void> openWhatsApp(String phone, String message) async {
@@ -59,78 +57,25 @@ class _HomeState extends State<Home> {
     }
   }
 
+  final HostelController hostelController = Get.put(HostelController());
+
   TextEditingController searchController = TextEditingController();
-  bool favorite = false;
+
   bool seeAllPopular = false;
   bool seeAllTop = false;
-
-  List<Hostels> hostels = [];
-  List<Hostels> topHostels = [];
-  // Map<String, dynamic> myLocations = {};
   final FirebaseFirestore db = FirebaseFirestore.instance;
   User? user;
 
-  bool isLoading = true;
+  bool isLoading = false;
   int num = 0;
 
-  Future<void> getPopular() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<Hostels> awaitPopular = await FirestoreDb.instance.getPopular();
-    List<Hostels> awaitTop = await FirestoreDb.instance.getPrivateHostels();
-    awaitPopular.shuffle();
-    awaitTop.shuffle();
-    if (mounted) {
-      setState(() {
-        hostels = awaitPopular;
-        topHostels = awaitTop;
-        popularBools.value = List.generate(hostels.length, (index) {
-          return false;
-        });
-        topFavoriteBools = List.generate(topHostels.length, (index) {
-          return false;
-        });
-        // topHostelsLength =
-        //   (seeAllTop ? topHostels.length : topHostels.length / 2.ceil()).toInt();
-        //   for (int i = 0; i <= hostels.length - 1; i++) {
-        //   favoritebools.add(false);
-        //   debugdebugPrint("");
-        // }
-        // myLocations = awaitLocations;
-        isLoading = false;
-      });
-    }
-  }
-
-  // List<bool> favoritebools = [];
-  // FocusNode search = FocusNode();
   @override
   void initState() {
     super.initState();
-    // popularBools.addListener(() {
-    //   setState(() {
-    //     debugPrint("The value is changed");
-    //   });
-    // });
-    // debugPrint("InitState is running");
-    setState(() {
-      user = FirebaseAuth.instance.currentUser;
-    });
-    userInformation["previously_viewed"].addListener(_update);
-    if (hostels.isEmpty || topHostels.isEmpty) {
-      debugPrint("I'm running");
-      getPopular();
-    }
-  }
-
-  void _update() {
-    debugPrint("Rebuild triggered");
-    setState(() {});
+    user = FirebaseAuth.instance.currentUser;
   }
 
   String getFirstName() {
-    // debugPrint(widget.username);
     String text = widget.username ?? "${user?.displayName}";
     if (text.trim().isEmpty) return '';
     return text.trim().split(' ').first;
@@ -138,8 +83,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("${userInformation["previously_viewed"].value} at home");
-    // debugPrint("${favoriteBools[0]}   ##############");
+    List<Hostels> hostels = hostelController
+        .privateHostels; //i created this for recently viewed cos
+    //it doesnt matter whether its private or popular, once its viewed it should appear in recently viewed
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -455,12 +401,14 @@ class _HomeState extends State<Home> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                // onTap: () => Get.to(
-                                //   () => SchoolHostelCategory(),
-                                //   transition: Transition.fadeIn,
-                                //   duration: const Duration(milliseconds: 200),
-                                //   curve: Curves.easeIn,
-                                // ),
+                                onTap: () => Get.to(
+                                  () => HostelCategory(
+                                    categoryType: "School Hostels",
+                                  ),
+                                  transition: Transition.fadeIn,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn,
+                                ),
                                 child: Column(
                                   children: [
                                     Image.asset(
@@ -485,25 +433,14 @@ class _HomeState extends State<Home> {
                             ),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () {
-                                  bottomNav.currentPage.value = 5;
-
-                                  bottomNav.hostelCategory = "Private";
-                                  // setState(() {
-                                  //   Get.to(
-                                  //     () => BottomNav(
-                                  //       username: widget.username ?? "",
-                                  //       subindex: 5,
-                                  //     ),
-                                  //     transition: Transition.fadeIn,
-                                  //     duration: const Duration(
-                                  //       milliseconds: 200,
-                                  //     ),
-                                  //     curve: Curves.easeIn,
-                                  //   );
-                                  // });
-                                  setState(() {});
-                                },
+                                onTap: () => Get.to(
+                                  () => HostelCategory(
+                                    categoryType: "Private Hostels",
+                                  ),
+                                  transition: Transition.fadeIn,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn,
+                                ),
                                 child: Column(
                                   children: [
                                     Image.asset(
@@ -528,18 +465,13 @@ class _HomeState extends State<Home> {
                             ),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () {
-                                  bottomNav.currentPage.value = 5;
-                                  bottomNav.hostelCategory = "Private";
-                                  // () => Get.to(
-                                  //   () => BottomNav(
-                                  //     username: widget.username ?? "",
-                                  //   ),
-                                  //   transition: Transition.fadeIn,
-                                  //   duration: const Duration(milliseconds: 200),
-                                  //   curve: Curves.easeIn,
-                                  // );
-                                },
+                                onTap: () => Get.to(
+                                  () =>
+                                      HostelCategory(categoryType: "Homestels"),
+                                  transition: Transition.fadeIn,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn,
+                                ),
                                 child: Column(
                                   children: [
                                     Image.asset(
@@ -628,6 +560,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       SizedBox(height: 15.h),
+
                       isLoading
                           ? SizedBox(
                               height: 300,
@@ -640,15 +573,13 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             )
-                          : HostelCard(
-                              hostels: hostels,
-                              seeAllPopular: seeAllPopular,
-                              favoriteBools: popularBools.value,
-                              onFavoriteTap: () {
-                                debugPrint("on favorite tap is called");
-                                setState(() {});
-                              },
-                            ),
+                          : Obx(() {
+                              final hostels = hostelController.privateHostels;
+                              return HostelCard(
+                                hostels: hostels,
+                                seeAllPopular: seeAllPopular,
+                              );
+                            }),
                       SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
@@ -714,6 +645,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       SizedBox(height: 15.h),
+
                       isLoading
                           ? SizedBox(
                               height: 300,
@@ -728,103 +660,110 @@ class _HomeState extends State<Home> {
                             )
                           : Builder(
                               builder: (context) {
-                                return SizedBox(
-                                  height:
-                                      Constant.height *
-                                      0.47 *
-                                      (seeAllTop ? topHostels.length : 5),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 0.h,
+                                return Obx(() {
+                                  final topHostels =
+                                      hostelController.privateHostels;
+                                  return SizedBox(
+                                    height:
+                                        Constant.height *
+                                        0.47 *
+                                        (seeAllTop ? topHostels.length : 5),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 0.h,
+                                      ),
+                                      child: HostelCard(
+                                        variant: true,
+                                        hostels: topHostels,
+                                        seeAllPopular: seeAllPopular,
+                                      ),
                                     ),
-                                    child: HostelCard(
-                                      hostels: topHostels,
-                                      seeAllPopular: seeAllTop,
-                                      favoriteBools: topFavoriteBools,
-                                      onFavoriteTap: () {
-                                        setState(() {});
-                                      },
-                                      variant: true,
-                                    ),
-                                  ),
-                                );
+                                  );
+                                });
                               },
                             ),
                       SizedBox(height: 20.h),
-                      if (userInformation["previously_viewed"].value.isNotEmpty)
-                        SizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 25.w),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Previously",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22.sp.clamp(0, 22),
-                                      fontFamily: "Poppins-Bold",
-                                      letterSpacing: 0.15.w,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: " Viewed",
-                                        style: TextStyle(
-                                          color: const Color.fromARGB(
-                                            255,
-                                            0,
-                                            239,
-                                            209,
-                                          ),
-                                          fontSize: 22.sp.clamp(0, 22),
-                                          fontFamily: "Poppins-Bold",
-                                          letterSpacing: 0.15.w,
-                                        ),
-                                      ),
-                                    ],
+                      SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Previously",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22.sp.clamp(0, 22),
+                                    fontFamily: "Poppins-Bold",
+                                    letterSpacing: 0.15.w,
                                   ),
+                                  children: [
+                                    TextSpan(
+                                      text: " Viewed",
+                                      style: TextStyle(
+                                        color: const Color.fromARGB(
+                                          255,
+                                          0,
+                                          239,
+                                          209,
+                                        ),
+                                        fontSize: 22.sp.clamp(0, 22),
+                                        fontFamily: "Poppins-Bold",
+                                        letterSpacing: 0.15.w,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: 20),
-                              SizedBox(
-                                // margin: EdgeInsets.only(bottom: 5.h),
-                                // color: Colors.red,
-                                height: Constant.height * 0.4,
-                                // width: 225.w,
-                                width: MediaQuery.of(context).size.width,
-                                child: ListView.builder(
+                            ),
+                            SizedBox(height: 20),
+
+                            SizedBox(
+                              height: Constant.height * 0.4,
+                              // width: 225.w,
+                              width: MediaQuery.of(context).size.width,
+                              child: Obx(() {
+                                final RecentlyViewedController recentCtrl =
+                                    Get.put(RecentlyViewedController());
+                                final recentHostels = recentCtrl
+                                    .recentlyViewedIds
+                                    .map(
+                                      (id) => hostels.firstWhereOrNull(
+                                        (h) => h.id == id,
+                                      ),
+                                    )
+                                    .whereType<Hostels>() // remove nulls
+                                    .toList();
+
+                                if (recentHostels.isEmpty) {
+                                  return const Center(
+                                    child: Text("No recently viewed hostels"),
+                                  );
+                                }
+                                return ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   physics: const BouncingScrollPhysics(),
-                                  itemCount:
-                                      userInformation["previously_viewed"]
-                                          .value
-                                          .length,
+                                  itemCount: recentHostels.length,
                                   itemBuilder: (context, index) {
                                     return Row(
                                       children: [
                                         if (index == 0) SizedBox(width: 20.w),
                                         hostelCardVariant(
                                           type: "previously",
-                                          hostel:
-                                              userInformation["previously_viewed"]
-                                                  .value
-                                                  .toList()[index],
-                                          favorite: favorite,
-                                          triggerRebuild: () {
-                                            setState(() {});
-                                          },
+                                          hostel: recentHostels[index],
                                         ),
                                         if (index + 1 == hostels.length)
                                           SizedBox(width: 20.w),
                                       ],
                                     );
                                   },
-                                ),
-                              ),
-                            ],
-                          ),
+                                );
+                              }),
+                            ),
+                          ],
                         ),
+                      ),
                       SizedBox(height: 20),
 
                       SizedBox(height: 10.h),
@@ -873,9 +812,6 @@ class _HomeState extends State<Home> {
                       SizedBox(height: 20.h),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 40.h),
-                        // width: 380.w,
-                        // height: 40.h,
-                        // color: Colors.amber,
                         child: RichText(
                           text: TextSpan(
                             text:

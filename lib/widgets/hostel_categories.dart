@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:on_campus/classes/screen_details.dart';
 import 'package:on_campus/screens/hostels_detail.dart';
+import 'package:on_campus/firebase/hostelController.dart';
 import 'package:on_campus/widgets/home_page_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,56 +22,26 @@ class HostelCategory extends StatefulWidget {
 }
 
 class _HostelCategoryState extends State<HostelCategory> {
-  bool favorite = false;
-  bool isLoading = true;
+  // bool isLoading = true;
+  final HostelController hostelController = Get.put(HostelController());
 
-  List<Hostels> allPrivateHostels = [];
   List<Hostels> searchList = [];
 
-  Future<void> getPrivateHostels() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<Hostels> awaitPrivateHostels = await FirestoreDb.instance
-        .getPrivateHostels();
-    awaitPrivateHostels.shuffle();
-    if (awaitPrivateHostels.isNotEmpty) {
-    if(mounted){
-      setState(() {
-        allPrivateHostels = awaitPrivateHostels;
-        favoriteBools = List.generate(allPrivateHostels.length, (index) {
-          return false;
-        });
-        isLoading = false;
-      });
-    }
-    }
-  }
-
   void search(String value) {
+    List<Hostels> allPrivateHostels = hostelController.privateHostels;
     searchList = allPrivateHostels
         .where((item) => item.name.toLowerCase().contains(value.toLowerCase()))
         .toList();
-    searchFavoriteBools = List.generate(searchList.length, (index) {
-      return false;
-    });
+
     setState(() {});
   }
 
-  List<bool> favoriteBools = [];
-  List<bool> searchFavoriteBools = [];
   TextEditingController searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    getPrivateHostels();
-  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: true,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -102,10 +73,13 @@ class _HostelCategoryState extends State<HostelCategory> {
                             //   color: Colors.white.withOpacity(0.1),
                             //   borderRadius: BorderRadius.circular(8.r),
                             // ),
-                            child: Icon(
-                              Icons.chevron_left,
-                              color: Colors.black,
-                              size: 30.w,
+                            child: IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: Colors.black,
+                                size: 30.w,
+                              ),
                             ),
                           ),
                         ),
@@ -120,7 +94,7 @@ class _HostelCategoryState extends State<HostelCategory> {
                                 width: Constant.width * 0.85,
                                 child: FittedBox(
                                   child: Text(
-                                    "Private Hostels",
+                                    widget.categoryType,
                                     style: TextStyle(
                                       fontFamily: "Poppins-Bold",
                                       fontSize: 22.sp,
@@ -190,13 +164,6 @@ class _HostelCategoryState extends State<HostelCategory> {
                                     ),
                                   ),
                                   border: InputBorder.none,
-                                  // OutlineInputBorder(
-                                  //   borderRadius: BorderRadius.circular(24.r),
-                                  //   borderSide: const BorderSide(color: Colors.white),
-                                  //   ),
-                                  //   focusedBorder: OutlineInputBorder(
-                                  //     borderRadius: BorderRadius.circular(16.r),
-                                  //     borderSide: const BorderSide(color: Colors.white),),
                                 ),
                               ),
                               Positioned(
@@ -218,62 +185,49 @@ class _HostelCategoryState extends State<HostelCategory> {
                       ),
                     ),
                   ),
-                  // SizedBox(height: 30.h),
-                  // Container(
-                  //   color: Colors.white,
-                  //   height: Constant.height * 0.06,
-                  //   width: Constant.width,
-                  //   child: Container(child: Text("HI")),
-                  // ),
-                  // SizedBox(height: 30.h),
-                  (isLoading)
-                      ? Container(
-                          child: Center(
-                            child: Center(
-                              child: SpinKitThreeBounce(
-                                color: const Color.fromARGB(255, 0, 239, 209),
-                                size: 50.0,
-                              ),
-                            ),
-                          ),
-                        )
-                      : (searchController.text.isEmpty)
+
+                  // isLoading
+                  //     ? Container(
+                  //         child: Center(
+                  //           child: Center(
+                  //             child: SpinKitThreeBounce(
+                  //               color: const Color.fromARGB(255, 0, 239, 209),
+                  //               size: 50.0,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     :
+                  (searchController.text.isEmpty)
                       ? SizedBox(
                           height: Constant.height * 0.75,
-                          // decoration: BoxDecoration(),
-                          // margin: EdgeInsets.only(bottom: 450.h),
-                          // height: MediaQuery.of(context).size.height,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: allPrivateHostels.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Hostels hostel = allPrivateHostels[index];
-                              // String? string = hostel.hostel_images?[0];
-                              // //debugPrint(hostel.name);
-                              return Column(
-                                children: [
-                                  if (index == 0) SizedBox(height: 12.h),
-                                  hostelCardVariant(
-                                    hostel: hostel,
-                                    favorite: favoriteBools[index],
-                                    variant: true,
-                                    // index: index,
-                                    type: "search",
-                                    triggerRebuild: () {
-                                      setState(() {
-                                        favoriteBools[index] =
-                                            !favoriteBools[index];
-                                      });
-                                    },
-                                    index: index,
-                                  ),
-                                  if (index + 1 == allPrivateHostels.length)
-                                    SizedBox(height: Constant.height * 0.1),
-                                ],
-                              );
-                            },
-                          ),
+                          child: Obx(() {
+                            List<Hostels> allPrivateHostels =
+                                hostelController.privateHostels;
+                            print(
+                              "all private hostels are ${allPrivateHostels} length ${allPrivateHostels.length} ",
+                            );
+                            return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              itemCount: allPrivateHostels.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Hostels hostel = allPrivateHostels[index];
+                                return Column(
+                                  children: [
+                                    if (index == 0) SizedBox(height: 12.h),
+                                    hostelCardVariant(
+                                      hostel: hostel,
+                                      variant: true,
+                                      type: "search",
+                                    ),
+                                    if (index + 1 == allPrivateHostels.length)
+                                      SizedBox(height: Constant.height * 0.1),
+                                  ],
+                                );
+                              },
+                            );
+                          }),
                         )
                       : (searchList.isEmpty)
                       ? Center(
@@ -298,13 +252,8 @@ class _HostelCategoryState extends State<HostelCategory> {
                                   if (index == 0) SizedBox(height: 12.h),
                                   hostelCardVariant(
                                     hostel: searchHostel,
-                                    favorite: true,
                                     variant: true,
                                     type: "search",
-                                    triggerRebuild: () {
-                                      setState(() {});
-                                    },
-                                    index: index,
                                   ),
                                   if (index + 1 == searchList.length &&
                                       searchList.length > 1)

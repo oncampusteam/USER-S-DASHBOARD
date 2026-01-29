@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -5,56 +6,64 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:on_campus/screens/media.dart';
 import 'package:on_campus/classes/classes.dart';
 import 'package:on_campus/firebase/consts.dart';
 import 'package:on_campus/screens/enquire.dart';
 import 'package:on_campus/firebase/classes.dart';
-import 'package:on_campus/classes/user_file.dart';
 import 'package:on_campus/classes/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_campus/firebase/firestore_db.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:on_campus/screens/hostels_detail_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:on_campus/firebase/favorites_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:on_campus/widgets/hostel_details_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:on_campus/screens/Home%20Page%20Views/payment.dart';
-import 'package:on_campus/screens/Home Page Views/home.dart' as home;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+// import 'package:on_campus/screens/bottom_nav.dart';
+// import 'package:on_campus/classes/user_file.dart';
+// import 'package:on_campus/screens/Home Page Views/home.dart' as home;
 
 // import 'package:on_campus/classes/user_file.dart';
 // import 'package:on_campus/screens/get_icon.dart';
 
 class HostelDetails extends StatefulWidget {
   final Hostels hostel;
-  final bool favorite;
-  final int index;
-  final String type;
+  // final bool favorite;
+  // final int index;
+  // final String type;
   const HostelDetails({
     super.key,
     required this.hostel,
-    required this.favorite,
-    required this.index,
-    required this.type,
+    // required this.favorite,
+    // required this.index,
+    // required this.type,
   });
 
   @override
   State<HostelDetails> createState() => _HostelDetailsState();
 }
-
+String generateSixDigitCode() {
+  // Generates a number between 100,000 and 999,999
+  int code = Random.secure().nextInt(900000) + 100000;
+  return code.toString();
+}
 String gender = "";
 String selectedGender = "";
 ScrollController controller = ScrollController();
 List<TextEditingController> occupantNames = [];
 List<TextEditingController> occupantEmails = [];
 List<TextEditingController> occupantPhones = [];
+TextEditingController numPeople = TextEditingController();
 GlobalKey key = GlobalKey();
-
+String roomtype = "";
 class _HostelDetailsState extends State<HostelDetails> {
+  final FavoritesController favCtrl = Get.put(FavoritesController());
   int selectedIndex = 0;
   List<RoomTypes> roomTypes = [];
   bool isLoading = false;
@@ -71,7 +80,6 @@ class _HostelDetailsState extends State<HostelDetails> {
       CameraUpdate.newCameraPosition(_newCameraPosition),
     );
   }
-
 
   Location location = Location();
 
@@ -99,29 +107,34 @@ class _HostelDetailsState extends State<HostelDetails> {
     locationData = await location.getLocation();
 
     location.onLocationChanged.listen((LocationData currentLocation) async {
-      if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
-        if(mounted){
-          setState(() {
-          currentPosition = LatLng(
-            currentLocation.latitude!,
-            currentLocation.longitude!,
-          );
+      try {
+        if (currentLocation.latitude != null &&
+            currentLocation.longitude != null) {
+          if (mounted) {
+            setState(() {
+              currentPosition = LatLng(
+                currentLocation.latitude!,
+                currentLocation.longitude!,
+              );
 
-          //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
-          // _cameraToPosition(currentPosition!);
-        });
+              //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
+              // _cameraToPosition(currentPosition!);
+            });
+          }
         }
-      }
-      final coords = await getPolylinePoints();
-      generatePolyLineFromPoints(coords);
+        final coords = await getPolylinePoints();
+        generatePolyLineFromPoints(coords);
 
-     if(mounted){
-       setState(() {});
-     }
+        if (mounted) {
+          setState(() {});
+        }
+      } catch (e) {
+        debugPrint(
+          "This is an error in hostels_details.dart\n and this is the error : $e",
+        );
+      }
     });
   }
-
 
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
@@ -137,10 +150,10 @@ class _HostelDetailsState extends State<HostelDetails> {
       width: 8,
     );
     // Made changes, if not working remove mounted and find a way to fix the solution ##NOTICE
-    if(mounted){
+    if (mounted) {
       setState(() {
-      polylines[id] = polyline;
-    });
+        polylines[id] = polyline;
+      });
     }
   }
 
@@ -171,14 +184,11 @@ class _HostelDetailsState extends State<HostelDetails> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      Get.snackbar("Error", "${response.errorMessage}");
+      Get.snackbar("Error Getting Polyline Points", "${response.errorMessage}");
       debugPrint(response.errorMessage);
     }
     return polylineCoordinates;
   }
-
-
-  
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController dateControllerMovein = TextEditingController(
@@ -194,7 +204,6 @@ class _HostelDetailsState extends State<HostelDetails> {
     ),
   );
 
-  
   final Map<String, GlobalKey> _sectionKeys = {};
   final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
@@ -215,10 +224,10 @@ class _HostelDetailsState extends State<HostelDetails> {
   }
 
   Future<void> getRoomTypes() async {
-    if(mounted){
+    if (mounted) {
       setState(() {
-      isLoading = true;
-    });
+        isLoading = true;
+      });
     }
     roomTypes = await FirestoreDb.instance.roomTypes(widget.hostel);
 
@@ -255,13 +264,13 @@ class _HostelDetailsState extends State<HostelDetails> {
     }
   }
 
-  late bool favorite;
+  // late bool favorite;
   @override
   void initState() {
     super.initState();
 
     //debugPrint("This is the value from widget.fvorite : ${widget.favorite}");
-    favorite = widget.favorite;
+    // favorite = widget.favorite;
     //debugPrint("this is the value of $favorite");
     getRoomTypes().then((_) {
       for (var room in roomTypes) {
@@ -282,14 +291,17 @@ class _HostelDetailsState extends State<HostelDetails> {
       initialPose = const LatLng(6.73968, -1.56516);
       debugPrint('Invalid hostel coordinates');
     }
-    getLocation().then(
+    try{
+      getLocation().then(
       (_) => {
         getPolylinePoints().then(
           (coordinates) => {generatePolyLineFromPoints(coordinates)},
         ),
       },
     );
-    
+    }catch(e){
+      debugPrint("This is an error in initState of hostels_detail.dart, funct getLocation : $e");
+    }
   }
 
   @override
@@ -328,39 +340,7 @@ class _HostelDetailsState extends State<HostelDetails> {
 
   int duration = 1;
 
-  // Future<void> _selectDate(
-  //   BuildContext context,
-  //   TextEditingController moveInController,
-  //   TextEditingController? moveOutController,
-  // ) async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2100),
-  //   );
-
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       // Set move-in date
-  //       moveInController.text = DateFormat('MM-dd-yyyy').format(pickedDate);
-
-  //       // If move-out controller was provided, add 2 years automatically
-  //       if (moveOutController != null) {
-  //         final moveOutDate = DateTime(
-  //           pickedDate.year + widget.duration,
-  //           pickedDate.month,
-  //           pickedDate.day,
-  //         );
-
-  //         // moveOutController.text = DateFormat('MM-dd-yyyy').format(moveOutDate);
-  //       }
-  //     });
-  //   }
-  // }
-
-
-   dynamic showDate() {
+  dynamic showDate() {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -560,45 +540,47 @@ class _HostelDetailsState extends State<HostelDetails> {
                   ),
                 ),
                 onPressed: () async {
-                  setModalState(() {
-                    isLoading = true;
-                  });
-                  final user = FirebaseAuth.instance.currentUser;
-                  await FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(user!.uid)
-                      .collection('Booked hostels')
-                      .doc(widget.hostel.name) // Set your own ID
-                      .set({
-                        'gender': selectedGender == "M" ? "male" : "female",
-                        'duration': duration,
-                      }, SetOptions(merge: true));
+                  // setModalState(() {
+                  //   // isLoading = true;
+                  // });
+                  // final user = FirebaseAuth.instance.currentUser;
+                  // await FirebaseFirestore.instance
+                  //     .collection('Users')
+                  //     .doc(user!.uid)
+                  //     .collection('Booked hostels')
+                  //     .doc(widget.hostel.name) // Set your own ID
+                  //     .set({
+                  //       'gender': selectedGender == "M" ? "male" : "female",
+                  //       'duration': duration,
+                  //     }, SetOptions(merge: true));
 
-                  setModalState(() {
-                    isLoading = false;
-                  });
+                  // setModalState(() {
+                  //   // isLoading = false;
+                  // });
                   showDate();
                   // setDate(setModalState);
                 },
-                child: isLoading
-                    ? Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 15,
-                              height: 15,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text("Please wait.."),
-                          ],
-                        ),
-                      )
-                    : SizedBox(
+                child: 
+                // isLoading
+                //     ? Align(
+                //         alignment: Alignment.center,
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             SizedBox(
+                //               width: 15,
+                //               height: 15,
+                //               child: CircularProgressIndicator(
+                //                 color: Colors.white,
+                //               ),
+                //             ),
+                //             SizedBox(width: 5),
+                //             Text("Please wait.."),
+                //           ],
+                //         ),
+                //       )
+                //     : 
+                    SizedBox(
                         height: Constant.height * 0.03,
                         child: FittedBox(
                           child: Text(
@@ -1187,40 +1169,71 @@ class _HostelDetailsState extends State<HostelDetails> {
                       ),
                       onPressed: () async {
                         if (_formkey.currentState!.validate()) {
-                          setModalState(() {
-                            isLoading = true;
-                          });
+                          // setModalState(() {
+                          //   isLoading = true;
+                          // });
 
-                          final user = FirebaseAuth.instance.currentUser;
+                          // final user = FirebaseAuth.instance.currentUser;
 
-                          List<Map<String, dynamic>> occupants = [];
+                          // List<Map<String, dynamic>> occupants = [];
 
-                          for (int i = 1; i < occupantNames.length; i++) {
-                            occupants.add({
-                              'name': occupantNames[i].text.trim(),
-                              'email': occupantEmails[i].text.trim(),
-                              'phoneNumber': occupantPhones[i].text.trim(),
-                            });
-                          }
-                          await FirebaseFirestore.instance
-                              .collection('Users')
-                              .doc(user!.uid)
-                              .collection('Booked hostels')
-                              .doc(widget.hostel.name) // Set your own ID
-                              .set({
-                                'hostel_name': widget.hostel.name,
-                                'paid': false,
-                                'isDone': false,
-                                'people_booking': int.parse(numPeople.text),
-                                'name': occupantNames[0].text,
-                                'occupants': occupants,
-                                'email': occupantEmails[0].text,
-                                'phone_number': occupantPhones[0].text,
-                                'time': Timestamp.now(),
-                              }, SetOptions(merge: true));
-                          setModalState(() {
-                            isLoading = false;
-                          });
+                          // for (int i = 1; i < occupantNames.length; i++) {
+                          //   occupants.add({
+                          //     'name': occupantNames[i].text.trim(),
+                          //     'email': occupantEmails[i].text.trim(),
+                          //     'phoneNumber': occupantPhones[i].text.trim(),
+                          //   });
+                          // }
+                          // await FirebaseFirestore.instance
+                          //     .collection('Users')
+                          //     .doc(user!.uid)
+                          //     .collection('Booked hostels')
+                          //     .doc(widget.hostel.name) // Set your own ID
+                          //     .set({
+                          //       'hostel_name': widget.hostel.name,
+                          //       'paid': false,
+                          //       'isDone': false,
+                          //       'people_booking': int.parse(numPeople.text),
+                          //       'name': occupantNames[0].text,
+                          //       'occupants': occupants,
+                          //       'email': occupantEmails[0].text,
+                          //       'phone_number': occupantPhones[0].text,
+                          //       'time': Timestamp.now(),
+                          //     }, SetOptions(merge: true));
+
+                          // final int totalPeople =
+                          //     int.tryParse(numPeople.text) ?? 0;
+
+                          // if (totalPeople == 0) return;
+
+                          // final List<Map<String, dynamic>> students = [];
+
+                          // for (int j = 0; j < totalPeople; j++) {
+                          //   students.add({
+                          //     "name": occupantNames[j].text.trim(),
+                          //     "id": "Test$j",
+                          //     "email": occupantEmails[j].text.trim(),
+                          //     "phone": occupantPhones[j].text.trim(),
+                          //     "hostel_booked": widget.hostel.name,
+                          //     "roomType": "${roomCapacity()}in1",
+                          //     "booked_by": j == 0
+                          //         ? "self"
+                          //         : occupantNames[0].text.trim(),
+                          //     "createdAt": DateTime.now(),
+                          //     "verified": false,
+                          //   });
+                          // }
+
+                          // await FirebaseFirestore.instance
+                          //     .collection('Managers')
+                          //     .doc(widget.hostel.manager_id)
+                          //     .set({
+                          //       'students': FieldValue.arrayUnion(students),
+                          //     }, SetOptions(merge: true));
+
+                          // setModalState(() {
+                          //   isLoading = false;
+                          // });
                           showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
@@ -1237,25 +1250,27 @@ class _HostelDetailsState extends State<HostelDetails> {
                           );
                         }
                       },
-                      child: isLoading
-                          ? Align(
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 15,
-                                    height: 15,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text("Please wait.."),
-                                ],
-                              ),
-                            )
-                          : SizedBox(
+                      child: 
+                      // isLoading
+                      //     ? Align(
+                      //         alignment: Alignment.center,
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             SizedBox(
+                      //               width: 15,
+                      //               height: 15,
+                      //               child: CircularProgressIndicator(
+                      //                 color: Colors.white,
+                      //               ),
+                      //             ),
+                      //             SizedBox(width: 5),
+                      //             Text("Please wait.."),
+                      //           ],
+                      //         ),
+                      //       )
+                      //     : 
+                          SizedBox(
                               height: Constant.height * 0.03,
                               child: FittedBox(
                                 child: Text(
@@ -1542,26 +1557,137 @@ class _HostelDetailsState extends State<HostelDetails> {
                     ),
                   ),
                   onPressed: () async {
+                    int roomCapacity() {
+                      if (roomtype != "") {
+                        if (roomtype == "1in1") {
+                          return 1;
+                        }
+                        if (roomtype == "2in1") {
+                          return 2;
+                        }
+                        if (roomtype == "3in1") {
+                          return 3;
+                        }
+                        if (roomtype == "4in1") {
+                          return 4;
+                        }
+                        if (roomtype == "5in1") {
+                          return 5;
+                        }
+                        if (roomtype == "6in1") {
+                          return 6;
+                        }
+                        if (roomtype == "7in1") {
+                          return 7;
+                        }
+                        if (roomtype == "8in1") {
+                          return 8;
+                        }
+                        if (roomtype == "9in1") {
+                          return 9;
+                        }
+                        if (roomtype == "10in1") {
+                          return 10;
+                        }
+                      }
+                      return 0;
+                    }
                     if (_formkey2.currentState!.validate()) {
                       setModalState(() {
                         isLoading = true;
                       });
+                      int roomCap = roomCapacity();
                       final user = FirebaseAuth.instance.currentUser;
+                      // await FirebaseFirestore.instance
+                      //     .collection('Users')
+                      //     .doc(user!.uid)
+                      //     .collection('Booked hostels')
+                      //     .doc(widget.hostel.name) // Set your own ID
+                      //     .set({
+                      //       'move_in': dateControllerMovein.text,
+                      //       'move_out': dateControllerMoveout.text,
+                      //       'isDone': true,
+                      //     }, SetOptions(merge: true));
+
+                      // final user = FirebaseAuth.instance.currentUser;
+
+                      List<Map<String, dynamic>> occupants = [];
+
+                      for (int i = 1; i < occupantNames.length; i++) {
+                        occupants.add({
+                          'name': occupantNames[i].text.trim(),
+                          'email': occupantEmails[i].text.trim(),
+                          'phoneNumber': occupantPhones[i].text.trim(),
+                        });
+                      }
                       await FirebaseFirestore.instance
                           .collection('Users')
-                          .doc(user!.uid)
+                          .doc(user?.uid)
                           .collection('Booked hostels')
                           .doc(widget.hostel.name) // Set your own ID
                           .set({
+                            'hostel_name': widget.hostel.name,
+                            'paid': false,
+                            // 'isDone': false,
+                            'people_booking': int.parse(numPeople.text),
+                            'name': occupantNames[0].text,
+                            'occupants': occupants,
+                            'email': occupantEmails[0].text,
+                            'phone_number': occupantPhones[0].text,
+                            'time': Timestamp.now(),
                             'move_in': dateControllerMovein.text,
                             'move_out': dateControllerMoveout.text,
                             'isDone': true,
+                            'gender': selectedGender == "M" ? "male" : "female",
+                            'duration': duration,
                           }, SetOptions(merge: true));
+
+                      final int totalPeople = int.tryParse(numPeople.text) ?? 0;
+
+                      if (totalPeople == 0) return;
+
+                      final List<Map<String, dynamic>> students = [];
+
+                      for (int j = 0; j < totalPeople; j++) {
+                        students.add({
+                          "name": occupantNames[j].text.trim(),
+                          "id": "${occupantNames[j].text.trim().split(" ")[0]}${generateSixDigitCode()}",
+                          "email": occupantEmails[j].text.trim(),
+                          "phone": occupantPhones[j].text.trim(),
+                          "hostel_booked": widget.hostel.name,
+                          "roomType": "$roomCap in a room",
+                          "booked_by": j == 0
+                              ? "self"
+                              : occupantNames[0].text.trim(),
+                          "createdAt": DateTime.now(),
+                          "verified": false,
+                          'move_in': dateControllerMovein.text,
+                          'move_out': dateControllerMoveout.text,
+                          'gender': selectedGender == "M" ? "male" : "female",
+                          'duration': duration,
+                          'paid': false,
+                          'status': 'pending',
+                          'paymentStatus': 'pending',
+                          'commissionAmount': widget.hostel.amt_per_year?? 0 * 0.15,
+                          'paymentMethod': '',
+                          'amount': 0,
+                          'paymentRef': "",
+                          'institution_name': widget.hostel.institution_name
+                        });
+                      }
+
+                      await FirebaseFirestore.instance
+                          .collection('Managers')
+                          .doc(widget.hostel.manager_id)
+                          .set({
+                            'students': FieldValue.arrayUnion(students),
+                          }, SetOptions(merge: true));
+
                       setModalState(() {
                         isLoading = false;
                       });
                       Get.to(
-                        () => Payment(user: user, subject: "Payment"),
+                        () => Payment(user: user!, subject: "Payment"),
                         transition: Transition.fadeIn,
                         duration: const Duration(milliseconds: 600),
                         curve: Curves.easeIn,
@@ -1612,7 +1738,7 @@ class _HostelDetailsState extends State<HostelDetails> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: true,
       child: Material(
         child: SafeArea(
           child: Scaffold(
@@ -1785,28 +1911,6 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   ),
                                                   // SizedBox(width: 5.h),
                                                   GestureDetector(
-                                                    onTap: () {
-                                                      debugPrint(
-                                                        "This is the value of index: ${widget.index}",
-                                                      );
-                                                      debugPrint(
-                                                        "This is the value at index: ${home.popularBools.value[widget.index]}",
-                                                      );
-                                                      setState(() {
-                                                        favorite = !favorite;
-                                                        if (widget.type ==
-                                                            "popular") {
-                                                          home
-                                                                  .popularBools
-                                                                  .value[widget
-                                                                  .index] =
-                                                              favorite;
-                                                        }
-                                                        debugPrint(
-                                                          "This is the value at index after tap: ${home.popularBools.value[widget.index]}",
-                                                        );
-                                                      });
-                                                    },
                                                     child: Container(
                                                       margin: EdgeInsets.only(
                                                         right: 20.h,
@@ -1831,20 +1935,38 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                             left: 0,
                                                             right: 0,
                                                             bottom: 0,
-                                                            child: !favorite
-                                                                ? const Icon(
-                                                                    Icons
-                                                                        .favorite_border_outlined,
-                                                                    color: Colors
-                                                                        .black,
-                                                                  )
-                                                                : Icon(
-                                                                    Icons
-                                                                        .favorite,
-                                                                    color: Color(
-                                                                      0xFF00EFD1,
+                                                            child: Obx(() {
+                                                              final isFav = favCtrl
+                                                                  .isFavorite(
+                                                                    widget
+                                                                        .hostel
+                                                                        .id,
+                                                                  );
+
+                                                              return GestureDetector(
+                                                                onTap: () => favCtrl
+                                                                    .toggleFavorite(
+                                                                      widget
+                                                                          .hostel
+                                                                          .id,
                                                                     ),
-                                                                  ),
+
+                                                                child: Icon(
+                                                                  isFav
+                                                                      ? Icons
+                                                                            .favorite
+                                                                      : Icons
+                                                                            .favorite_border,
+                                                                  color:
+                                                                      Color.fromARGB(
+                                                                        255,
+                                                                        0,
+                                                                        239,
+                                                                        209,
+                                                                      ),
+                                                                ),
+                                                              );
+                                                            }),
                                                           ),
                                                         ],
                                                       ),
@@ -2239,18 +2361,46 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   BorderRadius.circular(
                                                                     10.r,
                                                                   ),
-                                                              child: Image.asset(
-                                                                'assets/hostels_detail/hostel-2.png',
-                                                                height:
-                                                                    Constant
-                                                                        .height *
-                                                                    0.05,
+                                                              child: CachedNetworkImage(
+                                                                imageUrl:
+                                                                    widget
+                                                                        .hostel
+                                                                        .hostel_images?[2] ??
+                                                                    "",
                                                                 width:
                                                                     Constant
                                                                         .width *
                                                                     0.115,
+                                                                height:
+                                                                    Constant
+                                                                        .height *
+                                                                    0.05,
                                                                 fit: BoxFit
                                                                     .cover,
+                                                                placeholder:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                    ) => SpinKitThreeBounce(
+                                                                      color:
+                                                                          const Color.fromARGB(
+                                                                            255,
+                                                                            0,
+                                                                            239,
+                                                                            209,
+                                                                          ),
+                                                                      size:
+                                                                          10.0,
+                                                                    ),
+                                                                errorWidget:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                      error,
+                                                                    ) => Icon(
+                                                                      Icons
+                                                                          .error,
+                                                                    ),
                                                               ),
                                                             ),
                                                           ),
@@ -2272,8 +2422,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                   BorderRadius.circular(
                                                                     10.r,
                                                                   ),
-                                                              child: Image.asset(
-                                                                'assets/hostels_detail/hostel-2.png',
+                                                              child: CachedNetworkImage(
                                                                 height:
                                                                     Constant
                                                                         .height *
@@ -2282,86 +2431,150 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     Constant
                                                                         .width *
                                                                     0.115,
+                                                                imageUrl:
+                                                                    widget
+                                                                        .hostel
+                                                                        .hostel_images?[1] ??
+                                                                    "",
                                                                 fit: BoxFit
                                                                     .cover,
+                                                                placeholder:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                    ) => SpinKitThreeBounce(
+                                                                      color:
+                                                                          const Color.fromARGB(
+                                                                            255,
+                                                                            0,
+                                                                            239,
+                                                                            209,
+                                                                          ),
+                                                                      size:
+                                                                          10.0,
+                                                                    ),
+                                                                errorWidget:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                      error,
+                                                                    ) => Icon(
+                                                                      Icons
+                                                                          .error,
+                                                                    ),
                                                               ),
                                                             ),
                                                           ),
                                                           // SizedBox(height: 10.h),
-                                                          Container(
-                                                            height:
-                                                                Constant
-                                                                    .height *
-                                                                0.05,
-                                                            width:
-                                                                Constant.width *
-                                                                0.115,
-                                                            decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                color: Colors
-                                                                    .white,
-                                                                width: 2.w,
-                                                              ),
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    10.r,
-                                                                  ),
-                                                            ),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    10.r,
-                                                                  ),
-                                                              child: SizedBox(
-                                                                height:
-                                                                    Constant
-                                                                        .height *
-                                                                    0.05,
-                                                                width:
-                                                                    Constant
-                                                                        .width *
-                                                                    0.115,
-                                                                child: Stack(
-                                                                  children: [
-                                                                    Image.asset(
-                                                                      'assets/hostels_detail/hostel-2.png',
-                                                                      height:
-                                                                          Constant
-                                                                              .height *
-                                                                          0.05,
-                                                                      width:
-                                                                          Constant
-                                                                              .width *
-                                                                          0.115,
-                                                                      fit: BoxFit
-                                                                          .cover,
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Get.to(
+                                                                () => MediaScreen(
+                                                                  type:
+                                                                      "photos",
+                                                                  media:
+                                                                      (widget.hostel.hostel_images ??
+                                                                              [])
+                                                                          .whereType<
+                                                                            String
+                                                                          >()
+                                                                          .toList(),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              height:
+                                                                  Constant
+                                                                      .height *
+                                                                  0.05,
+                                                              width:
+                                                                  Constant
+                                                                      .width *
+                                                                  0.115,
+                                                              decoration: BoxDecoration(
+                                                                border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 2.w,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      10.r,
                                                                     ),
-                                                                    Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: Color.fromRGBO(
-                                                                          51,
-                                                                          51,
-                                                                          51,
-                                                                          0.1,
-                                                                        ),
+                                                              ),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      10.r,
+                                                                    ),
+                                                                child: SizedBox(
+                                                                  height:
+                                                                      Constant
+                                                                          .height *
+                                                                      0.05,
+                                                                  width:
+                                                                      Constant
+                                                                          .width *
+                                                                      0.115,
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl:
+                                                                            widget.hostel.hostel_images?[0] ??
+                                                                            "",
+                                                                        width:
+                                                                            Constant.width *
+                                                                            0.115,
+                                                                        height:
+                                                                            Constant.height *
+                                                                            0.05,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        placeholder:
+                                                                            (
+                                                                              context,
+                                                                              url,
+                                                                            ) => SpinKitThreeBounce(
+                                                                              color: const Color.fromARGB(
+                                                                                255,
+                                                                                0,
+                                                                                239,
+                                                                                209,
+                                                                              ),
+                                                                              size: 10.0,
+                                                                            ),
+                                                                        errorWidget:
+                                                                            (
+                                                                              context,
+                                                                              url,
+                                                                              error,
+                                                                            ) => Icon(
+                                                                              Icons.error,
+                                                                            ),
                                                                       ),
-                                                                      child: Center(
-                                                                        child: Text(
-                                                                          "+10",
-                                                                          style: TextStyle(
-                                                                            fontFamily:
-                                                                                "Poppins",
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                            fontSize:
-                                                                                12.sp,
-                                                                            color:
-                                                                                Colors.white,
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: Color.fromRGBO(
+                                                                            51,
+                                                                            51,
+                                                                            51,
+                                                                            0.1,
+                                                                          ),
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            "+${(widget.hostel.hostel_images?.length ?? 0) - 3 > 0 ? (widget.hostel.hostel_images!.length - 3) : 0}",
+                                                                            style: TextStyle(
+                                                                              fontFamily: "Poppins",
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 12.sp,
+                                                                              color: Colors.white,
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -2982,7 +3195,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                     ),
                                   ),
                                   isLoading
-                                      ? CircularProgressIndicator(color: Color(0xFF00EFD1),)
+                                      ? CircularProgressIndicator(
+                                          color: Color(0xFF00EFD1),
+                                        )
                                       : SingleChildScrollView(
                                           controller: _scrollController,
                                           child: Column(
@@ -3639,7 +3854,6 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             0.05,
                                                                         child: ElevatedButton(
                                                                           onPressed: () {
-                                                                            TextEditingController
                                                                             numPeople = TextEditingController(
                                                                               text: "1",
                                                                             );
@@ -3726,10 +3940,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                                                       name,
                                                                                                       // phoneNum,
                                                                                                       emailAddress,
-                                                                                                      occupantNames,
                                                                                                       occupantEmails,
+                                                                                                      occupantNames,
                                                                                                       occupantPhones,
                                                                                                       () {
+                                                                                                        roomtype = room.type ?? "";
                                                                                                         if (room.type !=
                                                                                                             null) {
                                                                                                           if (room.type ==
@@ -4213,35 +4428,35 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           ),
                                           SizedBox(height: 20.h),
                                           Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10.0.w,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Get.to(
-                                            () => HostelsDetailMap(
-                                              hostel: widget.hostel,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10.0.w,
                                             ),
-                                            transition: Transition.fadeIn,
-                                            duration: const Duration(
-                                              milliseconds: 800,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Get.to(
+                                                  () => HostelsDetailMap(
+                                                    hostel: widget.hostel,
+                                                  ),
+                                                  transition: Transition.fadeIn,
+                                                  duration: const Duration(
+                                                    milliseconds: 800,
+                                                  ),
+                                                  curve: Curves.easeIn,
+                                                );
+                                              },
+                                              child: SizedBox(
+                                                width: MediaQuery.sizeOf(
+                                                  context,
+                                                ).width.w,
+                                                height: 400.h,
+                                                // color: Colors.red,
+                                                child: Image.asset(
+                                                  "assets/hostels_detail/citymap.jpg",
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
                                             ),
-                                            curve: Curves.easeIn,
-                                          );
-                                        },
-                                        child: SizedBox(
-                                          width: MediaQuery.sizeOf(
-                                            context,
-                                          ).width.w,
-                                          height: 400.h,
-                                          // color: Colors.red,
-                                          child: Image.asset(
-                                            "assets/hostels_detail/view location.png",
-                                            fit: BoxFit.fill,
                                           ),
-                                        ),
-                                      ),
-                                    ),
                                         ],
                                       ),
                                     ),

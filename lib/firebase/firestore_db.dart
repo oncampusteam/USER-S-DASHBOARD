@@ -21,119 +21,108 @@ class FirestoreDb {
 
   // UserModel? usermodel;
 
-  Future<List<Regions>> getRegions(BuildContext context) async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
-          .collection("Region")
-          .get();
-
-      List<Regions> regionsList = querySnapshot.docs
-          .map((e) => Regions.fromJson(e.data()))
-          .toList();
-
-      return regionsList;
-    } catch (e) {
-      debugPrint(e.toString());
-      Get.snackbar(
-        "Error",
-        "An unknown error occurred. Please try again later. \n ${e.toString()}\n ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return [];
-    }
+  Stream<List<Regions>> getRegionsStream() {
+    return db
+        .collection("Region")
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((e) => Regions.fromJson(e.data())).toList();
+        })
+        .handleError((e) {
+          debugPrint(e.toString());
+          Get.snackbar(
+            "Error in getting Region",
+            "An unknown error occurred. Please try again later. \n ${e.toString()}",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        });
   }
 
-  Future<List<Hostels>> getPrivateHostels() async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
-          .collectionGroup("Private Hostels")
-          .get();
+  Stream<List<Hostels>> getPrivateHostelsStream() {
+    return db
+        .collectionGroup("Private Hostels")
+        .snapshots()
+        .map((snapshot) {
+          debugPrint("${snapshot.docs}");
+          List<Hostels> hostels = snapshot.docs
+              .map((e) => Hostels.fromJson(e.data()))
+              .toList();
 
-      List<Hostels> allPrivateHostels = querySnapshot.docs
-          .map((e) => Hostels.fromJson(e.data()))
-          .toList();
-      // print(allPrivateHostels);
-      for (var e in querySnapshot.docs) {
-        String fullPath = e.reference.path;
+          // Optional: update region and city fields once
+          for (var e in snapshot.docs) {
+            String fullPath = e.reference.path;
+            List<String> pathSegments = fullPath.split('/');
+            String region = pathSegments[1];
+            String city = pathSegments[3];
 
-        // Example path: "Regions/Ashanti/Cities/Ayeduase/Private Hostels/Wagyingo"
-        List<String> pathSegments = fullPath.split('/');
+            // Only update if missing
+            if (e.data()['region'] == null || e.data()['city'] == null) {
+              e.reference.update({'region': region, 'city': city});
+            }
+          }
 
-        String region = pathSegments[1];
-        String city = pathSegments[3];
-        await e.reference.update({'region': region, 'city': city});
-      }
-      return allPrivateHostels;
-    } catch (e) {
-      debugPrint(e.toString());
-      Get.snackbar(
-        "Error",
-        "An unknown error occurred. Please try again later. \n ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return [];
-    }
+          return hostels;
+        })
+        .handleError((e) {
+          debugPrint(e.toString());
+          Get.snackbar(
+            "Error in getting Private Hostels",
+            "An unknown error occurred. Please try again later. \n ${e.toString()}",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        });
   }
 
-  Future<List<Hostels>> getSchoolHostels() async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
-          .collectionGroup("School Hostels")
-          .get();
-      List<Hostels> allSchoolHostels = querySnapshot.docs
-          .map((e) => Hostels.fromJson(e.data()))
-          .toList();
+  /// Stream of all school hostels
+  Stream<List<Hostels>> getSchoolHostelsStream() {
+    return db
+        .collectionGroup("School Hostels")
+        .snapshots()
+        .map((snapshot) {
+          List<Hostels> hostels = snapshot.docs
+              .map((e) => Hostels.fromJson(e.data()))
+              .toList();
 
-      for (var e in querySnapshot.docs) {
-        String fullPath = e.reference.path;
+          for (var e in snapshot.docs) {
+            String fullPath = e.reference.path;
+            List<String> pathSegments = fullPath.split('/');
+            String region = pathSegments[1];
+            String university = pathSegments[3];
 
-        // /Region/Cape Coast/Universities/UCC/School Hostels/SRC Hostel
-        List<String> pathSegments = fullPath.split('/');
-        String region = pathSegments[1];
-        String university = pathSegments[3];
-        await e.reference.update({'region': region, 'university': university});
-        print(e.data().length);
-      }
-      return allSchoolHostels;
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "An unknown error occurred. Please try again later. \n ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return [];
-    }
+            if (e.data()['region'] == null || e.data()['university'] == null) {
+              e.reference.update({'region': region, 'university': university});
+            }
+          }
+
+          return hostels;
+        })
+        .handleError((e) {
+          debugPrint(e.toString());
+          Get.snackbar(
+            "Error in getting School Hostels",
+            "An unknown error occurred. Please try again later. \n ${e.toString()}",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        });
   }
 
-  Future<List<Hostels>> getPopular() async {
-    List<Hostels> popularHostels = [];
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
-          .collectionGroup("Private Hostels")
-          .where(
-            "ispopular",
-            isEqualTo: true,
-          ) // use boolean true instead of string
-          .get();
-
-      popularHostels = querySnapshot.docs
-          .map((e) => Hostels.fromJson(e.data()))
-          .toList();
-      // for (var e in querySnapshot.docs) {
-      //   print(e.data());
-      // }
-
-      return popularHostels;
-    } catch (e) {
-      // print("Anfa oo");
-      debugPrint(e.toString());
-      Get.snackbar(
-        "Error",
-        "An unknown error occurred. Please try again later. \n ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return [];
-    }
+  Stream<List<Hostels>> getPopularStream() {
+    return db
+        .collectionGroup("Private Hostels")
+        .where("ispopular", isEqualTo: true)
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((e) => Hostels.fromJson(e.data())).toList(),
+        )
+        .handleError((e) {
+          debugPrint(e.toString());
+          Get.snackbar(
+            "Error in getting Popular Hostels",
+            "An unknown error occurred. Please try again later. \n ${e.toString()}",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        });
   }
 
   Future<List<RoomTypes>> roomTypes(Hostels name) async {
@@ -159,7 +148,7 @@ class FirestoreDb {
       return roomTypes;
     } catch (e) {
       Get.snackbar(
-        "Error",
+        "Error in room types",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -187,7 +176,7 @@ class FirestoreDb {
     } catch (e) {
       debugPrint("An error occurred during Google sign-in: $e");
       Get.snackbar(
-        "Error",
+        "Error in getting Popular",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -398,7 +387,9 @@ class FirestoreDb {
 
       // debugPrint('Finished updating documents in "Private Hostels" collection.');
     } catch (e) {
-      debugPrint('Error getting documents from "Private Hostels" collection: $e');
+      debugPrint(
+        'Error getting documents from "Private Hostels" collection: $e',
+      );
     }
   }
 
@@ -534,7 +525,7 @@ class FirestoreDb {
       await query.reference.update({'region': region, 'city': city});
     } catch (e) {
       Get.snackbar(
-        "Error",
+        "Error in getting Hostels by Name",
         "An unknown error occurred. Please try again later. \n ${e.toString()}",
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -548,7 +539,7 @@ class FirestoreDb {
     try {
       if (user == null) {
         Get.snackbar(
-          "Error",
+          "Error getting user info",
           "Please sign in to continue",
           snackPosition: SnackPosition.BOTTOM,
         );
@@ -560,7 +551,7 @@ class FirestoreDb {
 
       if (!docSnapshot.exists || docSnapshot.data() == null) {
         Get.snackbar(
-          "Error",
+          "Error getting user info",
           "User data not found.",
           snackPosition: SnackPosition.BOTTOM,
         );
@@ -623,5 +614,39 @@ class FirestoreDb {
 
     //debugPrint(bookedHostels.toString());
     return bookedHostels;
+  }
+
+  Future<void> createNewFields() async {
+    try {
+      // Get all documents in the 'Private Hostels' collection
+      QuerySnapshot privateHostelsSnapshot = await db
+          .collectionGroup('Private Hostels')
+          .get();
+
+      // Iterate through the documents and update each one
+      for (QueryDocumentSnapshot doc in privateHostelsSnapshot.docs) {
+        try {
+          await doc.reference.update({
+            "googleMapUrl": "https://www.google.com/maps?q=5.4581522,-1.158504",
+            "managerEmail": "godfredamoateng13@gmail.com",
+            "updatedAt": FieldValue.serverTimestamp(),
+            "video":
+                "https://firebasestorage.googleapis.com/v0/b/on-campus-d0cb6.firebasestorage.app/o/hostels%2Fvideos%2F1769029097891_Recording%202026-01-06%20215022.mp4?alt=media&token=c07c6b66-33d9-4153-8579-6a0716395987",
+            "virtualTour": "",
+            "category": "Private Hostels",
+            "createdAt": FieldValue.serverTimestamp(),
+            "createdBy": "Twa10GnjO0PKOs1ZJUn3ckbSXN72",
+          });
+        } catch (e) {
+          debugPrint('Error updating document ${doc.id}: $e');
+        }
+      }
+
+      // debugPrint('Finished updating documents in "Private Hostels" collection.');
+    } catch (e) {
+      debugPrint(
+        'Error getting documents from "Private Hostels" collection: $e',
+      );
+    }
   }
 }

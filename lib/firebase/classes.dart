@@ -33,6 +33,7 @@ class Regions {
 class Hostels {
   Hostels({
     required this.name,
+    required this.institution_name,
     required this.amt_per_year,
     required this.description,
     required this.available_rooms,
@@ -50,11 +51,14 @@ class Hostels {
     required this.university,
     required this.latitude,
     required this.longitude,
+    required this.manager_id,
   });
 
-  Hostels.empty() : name = "";
+  // Hostels.empty() : name = "";
 
   String name;
+  String institution_name;
+  String manager_id;
   int? amt_per_year;
   String? description;
   int? available_rooms;
@@ -73,8 +77,12 @@ class Hostels {
   String? latitude;
   String? longitude;
 
+  String get id => "$name|$university|$city";
+
   factory Hostels.fromJson(Map<String, dynamic> json) => Hostels(
     name: json["name"],
+    institution_name: json["institution_name"],
+    manager_id: json["manager_id"],
     amt_per_year: json["amt_per_year"],
     description: json["description"],
     available_rooms: json["available_rooms"],
@@ -104,11 +112,13 @@ class Hostels {
 
   Map<String, dynamic> toJson() => {
     "name": name,
+    "institution_name": institution_name,
     "amt_per_year": amt_per_year,
     "description": description,
     "available_rooms": available_rooms,
     "distance_car": distance_car,
     "gender": gender,
+    "manager_id": manager_id,
     "distance_walk": distance_walk,
     "hostel_images": hostel_images != null
         ? List<dynamic>.from(hostel_images!.map((x) => x))
@@ -117,6 +127,12 @@ class Hostels {
     // "amenities": amenities,
     "amenities": amenities != null
         ? List<dynamic>.from(amenities!.map((x) => x))
+        : null,
+    "bills_utilities": bills_utilities != null
+        ? List<dynamic>.from(bills_utilities!.map((x) => x))
+        : null,
+    "security_safety": security_safety != null
+        ? List<dynamic>.from(security_safety!.map((x) => x))
         : null,
     "ispopular": ispopular,
     "region": region,
