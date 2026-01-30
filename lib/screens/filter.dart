@@ -60,9 +60,9 @@ class _FilterState extends State<Filter> {
 
       /// AMENITIES FILTER (ALL must match)
       if (filter.amenities.isNotEmpty) {
-        final hostelAmenities = hostel.amenities ?? [];
-        print("hostel.amenities ${hostel.amenities}");
-        print("filter.amenities ${filter.amenities}");
+        final hostelAmenities = hostel.amenities ?? [{}];
+        // print("hostel.amenities ${hostel.amenities}");
+        // print("filter.amenities ${filter.amenities}");
 
         final hasAllAmenities = filter.amenities.any(
           (a) => hostelAmenities.contains(a),

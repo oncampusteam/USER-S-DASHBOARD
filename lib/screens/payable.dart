@@ -30,7 +30,8 @@ class Payable extends StatefulWidget {
 
 class _PayableState extends State<Payable> {
   // String secretKey = "sk_test_13937ae4f88036bbec93c978710a821d598fe708";
-  String secretKey = dotenv.env['PAYSTACK_SECRET_KEY']!;
+String secretKey = dotenv.env['PAYSTACK_SECRET_KEY']!;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _PayableState extends State<Payable> {
               height: Constant.height * 0.055,
               child: FittedBox(
                 child: Text(
-                  "GHS ${widget.amount}",
+                  "GHS ${widget.bookedHostel.amount}",
                   style: TextStyle(
                     fontSize: 32.sp.clamp(0, 32),
                     fontWeight: FontWeight.bold,

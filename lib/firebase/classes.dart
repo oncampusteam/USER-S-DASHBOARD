@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: non_constant_identifier_names
+
 
 Regions regionsFromJson(String str) => Regions.fromJson(json.decode(str));
 String regionsToJson(Regions data) => json.encode(data.toJson());
@@ -65,11 +67,11 @@ class Hostels {
   int? distance_car;
   String? gender;
   int? distance_walk;
-  List<String?>? hostel_images;
+  List<dynamic>? hostel_images;
   int? rate;
-  List<String?>? amenities;
-  List<String?>? bills_utilities;
-  List<String?>? security_safety;
+  List<dynamic>? amenities;
+  List<dynamic>? bills_utilities;
+  List<dynamic>? security_safety;
   bool? ispopular;
   String? region;
   String? city;
@@ -89,19 +91,23 @@ class Hostels {
     distance_car: json["distance_car"],
     gender: json["gender"],
     distance_walk: json["distance_walk"],
-    hostel_images: json["hostel_images"] != null
-        ? List<String?>.from(json["hostel_images"])
-        : null,
+    // hostel_images: json["hostel_images"] != null
+    //     ? List<String?>.from(json["hostel_images"])
+    //     : null,
+    hostel_images: json["hostel_images"],
     rate: json["rate"],
-    amenities: json["amenities"] != null
-        ? List<String?>.from(json["amenities"])
-        : null,
-    bills_utilities: json["bills_utilities"] != null
-        ? List<String?>.from(json["bills_utilities"])
-        : null,
-    security_safety: json["security_safety"] != null
-        ? List<String?>.from(json["security_safety"])
-        : null,
+    // amenities: json["amenities"] != null
+    //     ? List<String?>.from(json["amenities"])
+    //     : null,
+    // bills_utilities: json["bills_utilities"] != null
+    //     ? List<String?>.from(json["bills_utilities"])
+    //     : null,
+    // security_safety: json["security_safety"] != null
+    //     ? List<String?>.from(json["security_safety"])
+    //     : null,
+    amenities: json["amenities"] ?? [{}],
+    bills_utilities: json["bills_utilities"] ?? [{}],
+    security_safety: json["security_safety"] ?? [{}],
     ispopular: json["ispopular"],
     region: json["region"],
     city: json["city"],
@@ -120,20 +126,24 @@ class Hostels {
     "gender": gender,
     "manager_id": manager_id,
     "distance_walk": distance_walk,
-    "hostel_images": hostel_images != null
-        ? List<dynamic>.from(hostel_images!.map((x) => x))
-        : null,
+    // "hostel_images": hostel_images != null
+    //     ? List<dynamic>.from(hostel_images!.map((x) => x))
+    //     : null,
+    "hostel_images": hostel_images ?? [{}],
     "rate": rate,
-    // "amenities": amenities,
-    "amenities": amenities != null
-        ? List<dynamic>.from(amenities!.map((x) => x))
-        : null,
-    "bills_utilities": bills_utilities != null
-        ? List<dynamic>.from(bills_utilities!.map((x) => x))
-        : null,
-    "security_safety": security_safety != null
-        ? List<dynamic>.from(security_safety!.map((x) => x))
-        : null,
+    "amenities": amenities as List<dynamic>,
+    "bills_utilities": bills_utilities as List<dynamic>,
+    "security_safety": security_safety as List<dynamic>,
+
+    // "amenities": amenities != null
+    //     ? List<dynamic>.from(amenities!.map((x) => x))
+    //     : null,
+    // "bills_utilities": bills_utilities != null
+    //     ? List<dynamic>.from(bills_utilities!.map((x) => x))
+    //     : null,
+    // "security_safety": security_safety != null
+    //     ? List<dynamic>.from(security_safety!.map((x) => x))
+    //     : null,
     "ispopular": ispopular,
     "region": region,
     "city": city,
@@ -270,6 +280,7 @@ class RoomTypes {
 
 class BookedHostels {
   BookedHostels({
+    required this.amount,
     required this.people_booking,
     required this.duration,
     required this.email,
@@ -283,6 +294,7 @@ class BookedHostels {
   });
 
   int? people_booking;
+  double amount;
   int? duration;
   String? email;
   String? gender;
@@ -295,6 +307,7 @@ class BookedHostels {
 
   factory BookedHostels.fromJson(Map<String, dynamic> json) => BookedHostels(
     people_booking: json["people_booking"],
+    amount: json["amount"],
     duration: json["duration"],
     email: json["email"],
     gender: json["gender"],
@@ -309,6 +322,7 @@ class BookedHostels {
   Map<String, dynamic> toJson() => {
     "people_booking": people_booking,
     "duration": duration,
+    "amount": amount,
     "email": email,
     "gender": gender,
     "hostel_name": hostel_name,

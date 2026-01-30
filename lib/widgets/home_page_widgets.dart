@@ -34,7 +34,7 @@ Widget HostelCard({
       itemCount: hostels.isEmpty ? 0 : (seeAllPopular ? hostels.length : 5),
       itemBuilder: (context, index) {
         Hostels hostel = hostels[index];
-        String? string = hostel.hostel_images?[0];
+        String? string = hostel.hostel_images?[0]["imageUrl"];
         return !variant
             ? Row(
                 children: [
@@ -411,13 +411,13 @@ Widget hostelGestureCard({
                                   child: FittedBox(
                                     child: GetIcon(
                                       text:
-                                          hostel.amenities![index] ?? "noicon",
+                                          hostel.amenities![index]["id"] ?? "noicon",
                                     ),
                                   ),
                                 ),
                                 SizedBox(width: 5.w),
                                 Text(
-                                  hostel.amenities![index]?.capitalize ??
+                                  hostel.amenities![index]["label"]??
                                       "none",
                                   style: TextStyle(
                                     fontFamily: "Work Sans",
@@ -593,7 +593,7 @@ Widget hostelCardVariant({
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12.r),
                             child: Image.network(
-                              hostel.hostel_images?[0] ?? "",
+                              hostel.hostel_images?[0]["imageUrl"] ?? "",
                               height: Constant.height * 0.25,
                               // width: 225.w,
                               fit: BoxFit.cover,
@@ -810,7 +810,7 @@ Widget hostelCardVariant({
                                                 child: GetIcon(
                                                   text:
                                                       hostel
-                                                          .amenities![index2] ??
+                                                          .amenities![index2] ["label"]??
                                                       "noicon",
                                                 ),
                                               ),
@@ -818,8 +818,7 @@ Widget hostelCardVariant({
                                             SizedBox(width: 5.w),
                                             Text(
                                               hostel
-                                                      .amenities![index2]
-                                                      ?.capitalize ??
+                                                      .amenities![index2]["label"]??
                                                   "none",
                                               style: TextStyle(
                                                 fontFamily: "Work Sans",
@@ -906,7 +905,7 @@ Widget hostelCardVariant({
                                                         text:
                                                             hostel
                                                                 .amenities![index3 +
-                                                                offset] ??
+                                                                offset]["label"] ??
                                                             "noicon",
                                                       ),
                                                     ),
@@ -915,8 +914,7 @@ Widget hostelCardVariant({
                                                   Text(
                                                     hostel
                                                             .amenities![index3 +
-                                                                offset]
-                                                            ?.capitalize ??
+                                                                offset]["label"] ??
                                                         "none",
                                                     style: TextStyle(
                                                       fontFamily: "Work Sans",

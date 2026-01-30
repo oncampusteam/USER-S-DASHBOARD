@@ -45,7 +45,7 @@ class Enquire extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
-                          imageUrl: hostel.hostel_images![0] ?? "",
+                          imageUrl: hostel.hostel_images![0]["imageUrl"] ?? "",
                           width: 70,
                           height: 70,
                           fit: BoxFit.cover,

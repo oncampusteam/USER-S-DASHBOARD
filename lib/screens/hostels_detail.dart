@@ -113,8 +113,8 @@ class _HostelDetailsState extends State<HostelDetails> {
           if (mounted) {
             setState(() {
               currentPosition = LatLng(
-                currentLocation.latitude!,
-                currentLocation.longitude!,
+                currentLocation.latitude ?? 0,
+                currentLocation.longitude ?? 0, 
               );
 
               //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
@@ -162,10 +162,10 @@ class _HostelDetailsState extends State<HostelDetails> {
     PolylinePoints polylinePoints = PolylinePoints(apiKey: GOOGLE_MAPS_API_KEY);
     RoutesApiRequest request = RoutesApiRequest(
       origin: PointLatLng(
-        currentPosition!.latitude,
-        currentPosition!.longitude,
+        currentPosition?.latitude ?? 0,
+        currentPosition?.longitude ?? 0,
       ),
-      destination: PointLatLng(initialPose!.latitude, initialPose!.longitude),
+      destination: PointLatLng(initialPose?.latitude ?? 0, initialPose?.longitude ?? 0),
       travelMode: TravelMode.driving,
       routingPreference: RoutingPreference.trafficAware,
     );
@@ -691,7 +691,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    widget.hostel.hostel_images![0] ?? "",
+                    widget.hostel.hostel_images?[0]["imageUrl"] ?? "",
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,
@@ -1376,7 +1376,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      widget.hostel.hostel_images![0] ?? "",
+                      widget.hostel.hostel_images?[0]["imageUrl"] ?? "",
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
@@ -1640,6 +1640,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                             'isDone': true,
                             'gender': selectedGender == "M" ? "male" : "female",
                             'duration': duration,
+                            'amount': widget.hostel.amt_per_year
                           }, SetOptions(merge: true));
 
                       final int totalPeople = int.tryParse(numPeople.text) ?? 0;
@@ -1774,7 +1775,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                       itemBuilder: (context, index) {
                                         // Swipper swiper = swipers[index];
                                         String? string =
-                                            widget.hostel.hostel_images![index];
+                                            widget.hostel.hostel_images![index]["imageUrl"];
                                         return CachedNetworkImage(
                                           imageUrl: string ?? "",
                                           width: MediaQuery.sizeOf(
@@ -2365,7 +2366,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 imageUrl:
                                                                     widget
                                                                         .hostel
-                                                                        .hostel_images?[2] ??
+                                                                        .hostel_images?[2]["imageUrl"] ??
                                                                     "",
                                                                 width:
                                                                     Constant
@@ -2434,7 +2435,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                 imageUrl:
                                                                     widget
                                                                         .hostel
-                                                                        .hostel_images?[1] ??
+                                                                        .hostel_images?[1]["imageUrl"] ??
                                                                     "",
                                                                 fit: BoxFit
                                                                     .cover,
@@ -2468,19 +2469,19 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           // SizedBox(height: 10.h),
                                                           GestureDetector(
                                                             onTap: () {
-                                                              Get.to(
-                                                                () => MediaScreen(
-                                                                  type:
-                                                                      "photos",
-                                                                  media:
-                                                                      (widget.hostel.hostel_images ??
-                                                                              [])
-                                                                          .whereType<
-                                                                            String
-                                                                          >()
-                                                                          .toList(),
-                                                                ),
-                                                              );
+                                                              // Get.to(
+                                                              //   () => MediaScreen(
+                                                              //     type:
+                                                              //         "photos",
+                                                              //     media:
+                                                              //         (widget.hostel.hostel_images ??
+                                                              //                 [])
+                                                              //             .whereType<
+                                                              //               String
+                                                              //             >()
+                                                              //             .toList(),
+                                                              //   ),
+                                                              // );
                                                             },
                                                             child: Container(
                                                               height:
@@ -2520,7 +2521,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                     children: [
                                                                       CachedNetworkImage(
                                                                         imageUrl:
-                                                                            widget.hostel.hostel_images?[0] ??
+                                                                            widget.hostel.hostel_images?[0]["imageUrl"] ??
                                                                             "",
                                                                         width:
                                                                             Constant.width *
@@ -2852,6 +2853,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                         bottom: 10.h,
                                       ),
                                       child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Align(
                                             key: _sectionKeys['Description'],
@@ -2875,7 +2877,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             ),
                                           ),
                                           Text(
-                                            "Welcome to resort paradise we ensure the best service during your stay in bali with an emphasis on customer comfort. Enjoy Balinese specialties, dance and music every saturday for free at competitve prices you can...",
+                                            widget.hostel.description ?? "",
                                             style: TextStyle(
                                               fontFamily: "Poppins",
                                               color: const Color(0xFF787878),

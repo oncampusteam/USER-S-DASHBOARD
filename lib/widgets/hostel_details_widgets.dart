@@ -20,20 +20,24 @@ Widget utilities({
   required String type,
   required BuildContext context,
 }) {
-  List<String?> abs() {
+  List<dynamic> abs() {
     if (amenities == true) {
-      return hostel.amenities ?? <String>[];
+      // debugPrint("This is the amenities return: ${hostel.amenities}");
+      debugPrint("This is the amenities length: ${hostel.amenities?.length}");
+      debugPrint("This is the amenities length: ${hostel.bills_utilities?.length}");
+      debugPrint("This is the amenities length: ${hostel.security_safety?.length}");
+      return hostel.amenities as List<dynamic>;
     } else if (bills == true) {
-      return hostel.bills_utilities ?? <String>[];
+      return hostel.bills_utilities as List<dynamic>;
     }
     if (security == true) {
-      return hostel.security_safety ?? <String>[];
+      return hostel.security_safety as List<dynamic>;
     } else {
       return [];
     }
   }
 
-  List<String?> value = abs();
+  List<dynamic> value = abs();
 
   return Column(
     children: [
@@ -42,28 +46,28 @@ Widget utilities({
         children: [
           Row(
             children: [
-              GetIcon(text: value[0] ?? "noicon"),
+              GetIcon(text: value[0]["id"] ?? "noicon"),
               SizedBox(width: 5),
               SizedBox(
                 height: Constant.height * 0.023,
                 width: Constant.width * 0.35,
                 child: FittedBox(
                   alignment: Alignment.centerLeft,
-                  child: Text(value[0]?.capitalize ?? ""),
+                  child: Text(value[0]["id"] ?? ""),
                 ),
               ),
             ],
           ),
           Row(
             children: [
-              GetIcon(text: value[1] ?? "noicon"),
+              GetIcon(text: value[1]["id"] ?? "noicon"),
               SizedBox(width: 5),
               SizedBox(
                 height: Constant.height * 0.023,
                 width: Constant.width * 0.35,
                 child: FittedBox(
                   alignment: Alignment.centerLeft,
-                  child: Text(value[1]?.capitalize ?? ""),
+                  child: Text(value[1]["label"] ?? ""),
                 ),
               ),
             ],
@@ -76,14 +80,14 @@ Widget utilities({
         children: [
           Row(
             children: [
-              GetIcon(text: value[2] ?? "noicon"),
+              GetIcon(text: value[2]["id"] ?? "noicon"),
               SizedBox(width: 5),
               SizedBox(
                 height: Constant.height * 0.023,
                 width: Constant.width * 0.35,
                 child: FittedBox(
                   alignment: Alignment.centerLeft,
-                  child: Text(value[2]?.capitalize ?? ""),
+                  child: Text(value[2]["id"] ?? ""),
                 ),
               ),
             ],
@@ -136,7 +140,9 @@ Widget utilities({
                               children: List.generate(value.length, (index) {
                                 return Row(
                                   children: [
-                                    getIcon(text: value[index] ?? "noicon"),
+                                    getIcon(
+                                      text: value[index]["id"] ?? "noicon",
+                                    ),
                                     SizedBox(width: 5),
                                     SizedBox(
                                       height: Constant.height * 0.023,
@@ -146,7 +152,7 @@ Widget utilities({
                                       child: FittedBox(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          value[index]?.capitalize ?? "",
+                                          value[index]["id"]?.capitalize ?? "",
                                         ),
                                       ),
                                     ),
@@ -320,7 +326,7 @@ Widget book({
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  hostel.hostel_images![0] ?? "",
+                  hostel.hostel_images![0]["imageUrl"] ?? "",
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
@@ -1090,7 +1096,7 @@ Widget setDate({
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    hostel.hostel_images![0] ?? "",
+                    hostel.hostel_images![0]["imageUrl"]?? "",
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,

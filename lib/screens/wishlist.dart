@@ -74,7 +74,7 @@ class _WishlistState extends State<Wishlist> {
           child: ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(12.r),
             child: CachedNetworkImage(
-                  imageUrl: hostel.hostel_images?[0] ?? "",   // Network image
+                  imageUrl: hostel.hostel_images?[0]["imageUrl"]?? "",   // Network image
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Image.asset(
                     "assets/notification/default.png",

@@ -427,7 +427,7 @@ class _PaymentState extends State<Payment> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "GH₵ 20",
+                                                                "GH₵ ${(pendingHostel.amt_per_year ?? 0) * (0.05)}",
                                                                 style: TextStyle(
                                                                   fontSize: 14
                                                                       .sp
