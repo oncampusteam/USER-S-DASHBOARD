@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore_for_file: non_constant_identifier_names
 
-
 Regions regionsFromJson(String str) => Regions.fromJson(json.decode(str));
 String regionsToJson(Regions data) => json.encode(data.toJson());
 //
@@ -54,11 +53,16 @@ class Hostels {
     required this.latitude,
     required this.longitude,
     required this.manager_id,
+    required this.campus,
+    required this.rules,
+    required this.address,
+    required this.category,
   });
 
   // Hostels.empty() : name = "";
 
   String name;
+  String category;
   String institution_name;
   String manager_id;
   int? amt_per_year;
@@ -78,11 +82,17 @@ class Hostels {
   String? university;
   String? latitude;
   String? longitude;
+  String? campus;
+  String? rules;
+  String? address;
 
   String get id => "$name|$university|$city";
 
   factory Hostels.fromJson(Map<String, dynamic> json) => Hostels(
     name: json["name"],
+    category: json["category"],
+    rules: json["rules"],
+    address: json["address"],
     institution_name: json["institution_name"],
     manager_id: json["manager_id"],
     amt_per_year: json["amt_per_year"],
@@ -96,6 +106,7 @@ class Hostels {
     //     : null,
     hostel_images: json["hostel_images"],
     rate: json["rate"],
+    campus: json["campus"],
     // amenities: json["amenities"] != null
     //     ? List<String?>.from(json["amenities"])
     //     : null,
@@ -118,6 +129,7 @@ class Hostels {
 
   Map<String, dynamic> toJson() => {
     "name": name,
+    "category": category,
     "institution_name": institution_name,
     "amt_per_year": amt_per_year,
     "description": description,
@@ -130,6 +142,7 @@ class Hostels {
     //     ? List<dynamic>.from(hostel_images!.map((x) => x))
     //     : null,
     "hostel_images": hostel_images ?? [{}],
+    "campus": campus,
     "rate": rate,
     "amenities": amenities as List<dynamic>,
     "bills_utilities": bills_utilities as List<dynamic>,
@@ -253,6 +266,7 @@ class RoomTypes {
     required this.price,
     required this.totalRooms,
     required this.type,
+    required this.billingCycle,
   });
 
   int? availableRooms;
@@ -260,6 +274,7 @@ class RoomTypes {
   double? price;
   int? totalRooms;
   String? type;
+  String? billingCycle;
 
   factory RoomTypes.fromJson(Map<String, dynamic> json) => RoomTypes(
     availableRooms: json["availableRooms"],
@@ -267,6 +282,7 @@ class RoomTypes {
     price: double.parse(json["price"].toString()),
     totalRooms: json["totalRooms"],
     type: json["type"],
+    billingCycle: json["billingCycle"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -275,6 +291,7 @@ class RoomTypes {
     "price": price,
     "totalRooms": totalRooms,
     "type": type,
+    "billingCycle": billingCycle,
   };
 }
 

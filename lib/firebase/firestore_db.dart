@@ -43,7 +43,7 @@ class FirestoreDb {
         .collectionGroup("Private Hostels")
         .snapshots()
         .map((snapshot) {
-          debugPrint("${snapshot.docs}");
+          // debugPrint("${snapshot.docs}");
           List<Hostels> hostels = snapshot.docs
               .map((e) => Hostels.fromJson(e.data()))
               .toList();

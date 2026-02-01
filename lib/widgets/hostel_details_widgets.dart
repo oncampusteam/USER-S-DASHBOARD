@@ -23,9 +23,9 @@ Widget utilities({
   List<dynamic> abs() {
     if (amenities == true) {
       // debugPrint("This is the amenities return: ${hostel.amenities}");
-      debugPrint("This is the amenities length: ${hostel.amenities?.length}");
-      debugPrint("This is the amenities length: ${hostel.bills_utilities?.length}");
-      debugPrint("This is the amenities length: ${hostel.security_safety?.length}");
+      // debugPrint("This is the amenities length: ${hostel.amenities?.length}");
+      // debugPrint("This is the amenities length: ${hostel.bills_utilities?.length}");
+      // debugPrint("This is the amenities length: ${hostel.security_safety?.length}");
       return hostel.amenities as List<dynamic>;
     } else if (bills == true) {
       return hostel.bills_utilities as List<dynamic>;

@@ -204,9 +204,9 @@ class _HostelCategoryState extends State<HostelCategory> {
                           child: Obx(() {
                             List<Hostels> allPrivateHostels =
                                 hostelController.privateHostels;
-                            print(
-                              "all private hostels are ${allPrivateHostels} length ${allPrivateHostels.length} ",
-                            );
+                            // print(
+                            //   "all private hostels are ${allPrivateHostels} length ${allPrivateHostels.length} ",
+                            // );
                             return ListView.builder(
                               physics: const BouncingScrollPhysics(),
                               scrollDirection: Axis.vertical,

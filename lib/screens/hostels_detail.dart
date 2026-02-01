@@ -48,11 +48,109 @@ class HostelDetails extends StatefulWidget {
   @override
   State<HostelDetails> createState() => _HostelDetailsState();
 }
+
 String generateSixDigitCode() {
   // Generates a number between 100,000 and 999,999
   int code = Random.secure().nextInt(900000) + 100000;
   return code.toString();
 }
+
+// List<List<Map<String, dynamic>>> roomdifference = [];
+List<Map<String, dynamic>> currentRoom = [];
+int offset = 0;
+
+int capacity(String roomtype) {
+  if (roomtype == "1in1") {
+    return 1;
+  }
+  if (roomtype == "2in1") {
+    return 2;
+  }
+  if (roomtype == "3in1") {
+    return 3;
+  }
+  if (roomtype == "4in1") {
+    return 4;
+  }
+  if (roomtype == "5in1") {
+    return 5;
+  }
+  if (roomtype == "6in1") {
+    return 6;
+  }
+  if (roomtype == "7in1") {
+    return 7;
+  }
+  if (roomtype == "8in1") {
+    return 8;
+  }
+  if (roomtype == "9in1") {
+    return 9;
+  }
+  if (roomtype == "10in1") {
+    return 10;
+  }
+  return 0;
+}
+
+List<List<Map<String, dynamic>>> sort(
+  List<Map<String, dynamic>> rooms,
+  int capacity,
+) {
+  List<Map<String, dynamic>> roomsWithBedSpace = [];
+  List<Map<String, dynamic>> roomsWithOutBedSpace = [];
+  debugPrint("This is the value of rooms: ${rooms.length}");
+  for (Map<String, dynamic> room in rooms) {
+    if (capacity == 1) {
+      roomsWithOutBedSpace.add(room);
+      // return [roomsWithOutBedSpace, roomsWithBedSpace];
+    }
+    else if (room["tenant"] == 0) {
+      roomsWithOutBedSpace.add(room);
+    }
+    else if (room["tenant"]> 0 && room["tenant"] < capacity) {
+      roomsWithBedSpace.add(room);
+    }
+  }
+  return [roomsWithOutBedSpace, roomsWithBedSpace];
+}
+
+Stream<List<Map<String, dynamic>>> availableRoomIdsStream({
+  required String regionName,
+  required String cityName,
+  required String categoryName,
+  required String hostelName,
+  required String roomType,
+}) {
+  // debugPrint("$regionName, $cityName, $categoryName, $hostelName, $roomType");
+  return FirebaseFirestore.instance
+      .collection("Region")
+      .doc(regionName)
+      .collection("Cities")
+      .doc(cityName)
+      .collection("${categoryName}s")
+      .doc(hostelName)
+      .collection("roomTypes")
+      .doc(roomType)
+      .collection("rooms")
+      .where("isAvailable", isEqualTo: true)
+      .snapshots()
+      .map((querySnapshot) {
+        return querySnapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data();
+          // debugPrint("This is the doc data return : ${doc.data()}");
+          return {
+            "createdAt": data["createdAt"],
+            "isAvailable": data["isAvailable"],
+            "number": data["number"],
+            "type": data["type"],
+            "tenant": data["tenant"],
+            "id": doc.id,
+          };
+        }).toList();
+      });
+}
+
 String gender = "";
 String selectedGender = "";
 ScrollController controller = ScrollController();
@@ -62,6 +160,9 @@ List<TextEditingController> occupantPhones = [];
 TextEditingController numPeople = TextEditingController();
 GlobalKey key = GlobalKey();
 String roomtype = "";
+int availableRooms = 0;
+// String roomId = "";
+
 class _HostelDetailsState extends State<HostelDetails> {
   final FavoritesController favCtrl = Get.put(FavoritesController());
   int selectedIndex = 0;
@@ -114,7 +215,7 @@ class _HostelDetailsState extends State<HostelDetails> {
             setState(() {
               currentPosition = LatLng(
                 currentLocation.latitude ?? 0,
-                currentLocation.longitude ?? 0, 
+                currentLocation.longitude ?? 0,
               );
 
               //khalil you can turn this on if you want the camera or map to follow the currentlocation when it moves
@@ -165,7 +266,10 @@ class _HostelDetailsState extends State<HostelDetails> {
         currentPosition?.latitude ?? 0,
         currentPosition?.longitude ?? 0,
       ),
-      destination: PointLatLng(initialPose?.latitude ?? 0, initialPose?.longitude ?? 0),
+      destination: PointLatLng(
+        initialPose?.latitude ?? 0,
+        initialPose?.longitude ?? 0,
+      ),
       travelMode: TravelMode.driving,
       routingPreference: RoutingPreference.trafficAware,
     );
@@ -175,8 +279,8 @@ class _HostelDetailsState extends State<HostelDetails> {
         .getRouteBetweenCoordinatesV2(request: request);
 
     if (response.routes.isNotEmpty) {
-      debugPrint('Duration: ${response.routes.first.durationMinutes} minutes');
-      print('Distance: ${response.routes.first.distanceKm} km');
+      // debugPrint('Duration: ${response.routes.first.durationMinutes} minutes');
+      // print('Distance: ${response.routes.first.distanceKm} km');
 
       // Get polyline points
       List<PointLatLng> points = response.routes.first.polylinePoints ?? [];
@@ -291,16 +395,18 @@ class _HostelDetailsState extends State<HostelDetails> {
       initialPose = const LatLng(6.73968, -1.56516);
       debugPrint('Invalid hostel coordinates');
     }
-    try{
+    try {
       getLocation().then(
-      (_) => {
-        getPolylinePoints().then(
-          (coordinates) => {generatePolyLineFromPoints(coordinates)},
-        ),
-      },
-    );
-    }catch(e){
-      debugPrint("This is an error in initState of hostels_detail.dart, funct getLocation : $e");
+        (_) => {
+          getPolylinePoints().then(
+            (coordinates) => {generatePolyLineFromPoints(coordinates)},
+          ),
+        },
+      );
+    } catch (e) {
+      debugPrint(
+        "This is an error in initState of hostels_detail.dart, funct getLocation : $e",
+      );
     }
   }
 
@@ -560,40 +666,40 @@ class _HostelDetailsState extends State<HostelDetails> {
                   showDate();
                   // setDate(setModalState);
                 },
-                child: 
-                // isLoading
-                //     ? Align(
-                //         alignment: Alignment.center,
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             SizedBox(
-                //               width: 15,
-                //               height: 15,
-                //               child: CircularProgressIndicator(
-                //                 color: Colors.white,
-                //               ),
-                //             ),
-                //             SizedBox(width: 5),
-                //             Text("Please wait.."),
-                //           ],
-                //         ),
-                //       )
-                //     : 
+                child:
+                    // isLoading
+                    //     ? Align(
+                    //         alignment: Alignment.center,
+                    //         child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             SizedBox(
+                    //               width: 15,
+                    //               height: 15,
+                    //               child: CircularProgressIndicator(
+                    //                 color: Colors.white,
+                    //               ),
+                    //             ),
+                    //             SizedBox(width: 5),
+                    //             Text("Please wait.."),
+                    //           ],
+                    //         ),
+                    //       )
+                    //     :
                     SizedBox(
-                        height: Constant.height * 0.03,
-                        child: FittedBox(
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(
-                              fontFamily: "Roboto",
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17.sp.clamp(0, 17),
-                            ),
+                      height: Constant.height * 0.03,
+                      child: FittedBox(
+                        child: Text(
+                          "Continue",
+                          style: TextStyle(
+                            fontFamily: "Roboto",
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17.sp.clamp(0, 17),
                           ),
                         ),
                       ),
+                    ),
               ),
             ),
           ],
@@ -1250,40 +1356,40 @@ class _HostelDetailsState extends State<HostelDetails> {
                           );
                         }
                       },
-                      child: 
-                      // isLoading
-                      //     ? Align(
-                      //         alignment: Alignment.center,
-                      //         child: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.center,
-                      //           children: [
-                      //             SizedBox(
-                      //               width: 15,
-                      //               height: 15,
-                      //               child: CircularProgressIndicator(
-                      //                 color: Colors.white,
-                      //               ),
-                      //             ),
-                      //             SizedBox(width: 5),
-                      //             Text("Please wait.."),
-                      //           ],
-                      //         ),
-                      //       )
-                      //     : 
+                      child:
+                          // isLoading
+                          //     ? Align(
+                          //         alignment: Alignment.center,
+                          //         child: Row(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             SizedBox(
+                          //               width: 15,
+                          //               height: 15,
+                          //               child: CircularProgressIndicator(
+                          //                 color: Colors.white,
+                          //               ),
+                          //             ),
+                          //             SizedBox(width: 5),
+                          //             Text("Please wait.."),
+                          //           ],
+                          //         ),
+                          //       )
+                          //     :
                           SizedBox(
-                              height: Constant.height * 0.03,
-                              child: FittedBox(
-                                child: Text(
-                                  "Continue",
-                                  style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20.sp.clamp(0, 20),
-                                  ),
+                            height: Constant.height * 0.03,
+                            child: FittedBox(
+                              child: Text(
+                                "Continue",
+                                style: TextStyle(
+                                  fontFamily: "Roboto",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20.sp.clamp(0, 20),
                                 ),
                               ),
                             ),
+                          ),
                     ),
                   ),
                 ],
@@ -1556,145 +1662,568 @@ class _HostelDetailsState extends State<HostelDetails> {
                       Color.fromARGB(255, 0, 239, 209),
                     ),
                   ),
+
+                  // onPressed: () async {
+                  //   int roomCapacity() {
+                  //     if (roomtype != "") {
+                  //       if (roomtype == "1in1") {
+                  //         return 1;
+                  //       }
+                  //       if (roomtype == "2in1") {
+                  //         return 2;
+                  //       }
+                  //       if (roomtype == "3in1") {
+                  //         return 3;
+                  //       }
+                  //       if (roomtype == "4in1") {
+                  //         return 4;
+                  //       }
+                  //       if (roomtype == "5in1") {
+                  //         return 5;
+                  //       }
+                  //       if (roomtype == "6in1") {
+                  //         return 6;
+                  //       }
+                  //       if (roomtype == "7in1") {
+                  //         return 7;
+                  //       }
+                  //       if (roomtype == "8in1") {
+                  //         return 8;
+                  //       }
+                  //       if (roomtype == "9in1") {
+                  //         return 9;
+                  //       }
+                  //       if (roomtype == "10in1") {
+                  //         return 10;
+                  //       }
+                  //     }
+                  //     return 0;
+                  //   }
+
+                  //   if (_formkey2.currentState!.validate()) {
+                  //     setModalState(() {
+                  //       isLoading = true;
+                  //     });
+                  //     int roomCap = roomCapacity();
+                  //     final user = FirebaseAuth.instance.currentUser;
+                  //     List<Map<String, dynamic>> occupants = [];
+
+                  //     for (int i = 1; i < occupantNames.length; i++) {
+                  //       occupants.add({
+                  //         'name': occupantNames[i].text.trim(),
+                  //         'email': occupantEmails[i].text.trim(),
+                  //         'phoneNumber': occupantPhones[i].text.trim(),
+                  //       });
+                  //     }
+
+                  //     Map<String, dynamic>? _findRoomForGroup(
+                  //       int groupSize,
+                  //       int capacity,
+                  //       List<Map<String, dynamic>> rooms,
+                  //     ) {
+                  //       for (final room in rooms) {
+                  //         final int tenant = room["tenant"];
+                  //         if (tenant + groupSize <= capacity) {
+                  //           return room;
+                  //         }
+                  //       }
+                  //       return null;
+                  //     }
+
+                  //     // bool split = false;
+                  //     void addOccupants(Map<String,dynamic> room, int totalPeople) async {
+                  //       final List<Map<String, dynamic>> students = [];
+
+                  //       if (offset == 0) {
+                  //         await FirebaseFirestore.instance
+                  //             .collection('Users')
+                  //             .doc(user?.uid)
+                  //             .collection('Booked hostels')
+                  //             .doc(widget.hostel.name) // Set your own ID
+                  //             .set({
+                  //               'hostel_name': widget.hostel.name,
+                  //               'paid': false,
+                  //               // 'isDone': false,
+                  //               'people_booking': int.parse(numPeople.text),
+                  //               'name': occupantNames[0].text,
+                  //               'occupants': occupants,
+                  //               'email': occupantEmails[0].text,
+                  //               'phone_number': occupantPhones[0].text,
+                  //               'time': Timestamp.now(),
+                  //               'move_in': dateControllerMovein.text,
+                  //               'move_out': dateControllerMoveout.text,
+                  //               'isDone': true,
+                  //               'gender': selectedGender == "M"
+                  //                   ? "male"
+                  //                   : "female",
+                  //               'duration': duration,
+                  //               'amount': widget.hostel.amt_per_year,
+                  //               'roomId': room["id"],
+                  //             }, SetOptions(merge: true));
+                  //       }
+
+                  //       // final int totalPeople = int.tryParse(numPeople.text) ?? 0;
+
+                  //       if (totalPeople == 0) return;
+
+                  //       for (int j = 0 + offset; j < totalPeople + offset; j++) {
+                  //         students.add({
+                  //           "name": occupantNames[j].text.trim(),
+                  //           "id":
+                  //               "${occupantNames[j].text.trim().split(" ")[0]}${generateSixDigitCode()}",
+                  //           "email": occupantEmails[j].text.trim(),
+                  //           "phone": occupantPhones[j].text.trim(),
+                  //           "hostel_booked": widget.hostel.name,
+                  //           "roomType": "$roomCap in a room",
+                  //           "booked_by": j == 0
+                  //               ? "self"
+                  //               : occupantNames[0].text.trim(),
+                  //           "createdAt": DateTime.now(),
+                  //           "verified": false,
+                  //           'move_in': dateControllerMovein.text,
+                  //           'move_out': dateControllerMoveout.text,
+                  //           'gender': selectedGender == "M" ? "male" : "female",
+                  //           'duration': duration,
+                  //           'paid': false,
+                  //           'status': 'pending',
+                  //           'paymentStatus': 'pending',
+                  //           'commissionAmount':
+                  //               widget.hostel.amt_per_year ?? 0 * 0.15,
+                  //           'paymentMethod': '',
+                  //           'amount': 0,
+                  //           'paymentRef': "",
+                  //           'institution_name': widget.hostel.institution_name,
+                  //           'roomId': room["id"]
+                  //         });
+                  //         offset = offset + 1;
+                  //       }
+
+                  //       await FirebaseFirestore.instance
+                  //           .collection('Managers')
+                  //           .doc(widget.hostel.manager_id)
+                  //           .set({
+                  //             'students': FieldValue.arrayUnion(students),
+                  //           }, SetOptions(merge: true));
+
+                  //      if(room["tenant"] + totalPeople == roomCap){
+                  //        await FirebaseFirestore.instance
+                  //           .collection("Region")
+                  //           .doc(widget.hostel.region)
+                  //           .collection("Cities")
+                  //           .doc(widget.hostel.city)
+                  //           .collection(widget.hostel.category)
+                  //           .doc(widget.hostel.name)
+                  //           .collection("roomTypes")
+                  //           .doc(roomtype)
+                  //           .set({
+                  //             'available_rooms': availableRooms != 0
+                  //                 ? --availableRooms
+                  //                 : 0,
+                  //           });
+
+                  //       await FirebaseFirestore.instance
+                  //           .collection("Region")
+                  //           .doc(widget.hostel.region)
+                  //           .collection("Cities")
+                  //           .doc(widget.hostel.city)
+                  //           .collection(widget.hostel.category)
+                  //           .doc(widget.hostel.name)
+                  //           .collection("roomTypes")
+                  //           .doc(roomtype)
+                  //           .collection("rooms")
+                  //           .doc(room["id"])
+                  //           .set({'isAvailable': false});
+                  //      }
+                  //     }
+
+                  //     List<String> allocateRecursively({
+                  //       required int peopleBooking,
+                  //       required int roomCap,
+                  //       required List<Map<String, dynamic>> rooms,
+                  //     }) {
+                  //       List<String> allocatedRooms = [];
+
+                  //       void _allocate(int people) {
+                  //         if (people <= 0) return;
+
+                  //         // 1️⃣ Try placing the whole group first
+                  //         final room = _findRoomForGroup(
+                  //           people,
+                  //           roomCap,
+                  //           rooms,
+                  //         );
+
+                  //         if (room != null) {
+                  //           allocatedRooms.add(room["id"]);
+                  //           room["tenant"] += people; // update local state
+                  //           return;
+                  //         }
+
+                  //         // 2️⃣ If can't place, split the group
+                  //         int left = people ~/ 2; // integer division
+                  //         int right = people - left; // handles odd numbers
+
+                  //         // Example:
+                  //         // 5 → 2 & 3
+                  //         // 7 → 3 & 4
+
+                  //         _allocate(left);
+                  //         _allocate(right);
+                  //       }
+
+                  //       _allocate(peopleBooking);
+
+                  //       return allocatedRooms;
+                  //     }
+
+                  //     allocateRecursively(
+                  //       peopleBooking: int.parse(numPeople.text),
+                  //       roomCap: roomCap,
+                  //       rooms: currentRoom,
+                  //     );
+
+                  //     setModalState(() {
+                  //       isLoading = false;
+                  //     });
+                  //     Get.to(
+                  //       () => Payment(user: user!, subject: "Payment"),
+                  //       transition: Transition.fadeIn,
+                  //       duration: const Duration(milliseconds: 600),
+                  //       curve: Curves.easeIn,
+                  //     );
+                  //   }
+                  // },
+                  // onPressed: () async {
+
+                  // Future<void> bookRoomsTransaction({
+                  //     required List<Map<String, dynamic>> allocations,
+                  //     required int roomCap,
+                  //     required User user,
+                  //   }) async {
+                  //     final firestore = FirebaseFirestore.instance;
+
+                  //     await firestore.runTransaction((transaction) async {
+                  //       for (final allocation in allocations) {
+                  //         final roomId = allocation["roomId"];
+                  //         final List<int> indexes = allocation["occupantIndexes"];
+
+                  //         final roomRef = firestore
+                  //             .collection("Region")
+                  //             .doc(widget.hostel.region)
+                  //             .collection("Cities")
+                  //             .doc(widget.hostel.city)
+                  //             .collection(widget.hostel.category)
+                  //             .doc(widget.hostel.name)
+                  //             .collection("roomTypes")
+                  //             .doc(roomtype)
+                  //             .collection("rooms")
+                  //             .doc(roomId);
+
+                  //         final roomSnap = await transaction.get(roomRef);
+
+                  //         if (!roomSnap.exists) {
+                  //           throw Exception("Room not found");
+                  //         }
+
+                  //         final int tenant = roomSnap["tenant"];
+
+                  //         if (tenant + indexes.length > roomCap) {
+                  //           throw Exception("Room already full");
+                  //         }
+
+                  //         // 🔹 Update tenant
+                  //         transaction.update(roomRef, {
+                  //           "tenant": tenant + indexes.length,
+                  //           "isAvailable": tenant + indexes.length == roomCap ? false : true,
+                  //         });
+
+                  //         // 🔹 Add students
+                  //         for (final i in indexes) {
+                  //           final studentRef = firestore
+                  //               .collection("Managers")
+                  //               .doc(widget.hostel.manager_id)
+                  //               .collection("students")
+                  //               .doc();
+
+                  //           transaction.set(studentRef, {
+                  //             "name": occupantNames[i].text.trim(),
+                  //             "email": occupantEmails[i].text.trim(),
+                  //             "phone": occupantPhones[i].text.trim(),
+                  //             "roomId": roomId,
+                  //             "hostel": widget.hostel.name,
+                  //             "createdAt": FieldValue.serverTimestamp(),
+                  //             "status": "pending",
+                  //           });
+                  //         }
+                  //       }
+                  //     });
+                  //   }
+
+                  //   List<Map<String, dynamic>> allocateRecursivelyWithIndexes({
+                  //   required int peopleBooking,
+                  //   required int roomCap,
+                  //   required List<Map<String, dynamic>> rooms,
+                  // }) {
+                  //   final List<Map<String, dynamic>> allocations = [];
+                  //   int currentIndex = 0;
+
+                  //   Map<String, dynamic>? findRoom(int groupSize) {
+                  //     for (final room in rooms) {
+                  //       if (room["tenant"] + groupSize <= roomCap) {
+                  //         return room;
+                  //       }
+                  //     }
+                  //     return null;
+                  //   }
+
+                  //   void allocate(int people) {
+                  //       if (people <= 0) return;
+
+                  //       final room = findRoom(people);
+
+                  //       // ✅ Direct placement
+                  //       if (room != null) {
+                  //         allocations.add({
+                  //           "roomId": room["id"],
+                  //           "occupantIndexes":
+                  //               List.generate(people, (i) => currentIndex + i),
+                  //         });
+
+                  //         room["tenant"] += people;
+                  //         currentIndex += people;
+                  //         return;
+                  //       }
+
+                  //       // ❌ If only 1 person and no room fits → REAL failure
+                  //       if (people == 1) {
+                  //         throw Exception("No available bed space for booking");
+                  //       }
+
+                  //       // 🔹 Safe split (people >= 2 guaranteed here)
+                  //       final int left = people ~/ 2;
+                  //       final int right = people - left;
+
+                  //       allocate(left);
+                  //       allocate(right);
+                  //     }
+
+                  //   allocate(peopleBooking);
+                  //   return allocations;
+                  // }
+
+                  //   if (!_formkey2.currentState!.validate()) return;
+
+                  //   setModalState(() => isLoading = true);
+
+                  //   try {
+                  //     final int peopleBooking = int.parse(numPeople.text);
+                  //     final int roomCap = capacity(roomtype);
+                  //     final user = FirebaseAuth.instance.currentUser!;
+
+                  //     // 1️⃣ Decide allocation
+                  //     final allocations = allocateRecursivelyWithIndexes(
+                  //       peopleBooking: peopleBooking,
+                  //       roomCap: roomCap,
+                  //       rooms: currentRoom,
+                  //     );
+
+                  //     // 2️⃣ Commit atomically
+                  //     await bookRoomsTransaction(
+                  //       allocations: allocations,
+                  //       roomCap: roomCap,
+                  //       user: user,
+                  //     );
+
+                  //     // 3️⃣ Success
+                  //     Get.snackbar("Success", "Booking completed successfully");
+                  //   } catch (e) {
+                  //     Get.snackbar("Booking Failed", e.toString());
+                  //   } finally {
+                  //     setModalState(() => isLoading = false);
+                  //   }
+                  // },
                   onPressed: () async {
-                    int roomCapacity() {
-                      if (roomtype != "") {
-                        if (roomtype == "1in1") {
-                          return 1;
-                        }
-                        if (roomtype == "2in1") {
-                          return 2;
-                        }
-                        if (roomtype == "3in1") {
-                          return 3;
-                        }
-                        if (roomtype == "4in1") {
-                          return 4;
-                        }
-                        if (roomtype == "5in1") {
-                          return 5;
-                        }
-                        if (roomtype == "6in1") {
-                          return 6;
-                        }
-                        if (roomtype == "7in1") {
-                          return 7;
-                        }
-                        if (roomtype == "8in1") {
-                          return 8;
-                        }
-                        if (roomtype == "9in1") {
-                          return 9;
-                        }
-                        if (roomtype == "10in1") {
-                          return 10;
-                        }
-                      }
-                      return 0;
-                    }
-                    if (_formkey2.currentState!.validate()) {
-                      setModalState(() {
-                        isLoading = true;
-                      });
-                      int roomCap = roomCapacity();
-                      final user = FirebaseAuth.instance.currentUser;
-                      // await FirebaseFirestore.instance
-                      //     .collection('Users')
-                      //     .doc(user!.uid)
-                      //     .collection('Booked hostels')
-                      //     .doc(widget.hostel.name) // Set your own ID
-                      //     .set({
-                      //       'move_in': dateControllerMovein.text,
-                      //       'move_out': dateControllerMoveout.text,
-                      //       'isDone': true,
-                      //     }, SetOptions(merge: true));
+                    if (!_formkey2.currentState!.validate()) return;
 
-                      // final user = FirebaseAuth.instance.currentUser;
+                    setModalState(() => isLoading = true);
 
-                      List<Map<String, dynamic>> occupants = [];
+                    try {
+                      final firestore = FirebaseFirestore.instance;
+                      final user = FirebaseAuth.instance.currentUser!;
+                      final int peopleBooking = int.parse(numPeople.text);
+                      final int roomCap = capacity(roomtype);
 
-                      for (int i = 1; i < occupantNames.length; i++) {
+                      // 🔹 Build occupants list
+                      final List<Map<String, dynamic>> occupants = [];
+                      for (int i = 0; i < occupantNames.length; i++) {
                         occupants.add({
-                          'name': occupantNames[i].text.trim(),
-                          'email': occupantEmails[i].text.trim(),
-                          'phoneNumber': occupantPhones[i].text.trim(),
-                        });
-                      }
-                      await FirebaseFirestore.instance
-                          .collection('Users')
-                          .doc(user?.uid)
-                          .collection('Booked hostels')
-                          .doc(widget.hostel.name) // Set your own ID
-                          .set({
-                            'hostel_name': widget.hostel.name,
-                            'paid': false,
-                            // 'isDone': false,
-                            'people_booking': int.parse(numPeople.text),
-                            'name': occupantNames[0].text,
-                            'occupants': occupants,
-                            'email': occupantEmails[0].text,
-                            'phone_number': occupantPhones[0].text,
-                            'time': Timestamp.now(),
-                            'move_in': dateControllerMovein.text,
-                            'move_out': dateControllerMoveout.text,
-                            'isDone': true,
-                            'gender': selectedGender == "M" ? "male" : "female",
-                            'duration': duration,
-                            'amount': widget.hostel.amt_per_year
-                          }, SetOptions(merge: true));
-
-                      final int totalPeople = int.tryParse(numPeople.text) ?? 0;
-
-                      if (totalPeople == 0) return;
-
-                      final List<Map<String, dynamic>> students = [];
-
-                      for (int j = 0; j < totalPeople; j++) {
-                        students.add({
-                          "name": occupantNames[j].text.trim(),
-                          "id": "${occupantNames[j].text.trim().split(" ")[0]}${generateSixDigitCode()}",
-                          "email": occupantEmails[j].text.trim(),
-                          "phone": occupantPhones[j].text.trim(),
-                          "hostel_booked": widget.hostel.name,
-                          "roomType": "$roomCap in a room",
-                          "booked_by": j == 0
-                              ? "self"
-                              : occupantNames[0].text.trim(),
-                          "createdAt": DateTime.now(),
-                          "verified": false,
-                          'move_in': dateControllerMovein.text,
-                          'move_out': dateControllerMoveout.text,
-                          'gender': selectedGender == "M" ? "male" : "female",
-                          'duration': duration,
-                          'paid': false,
-                          'status': 'pending',
-                          'paymentStatus': 'pending',
-                          'commissionAmount': widget.hostel.amt_per_year?? 0 * 0.15,
-                          'paymentMethod': '',
-                          'amount': 0,
-                          'paymentRef': "",
-                          'institution_name': widget.hostel.institution_name
+                          "name": occupantNames[i].text.trim(),
+                          "email": occupantEmails[i].text.trim(),
+                          "phone": occupantPhones[i].text.trim(),
                         });
                       }
 
-                      await FirebaseFirestore.instance
-                          .collection('Managers')
-                          .doc(widget.hostel.manager_id)
-                          .set({
-                            'students': FieldValue.arrayUnion(students),
-                          }, SetOptions(merge: true));
+                      /// ================================
+                      /// 1️⃣ GREEDY ALLOCATION (NO RECURSION)
+                      /// ================================
+                      List<Map<String, dynamic>> allocateGreedy({
+                        required int peopleBooking,
+                        required int roomCap,
+                        required List<Map<String, dynamic>> rooms,
+                      }) {
+                        final List<Map<String, dynamic>> allocations = [];
+                        int remaining = peopleBooking;
+                        int currentIndex = 0;
 
-                      setModalState(() {
-                        isLoading = false;
-                      });
-                      Get.to(
-                        () => Payment(user: user!, subject: "Payment"),
-                        transition: Transition.fadeIn,
-                        duration: const Duration(milliseconds: 600),
-                        curve: Curves.easeIn,
+                        rooms.sort((a, b) {
+                          final aFree = roomCap - a["tenant"];
+                          final bFree = roomCap - b["tenant"];
+                          return bFree.compareTo(aFree);
+                        });
+
+                        for (final room in rooms) {
+                          if (remaining <= 0) break;
+
+                          final int freeBeds = roomCap - room["tenant"] as int;
+                          if (freeBeds <= 0) continue;
+
+                          final int assign = freeBeds >= remaining
+                              ? remaining
+                              : freeBeds;
+
+                          allocations.add({
+                            "roomId": room["id"],
+                            "occupantIndexes": List.generate(
+                              assign,
+                              (i) => currentIndex + i,
+                            ),
+                          });
+
+                          room["tenant"] += assign; // local mutation
+                          currentIndex += assign;
+                          remaining -= assign;
+                        }
+
+                        if (remaining < 0) {
+                          throw Exception("Not enough available bed space");
+                        }
+
+                        return allocations;
+                      }
+
+                      final allocations = allocateGreedy(
+                        peopleBooking: peopleBooking,
+                        roomCap: roomCap,
+                        rooms: currentRoom,
                       );
+
+                      debugPrint("Allocatoins: $allocations");
+
+                      /// ================================
+                      /// 2️⃣ FIRESTORE TRANSACTION
+                      /// ================================
+                      await firestore.runTransaction((transaction) async {
+                        for (final allocation in allocations) {
+                          final String roomId = allocation["roomId"];
+                          final List<int> indexes =
+                              allocation["occupantIndexes"];
+
+                          final roomRef = firestore
+                              .collection("Region")
+                              .doc(widget.hostel.region)
+                              .collection("Cities")
+                              .doc(widget.hostel.city)
+                              .collection("${widget.hostel.category}s")
+                              .doc(widget.hostel.name)
+                              .collection("roomTypes")
+                              .doc(roomtype)
+                              .collection("rooms")
+                              .doc(roomId);
+
+                          final roomSnap = await transaction.get(roomRef);
+
+                          if (!roomSnap.exists) {
+                            throw Exception("Room not found");
+                          }
+
+                          final int tenant = roomSnap["tenant"];
+                          if (tenant + indexes.length > roomCap) {
+                            throw Exception("Room already filled");
+                          }
+
+                          // 🔹 Update room
+                          transaction.update(roomRef, {
+                            "tenant": tenant + indexes.length,
+                            "isAvailable": tenant + indexes.length < roomCap,
+                          });
+
+                          debugPrint("ALLOCATIONS: $allocations");
+                          // 🔹 Add students
+                          final managerRef = firestore
+                              .collection("Managers")
+                              .doc(widget.hostel.manager_id);
+
+                          // Build a list of student maps to add
+                          final List<Map<String, dynamic>> studentsToAdd = [];
+
+                          for (final i in indexes) {
+                            studentsToAdd.add({
+                              "name": occupantNames[i].text.trim(),
+                              "email": occupantEmails[i].text.trim(),
+                              "phone": occupantPhones[i].text.trim(),
+                              "hostel": widget.hostel.name,
+                              "roomType": "$roomCap in a room",
+                              "roomId": roomId,
+                              "booked_by": i == 0
+                                  ? "self"
+                                  : occupantNames[0].text.trim(),
+                              "gender": selectedGender == "M"
+                                  ? "male"
+                                  : "female",
+                              "move_in": dateControllerMovein.text,
+                              "move_out": dateControllerMoveout.text,
+                              "duration": duration,
+                              "status": "pending",
+                              "paid": false,
+                              "createdAt": DateTime.now(),
+                            });
+                          }
+
+                          // Update the "students" array in the manager document
+                          transaction.set(managerRef, {
+                            "students": FieldValue.arrayUnion(studentsToAdd),
+                          }, SetOptions(merge: true));
+                        }
+
+                        // 🔹 Save booking summary once
+                        final bookingRef = firestore
+                            .collection("Users")
+                            .doc(user.uid)
+                            .collection("Booked hostels")
+                            .doc(widget.hostel.name);
+
+                        transaction.set(bookingRef, {
+                          "hostel_name": widget.hostel.name,
+                          "people_booking": peopleBooking,
+                          "occupants": occupants,
+                          "gender": selectedGender == "M" ? "male" : "female",
+                          "move_in": dateControllerMovein.text,
+                          "move_out": dateControllerMoveout.text,
+                          "duration": duration,
+                          "paid": false,
+                          "createdAt": DateTime.now(),
+                        }, SetOptions(merge: true));
+                      });
+
+                      // 🎉 SUCCESS
+                      Get.snackbar("Success", "Room booked successfully");
+                    } catch (e) {
+                      Get.snackbar("Booking Failed", e.toString());
+                    } finally {
+                      setModalState(() => isLoading = false);
                     }
                   },
+
                   child: isLoading
                       ? Align(
                           alignment: Alignment.center,
@@ -1774,8 +2303,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                           widget.hostel.hostel_images!.length,
                                       itemBuilder: (context, index) {
                                         // Swipper swiper = swipers[index];
-                                        String? string =
-                                            widget.hostel.hostel_images![index]["imageUrl"];
+                                        String? string = widget
+                                            .hostel
+                                            .hostel_images![index]["imageUrl"];
                                         return CachedNetworkImage(
                                           imageUrl: string ?? "",
                                           width: MediaQuery.sizeOf(
@@ -2853,7 +3383,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                         bottom: 10.h,
                                       ),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Align(
                                             key: _sectionKeys['Description'],
@@ -3227,387 +3758,566 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       // right: 20.h
                                                     ),
                                                     padding:
-                                                        EdgeInsets.symmetric(
-                                                          vertical: 25.h,
-                                                          horizontal: 25.w,
+                                                        EdgeInsets.only(
+                                                          top: 25.h,
+                                                          bottom: 25.h,
+                                                          left: 25.w,
                                                         ),
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                          // color: Colors.green,
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      20,
-                                                                    ).r,
-                                                                child: SizedBox(
-                                                                  height:
-                                                                      Constant
-                                                                          .height *
-                                                                      0.1,
-                                                                  width:
-                                                                      Constant
-                                                                          .width *
-                                                                      0.25,
-                                                                  child: FittedBox(
-                                                                    child: Image.asset(
-                                                                      "assets/hostels_detail/roomTypeImage.png",
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              Expanded(
-                                                                child: Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      // width:
-                                                                      //     Constant
-                                                                      //         .width *
-                                                                      //     0.7,
-                                                                      child: FittedBox(
-                                                                        child: Text(
-                                                                          "${roomTypeText(room.type ?? "")} Room Bedroom Apartment",
-                                                                          maxLines:
-                                                                              2,
-                                                                          style: TextStyle(
-                                                                            fontSize: 16.sp.clamp(
-                                                                              0,
-                                                                              16,
-                                                                            ),
-                                                                            // letterSpacing: 0.2.w,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height:
-                                                                          5.h,
-                                                                    ),
-                                                                    SizedBox(
+                                                    child: StreamBuilder<List<Map<String, dynamic>>>(
+                                                      stream:
+                                                          availableRoomIdsStream(
+                                                            regionName:
+                                                                widget
+                                                                    .hostel
+                                                                    .region ??
+                                                                "",
+                                                            cityName:
+                                                                widget
+                                                                    .hostel
+                                                                    .city ??
+                                                                "",
+                                                            categoryName: widget
+                                                                .hostel
+                                                                .category,
+                                                            hostelName: widget
+                                                                .hostel
+                                                                .name,
+                                                            roomType:
+                                                                roomTypes[index]
+                                                                    .type ??
+                                                                "",
+                                                          ),
+                                                      builder: (context, snapshot) {
+                                                        if (!snapshot.hasData) {
+                                                          return CircularProgressIndicator();
+                                                        }
+                                                        final rooms =
+                                                            snapshot.data!;
+
+                                                        debugPrint(
+                                                          "This is the length of the rooms fetched: ${rooms.length}",
+                                                        );
+
+                                                        List<
+                                                          Map<String, dynamic>
+                                                        >
+                                                        roomsWithBedSpace = [];
+                                                        List<
+                                                          Map<String, dynamic>
+                                                        >
+                                                        roomsWithoutBedSpace =
+                                                            [];
+
+                                                        List<
+                                                          List<
+                                                            Map<String, dynamic>
+                                                          >
+                                                        >
+                                                        roomdiff = [];
+                                                        return Column(
+                                                          children: [
+                                                            Container(
+                                                              // color: Colors.green,
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          20,
+                                                                        ).r,
+                                                                    child: SizedBox(
                                                                       height:
                                                                           Constant
                                                                               .height *
-                                                                          0.03,
+                                                                          0.1,
+                                                                      width:
+                                                                          Constant
+                                                                              .width *
+                                                                          0.25,
                                                                       child: FittedBox(
-                                                                        child: SizedBox(
-                                                                          child: Row(
-                                                                            children: [
-                                                                              Text(
-                                                                                "From ",
-                                                                                style: TextStyle(
-                                                                                  fontSize: 12.sp.clamp(
-                                                                                    0,
-                                                                                    12,
-                                                                                  ),
-                                                                                  fontFamily: "Inter",
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                ),
-                                                                              ),
-                                                                              Text(
-                                                                                "¢${room.price}",
-                                                                                style: TextStyle(
-                                                                                  fontSize: 18.sp.clamp(
-                                                                                    0,
-                                                                                    18,
-                                                                                  ),
-                                                                                  fontFamily: "Poppins",
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                ),
-                                                                              ),
-                                                                              Text(
-                                                                                "/ year",
-                                                                                style: TextStyle(
-                                                                                  fontSize: 11.sp.clamp(
-                                                                                    0,
-                                                                                    11,
-                                                                                  ),
-                                                                                  fontFamily: "Poppins",
-                                                                                  fontWeight: FontWeight.w500,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
+                                                                        child: Image.asset(
+                                                                          "assets/hostels_detail/roomTypeImage.png",
+                                                                          fit: BoxFit
+                                                                              .cover,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    SizedBox(
-                                                                      height:
-                                                                          5.h,
-                                                                    ),
-                                                                    Row(
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
                                                                       children: [
-                                                                        Text(
-                                                                          "Available Rooms:",
-                                                                          style: TextStyle(
-                                                                            fontSize: 12.sp.clamp(
-                                                                              0,
-                                                                              12,
+                                                                        Container(
+                                                                          padding: EdgeInsets.only(right: 25.h),
+                                                                          // width:
+                                                                          //     Constant
+                                                                          //         .width *
+                                                                          //     0.7,
+                                                                          child: FittedBox(
+                                                                            child: Text(
+                                                                              "${roomTypeText(room.type ?? "")} Room Bedroom Apartment",
+                                                                              maxLines: 2,
+                                                                              style: TextStyle(
+                                                                                fontSize: 16.sp.clamp(
+                                                                                  0,
+                                                                                  16,
+                                                                                ),
+                                                                                // letterSpacing: 0.2.w,
+                                                                                fontWeight: FontWeight.w600,
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ),
                                                                         SizedBox(
-                                                                          width:
-                                                                              10.w,
+                                                                          height:
+                                                                              5.h,
                                                                         ),
-                                                                        isRoomAvailable
-                                                                            ? Text(
-                                                                                "${room.availableRooms}",
-                                                                                style: TextStyle(
-                                                                                  color: const Color(
-                                                                                    0xFF00EFD1,
-                                                                                  ),
-                                                                                  fontFamily: "Poppins",
-                                                                                  fontWeight: FontWeight.w700,
-                                                                                ),
-                                                                              )
-                                                                            : Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  color: const Color.fromRGBO(
-                                                                                    35,
-                                                                                    162,
-                                                                                    109,
-                                                                                    1,
-                                                                                  ),
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                    15.r,
-                                                                                  ),
-                                                                                ),
-                                                                                width: 55.w,
-                                                                                height: 25.h,
-                                                                                child: Center(
-                                                                                  child: Text(
-                                                                                    "Sold out",
+                                                                        SizedBox(
+                                                                          height:
+                                                                              Constant.height *
+                                                                              0.03,
+                                                                          child: FittedBox(
+                                                                            child: SizedBox(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    "From ",
                                                                                     style: TextStyle(
-                                                                                      fontSize: 10.sp.clamp(
+                                                                                      fontSize: 12.sp.clamp(
                                                                                         0,
-                                                                                        10,
+                                                                                        12,
                                                                                       ),
+                                                                                      fontFamily: "Inter",
                                                                                       fontWeight: FontWeight.w500,
-                                                                                      color: const Color(
-                                                                                        0xFF00EFD1,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Text(
+                                                                                    "¢${room.price}",
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 18.sp.clamp(
+                                                                                        0,
+                                                                                        18,
                                                                                       ),
+                                                                                      fontFamily: "Poppins",
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Text(
+                                                                                    "/ ${room.billingCycle}",
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 11.sp.clamp(
+                                                                                        0,
+                                                                                        11,
+                                                                                      ),
+                                                                                      fontFamily: "Poppins",
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              5.h,
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            SizedBox(
+                                                                              width: Constant.width * 0.22,
+                                                                              child: FittedBox(
+                                                                                child: Text(
+                                                                                  "Available Rooms:",
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 12.sp.clamp(
+                                                                                      0,
+                                                                                      12,
                                                                                     ),
                                                                                   ),
                                                                                 ),
                                                                               ),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              width: 5.w,
+                                                                            ),
+                                                                            sort(
+                                                                                  rooms,
+                                                                                  capacity(
+                                                                                    room.type ??
+                                                                                        "",
+                                                                                  ),
+                                                                                ).isNotEmpty
+                                                                                ? Builder(
+                                                                                    builder:
+                                                                                        (
+                                                                                          context,
+                                                                                        ) {
+                                                                                          roomdiff = sort(
+                                                                                            rooms,
+                                                                                            capacity(
+                                                                                              room.type ??
+                                                                                                  "",
+                                                                                            ),
+                                                                                          );
+                                                                                          return Row(
+                                                                                            children: [
+                                                                                              roomdiff[0].isNotEmpty
+                                                                                                  ? Container(
+                                                                                                      height:
+                                                                                                          Constant.height *
+                                                                                                          0.03,
+                                                                                                      width:
+                                                                                                          Constant.width *
+                                                                                                          0.2,
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        borderRadius: BorderRadius.circular(
+                                                                                                          23.r,
+                                                                                                        ),
+                                                                                                        color: Colors.red,
+                                                                                                      ),
+                                                                                                      child: Align(
+                                                                                                        child: SizedBox(
+                                                                                                          height:
+                                                                                                              Constant.height *
+                                                                                                              0.015,
+                                                                                                          child: FittedBox(
+                                                                                                            child: Text(
+                                                                                                              "${roomdiff[0].length} Empty Rooms",
+                                                                                                              style: TextStyle(
+                                                                                                                color: Colors.white,
+                                                                                                                fontFamily: "Poppins",
+                                                                                                                fontWeight: FontWeight.w500,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    )
+                                                                                                  : Container(),
+                                                                                              SizedBox(
+                                                                                                width: 5,
+                                                                                              ),
+                                                                                              roomdiff[1].isNotEmpty
+                                                                                                  ? Container(
+                                                                                                      height:
+                                                                                                          Constant.height *
+                                                                                                          0.03,
+                                                                                                      width:
+                                                                                                          Constant.width *
+                                                                                                          0.2,
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        borderRadius: BorderRadius.circular(
+                                                                                                          23.r,
+                                                                                                        ),
+                                                                                                        color: Color.fromRGBO(
+                                                                                                          35,
+                                                                                                          162,
+                                                                                                          109,
+                                                                                                          0.1,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      child: Align(
+                                                                                                        child: SizedBox(
+                                                                                                          height:
+                                                                                                              Constant.height *
+                                                                                                              0.015,
+                                                                                                          child: FittedBox(
+                                                                                                            child: Text(
+                                                                                                              "${roomdiff[1].length} Bed Space",
+                                                                                                              style: TextStyle(
+                                                                                                                color: Color(
+                                                                                                                  0xFF00EFD1,
+                                                                                                                ),
+                                                                                                                fontFamily: "Poppins",
+                                                                                                                fontWeight: FontWeight.w500,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    )
+                                                                                                  : Container(),
+                                                                                            ],
+                                                                                          );
+                                                                                        },
+                                                                                  )
+                                                                                : Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                      color: const Color.fromRGBO(
+                                                                                        35,
+                                                                                        162,
+                                                                                        109,
+                                                                                        1,
+                                                                                      ),
+                                                                                      borderRadius: BorderRadius.circular(
+                                                                                        15.r,
+                                                                                      ),
+                                                                                    ),
+                                                                                    width: 55.w,
+                                                                                    height: 25.h,
+                                                                                    child: Center(
+                                                                                      child: Text(
+                                                                                        "Sold out",
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 10.sp.clamp(
+                                                                                            0,
+                                                                                            10,
+                                                                                          ),
+                                                                                          fontWeight: FontWeight.w500,
+                                                                                          color: const Color(
+                                                                                            0xFF00EFD1,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                          ],
+                                                                        ),
                                                                       ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              // Image.asset("assets/hostels_detail/bed.jpeg"),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 10.h),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(
-                                                              width:
-                                                                  MediaQuery.sizeOf(
-                                                                    context,
-                                                                  ).width *
-                                                                  0.4,
-                                                              child: Row(
-                                                                children: [
-                                                                  Image.asset(
-                                                                    "assets/hostels_detail/home.png",
-                                                                    height:
-                                                                        24.h,
-                                                                    width: 24.w,
                                                                   ),
-                                                                  Container(
-                                                                    margin:
-                                                                        EdgeInsets.only(
+                                                                  // Image.asset("assets/hostels_detail/bed.jpeg"),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 10.h,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width:
+                                                                      MediaQuery.sizeOf(
+                                                                        context,
+                                                                      ).width *
+                                                                      0.4,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        "assets/hostels_detail/home.png",
+                                                                        height:
+                                                                            24.h,
+                                                                        width:
+                                                                            24.w,
+                                                                      ),
+                                                                      Container(
+                                                                        margin: EdgeInsets.only(
                                                                           top: 5
                                                                               .h,
                                                                         ),
-                                                                    child: Text(
-                                                                      " Bedroom 1",
-                                                                      style: TextStyle(
-                                                                        fontFamily:
-                                                                            "Work Sans",
-                                                                        fontSize: 14
-                                                                            .sp
-                                                                            .clamp(
+                                                                        child: Text(
+                                                                          " Bedroom 1",
+                                                                          style: TextStyle(
+                                                                            fontFamily:
+                                                                                "Work Sans",
+                                                                            fontSize: 14.sp.clamp(
                                                                               0,
                                                                               14,
                                                                             ),
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        color: const Color(
-                                                                          0xFF323232,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            color: const Color(
+                                                                              0xFF323232,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/hostels_detail/bathtub.png",
-                                                                  height: 24.h,
-                                                                  width: 24.w,
-                                                                ),
-                                                                Container(
-                                                                  margin:
-                                                                      EdgeInsets.only(
-                                                                        top:
-                                                                            5.h,
-                                                                      ),
-                                                                  child: Text(
-                                                                    " Bathroom 1",
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                          "Work Sans",
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      color: const Color(
-                                                                        0xFF323232,
-                                                                      ),
-                                                                    ),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 20.h),
-                                                        Row(
-                                                          children: [
-                                                            SizedBox(
-                                                              width:
-                                                                  MediaQuery.sizeOf(
-                                                                    context,
-                                                                  ).width *
-                                                                  0.4,
-                                                              child: Row(
-                                                                children: [
-                                                                  Image.asset(
-                                                                    "assets/hostels_detail/bed.png",
-                                                                    height:
-                                                                        24.h,
-                                                                    width: 24.w,
-                                                                  ),
-                                                                  Text(
-                                                                    " 2 Beds",
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                          "Work Sans",
-                                                                      color: const Color(
-                                                                        0xFF323232,
-                                                                      ),
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/hostels_detail/home.png",
-                                                                  height: 24.h,
-                                                                  width: 24.w,
-                                                                ),
-                                                                Container(
-                                                                  margin:
-                                                                      EdgeInsets.only(
-                                                                        top:
-                                                                            5.h,
-                                                                      ),
-                                                                  child: Text(
-                                                                    " Private Bedroom",
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                          "Work Sans",
-                                                                      fontSize: 14
-                                                                          .sp
-                                                                          .clamp(
-                                                                            0,
-                                                                            14,
-                                                                          ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 20.h),
-                                                        Container(
-                                                          // color: Colors.green,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Container(
-                                                                // color: Colors.blue,
-                                                                width:
-                                                                    MediaQuery.sizeOf(
-                                                                      context,
-                                                                    ).width *
-                                                                    0.35,
-                                                                child: Container(
-                                                                  height: 55.h,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          16.r,
-                                                                        ),
-                                                                    border: Border.all(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: SizedBox(
+                                                                Row(
+                                                                  children: [
+                                                                    Image.asset(
+                                                                      "assets/hostels_detail/bathtub.png",
+                                                                      height:
+                                                                          24.h,
                                                                       width:
-                                                                          Constant
-                                                                              .width *
-                                                                          0.3,
-                                                                      child: FittedBox(
-                                                                        child: Text(
-                                                                          "View more details",
-                                                                          textAlign:
-                                                                              TextAlign.center,
+                                                                          24.w,
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets.only(
+                                                                        top:
+                                                                            5.h,
+                                                                      ),
+                                                                      child: Text(
+                                                                        " Bathroom 1",
+                                                                        style: TextStyle(
+                                                                          fontFamily:
+                                                                              "Work Sans",
+                                                                          fontSize: 14.sp.clamp(
+                                                                            0,
+                                                                            14,
+                                                                          ),
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          color: const Color(
+                                                                            0xFF323232,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20.h,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  width:
+                                                                      MediaQuery.sizeOf(
+                                                                        context,
+                                                                      ).width *
+                                                                      0.4,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        "assets/hostels_detail/bed.png",
+                                                                        height:
+                                                                            24.h,
+                                                                        width:
+                                                                            24.w,
+                                                                      ),
+                                                                      Text(
+                                                                        " 2 Beds",
+                                                                        style: TextStyle(
+                                                                          fontFamily:
+                                                                              "Work Sans",
+                                                                          color: const Color(
+                                                                            0xFF323232,
+                                                                          ),
+                                                                          fontSize: 14.sp.clamp(
+                                                                            0,
+                                                                            14,
+                                                                          ),
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Image.asset(
+                                                                      "assets/hostels_detail/home.png",
+                                                                      height:
+                                                                          24.h,
+                                                                      width:
+                                                                          24.w,
+                                                                    ),
+                                                                    Container(
+                                                                      margin: EdgeInsets.only(
+                                                                        top:
+                                                                            5.h,
+                                                                      ),
+                                                                      child: Text(
+                                                                        " Private Bedroom",
+                                                                        style: TextStyle(
+                                                                          fontFamily:
+                                                                              "Work Sans",
+                                                                          fontSize: 14.sp.clamp(
+                                                                            0,
+                                                                            14,
+                                                                          ),
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20.h,
+                                                            ),
+                                                            Container(
+                                                              // color: Colors.green,
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Container(
+                                                                    // color: Colors.blue,
+                                                                    width:
+                                                                        MediaQuery.sizeOf(
+                                                                          context,
+                                                                        ).width *
+                                                                        0.35,
+                                                                    child: Container(
+                                                                      height:
+                                                                          55.h,
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              16.r,
+                                                                            ),
+                                                                        border: Border.all(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                      child: Center(
+                                                                        child: SizedBox(
+                                                                          width:
+                                                                              Constant.width *
+                                                                              0.3,
+                                                                          child: FittedBox(
+                                                                            child: Text(
+                                                                              "View more details",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyle(
+                                                                                fontWeight: FontWeight.w500,
+                                                                                fontSize: 14.sp,
+                                                                                fontFamily: "Work Sans",
+                                                                                color: Color(
+                                                                                  0xFF323232,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  // SizedBox(width: 40.h),
+                                                                  Container(
+                                                                    width:
+                                                                        Constant
+                                                                            .width *
+                                                                        0.48,
+                                                                    // color:
+                                                                    // Colors.yellow,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        SvgPicture.asset(
+                                                                          'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
+                                                                          width:
+                                                                              20,
+                                                                          height:
+                                                                              20,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              5,
+                                                                        ),
+                                                                        Text(
+                                                                          "More",
                                                                           style: TextStyle(
                                                                             fontWeight:
                                                                                 FontWeight.w500,
@@ -3620,440 +4330,406 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                ],
                                                               ),
-                                                              // SizedBox(width: 40.h),
-                                                              Container(
-                                                                width:
-                                                                    Constant
-                                                                        .width *
-                                                                    0.48,
-                                                                // color:
-                                                                // Colors.yellow,
-                                                                child: Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      'assets/user_interface_icons/Hostel_detail_screens/ic_add.svg',
-                                                                      width: 20,
-                                                                      height:
-                                                                          20,
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 5,
-                                                                    ),
-                                                                    Text(
-                                                                      "More",
-                                                                      style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontSize:
-                                                                            14.sp,
-                                                                        fontFamily:
-                                                                            "Work Sans",
-                                                                        color: Color(
-                                                                          0xFF323232,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 20.h),
-                                                        Divider(
-                                                          color:
-                                                              const Color.fromRGBO(
-                                                                120,
-                                                                120,
-                                                                120,
-                                                                0.7,
-                                                              ),
-                                                          height: .2.h,
-                                                        ),
-                                                        SizedBox(height: 20.h),
-                                                        SizedBox(
-                                                          width: Constant.width,
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                height:
-                                                                    Constant
-                                                                        .height *
-                                                                    0.03,
-                                                                width:
-                                                                    MediaQuery.sizeOf(
-                                                                      context,
-                                                                    ).width *
-                                                                    0.4,
-                                                                child: FittedBox(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child: Text(
-                                                                    "Academic Year",
-                                                                    style: TextStyle(
-                                                                      fontSize: 15
-                                                                          .sp
-                                                                          .clamp(
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20.h,
+                                                            ),
+                                                            Divider(
+                                                              color:
+                                                                  const Color.fromRGBO(
+                                                                    120,
+                                                                    120,
+                                                                    120,
+                                                                    0.7,
+                                                                  ),
+                                                              height: .2.h,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20.h,
+                                                            ),
+                                                            SizedBox(
+                                                              width: Constant
+                                                                  .width,
+                                                              child: Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height:
+                                                                        Constant
+                                                                            .height *
+                                                                        0.03,
+                                                                    width:
+                                                                        MediaQuery.sizeOf(
+                                                                          context,
+                                                                        ).width *
+                                                                        0.4,
+                                                                    child: FittedBox(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerLeft,
+                                                                      child: Text(
+                                                                        "Academic Year",
+                                                                        style: TextStyle(
+                                                                          fontSize: 15.sp.clamp(
                                                                             0,
                                                                             15,
                                                                           ),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: SizedBox(
-                                                                  height:
-                                                                      Constant
-                                                                          .width *
-                                                                      0.04,
-                                                                  child: FittedBox(
-                                                                    child: Text(
-                                                                      "Move in: 08 Aug 2024",
-                                                                      style: TextStyle(
-                                                                        fontSize: 13
-                                                                            .sp
-                                                                            .clamp(
+                                                                  Expanded(
+                                                                    child: SizedBox(
+                                                                      height:
+                                                                          Constant
+                                                                              .width *
+                                                                          0.04,
+                                                                      child: FittedBox(
+                                                                        child: Text(
+                                                                          "Move in: 08 Aug 2024",
+                                                                          style: TextStyle(
+                                                                            fontSize: 13.sp.clamp(
                                                                               0,
                                                                               13,
                                                                             ),
-                                                                        color: const Color(
-                                                                          0xFF323232,
+                                                                            color: const Color(
+                                                                              0xFF323232,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 15.h),
-                                                        Container(
-                                                          // color: Colors.pink,
-                                                          width: Constant.width,
-                                                          child: Row(
-                                                            children: [
-                                                              Container(
-                                                                // color: Colors.orange,
-                                                                width:
-                                                                    MediaQuery.sizeOf(
-                                                                      context,
-                                                                    ).width *
-                                                                    0.4,
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .topLeft,
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        "Price Estimate",
-                                                                        textAlign:
-                                                                            TextAlign.left,
-                                                                        style: TextStyle(
-                                                                          fontSize: 12.sp.clamp(
-                                                                            0,
-                                                                            12,
-                                                                          ),
-                                                                          letterSpacing:
-                                                                              0.2.w,
-                                                                          color: const Color(
-                                                                            0xFF787878,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      // SizedBox(
-                                                                      //   height:
-                                                                      //       10.h,
-                                                                      // ),
-                                                                      Container(
-                                                                        // color: Colors.brown,
-                                                                        height:
-                                                                            Constant.height *
-                                                                            0.03,
-                                                                        width:
-                                                                            Constant.width *
-                                                                            0.43,
-                                                                        child: Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            SizedBox(
-                                                                              height:
-                                                                                  Constant.height *
-                                                                                  0.028,
-                                                                              child: FittedBox(
-                                                                                child: Text(
-                                                                                  "GH¢${room.price}/",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 18.sp.clamp(
-                                                                                      0,
-                                                                                      18,
-                                                                                    ),
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    color: Color(
-                                                                                      0xFF323232,
-                                                                                    ),
-                                                                                    fontFamily: "Poppins",
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              child: FittedBox(
-                                                                                child: Text(
-                                                                                  "year",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 12.sp.clamp(
-                                                                                      0,
-                                                                                      12,
-                                                                                    ),
-                                                                                    color: const Color(
-                                                                                      0xFF787878,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: SizedBox(
-                                                                  // color: Colors.blue,
-                                                                  width:
-                                                                      MediaQuery.sizeOf(
-                                                                        context,
-                                                                      ).width *
-                                                                      0.3,
-                                                                  child: Center(
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15.h,
+                                                            ),
+                                                            Container(
+                                                              // color: Colors.pink,
+                                                              width: Constant
+                                                                  .width,
+                                                              child: Row(
+                                                                children: [
+                                                                  Container(
+                                                                    // color: Colors.orange,
+                                                                    width:
+                                                                        MediaQuery.sizeOf(
+                                                                          context,
+                                                                        ).width *
+                                                                        0.4,
                                                                     child: Align(
                                                                       alignment:
                                                                           Alignment
-                                                                              .center,
-                                                                      child: SizedBox(
-                                                                        width:
-                                                                            110.w,
-                                                                        height:
-                                                                            Constant.height *
-                                                                            0.05,
-                                                                        child: ElevatedButton(
-                                                                          onPressed: () {
-                                                                            numPeople = TextEditingController(
-                                                                              text: "1",
-                                                                            );
-                                                                            TextEditingController
-                                                                            name =
-                                                                                TextEditingController();
-                                                                            // TextEditingController
-                                                                            // phoneNum =
-                                                                            //     TextEditingController();
-                                                                            TextEditingController
-                                                                            emailAddress =
-                                                                                TextEditingController();
-                                                                            // List<
-                                                                            //   TextEditingController
-                                                                            // >
-                                                                            occupantNames = [
-                                                                              TextEditingController(),
-                                                                            ];
-                                                                            // List<
-                                                                            //   TextEditingController
-                                                                            // >
-                                                                            occupantEmails = [
-                                                                              TextEditingController(),
-                                                                            ];
-
-                                                                            occupantPhones = [
-                                                                              TextEditingController(),
-                                                                            ];
-
-                                                                            if (user !=
-                                                                                null) {
-                                                                              Get.snackbar(
-                                                                                'Success',
-                                                                                'Task saved!',
-                                                                              );
-                                                                              showModalBottomSheet(
-                                                                                context: context,
-                                                                                isScrollControlled: true,
-                                                                                builder:
-                                                                                    (
-                                                                                      BuildContext context,
-                                                                                    ) {
-                                                                                      return StatefulBuilder(
-                                                                                        key: key,
-                                                                                        builder:
-                                                                                            (
-                                                                                              BuildContext context,
-                                                                                              StateSetter setModalState,
-                                                                                            ) {
-                                                                                              return Container(
-                                                                                                height:
-                                                                                                    Constant.height *
-                                                                                                    0.85,
-                                                                                                decoration: BoxDecoration(
-                                                                                                  color: Colors.white,
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(
-                                                                                                      20,
-                                                                                                    ),
-                                                                                                    topRight: Radius.circular(
-                                                                                                      20,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                padding: EdgeInsets.only(
-                                                                                                  bottom: MediaQuery.of(
-                                                                                                    context,
-                                                                                                  ).viewInsets.bottom,
-                                                                                                ),
-                                                                                                child: ClipRRect(
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(
-                                                                                                      20,
-                                                                                                    ),
-                                                                                                    topRight: Radius.circular(
-                                                                                                      20,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  child: SingleChildScrollView(
-                                                                                                    // controller: controller,
-                                                                                                    child: book(
-                                                                                                      setModalState,
-                                                                                                      numPeople,
-                                                                                                      name,
-                                                                                                      // phoneNum,
-                                                                                                      emailAddress,
-                                                                                                      occupantEmails,
-                                                                                                      occupantNames,
-                                                                                                      occupantPhones,
-                                                                                                      () {
-                                                                                                        roomtype = room.type ?? "";
-                                                                                                        if (room.type !=
-                                                                                                            null) {
-                                                                                                          if (room.type ==
-                                                                                                              "1in1") {
-                                                                                                            return 1;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "2in1") {
-                                                                                                            return 2;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "3in1") {
-                                                                                                            return 3;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "4in1") {
-                                                                                                            return 4;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "5in1") {
-                                                                                                            return 5;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "6in1") {
-                                                                                                            return 6;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "7in1") {
-                                                                                                            return 7;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "8in1") {
-                                                                                                            return 8;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "9in1") {
-                                                                                                            return 9;
-                                                                                                          }
-                                                                                                          if (room.type ==
-                                                                                                              "10in1") {
-                                                                                                            return 10;
-                                                                                                          }
-                                                                                                        }
-                                                                                                        return 0;
-                                                                                                      },
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              );
-                                                                                            },
-                                                                                      );
-                                                                                    },
-                                                                              ).whenComplete(
-                                                                                () {
-                                                                                  // numPeople.dispose();
-
-                                                                                  setState(
-                                                                                    () {
-                                                                                      isChecked = false;
-                                                                                    },
-                                                                                  );
-
-                                                                                  // for (var c in occupantNames) {
-                                                                                  //   c.dispose();
-                                                                                  // }
-                                                                                  // for (var c in occupantEmails) {
-                                                                                  //   c.dispose();
-                                                                                  // }
-                                                                                },
-                                                                              );
-                                                                            } else {
-                                                                              Get.snackbar(
-                                                                                'Error',
-                                                                                'Please sign in to continue.',
-                                                                              );
-                                                                            }
-                                                                          },
-                                                                          style: ElevatedButton.styleFrom(
-                                                                            elevation:
+                                                                              .topLeft,
+                                                                      child: Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            "Price Estimate",
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style: TextStyle(
+                                                                              fontSize: 12.sp.clamp(
                                                                                 0,
-                                                                            shape: ContinuousRectangleBorder(
-                                                                              side: BorderSide.none,
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                30.r,
+                                                                                12,
+                                                                              ),
+                                                                              letterSpacing: 0.2.w,
+                                                                              color: const Color(
+                                                                                0xFF787878,
                                                                               ),
                                                                             ),
-                                                                            backgroundColor: const Color.fromARGB(
-                                                                              255,
-                                                                              33,
-                                                                              243,
-                                                                              201,
-                                                                            ),
                                                                           ),
-                                                                          child: SizedBox(
+                                                                          // SizedBox(
+                                                                          //   height:
+                                                                          //       10.h,
+                                                                          // ),
+                                                                          Container(
+                                                                            // color: Colors.brown,
                                                                             height:
                                                                                 Constant.height *
-                                                                                0.025,
-                                                                            child: FittedBox(
-                                                                              child: Text(
-                                                                                "Book now",
-                                                                                textAlign: TextAlign.center,
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                  fontSize: 14.sp.clamp(
-                                                                                    0,
-                                                                                    14,
+                                                                                0.03,
+                                                                            width:
+                                                                                Constant.width *
+                                                                                0.43,
+                                                                            child: Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              children: [
+                                                                                SizedBox(
+                                                                                  height:
+                                                                                      Constant.height *
+                                                                                      0.028,
+                                                                                  child: FittedBox(
+                                                                                    child: Text(
+                                                                                      "GH¢${room.price}/",
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 18.sp.clamp(
+                                                                                          0,
+                                                                                          18,
+                                                                                        ),
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        color: Color(
+                                                                                          0xFF323232,
+                                                                                        ),
+                                                                                        fontFamily: "Poppins",
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  child: FittedBox(
+                                                                                    child: Text(
+                                                                                      "year",
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 12.sp.clamp(
+                                                                                          0,
+                                                                                          12,
+                                                                                        ),
+                                                                                        color: const Color(
+                                                                                          0xFF787878,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: SizedBox(
+                                                                      // color: Colors.blue,
+                                                                      width:
+                                                                          MediaQuery.sizeOf(
+                                                                            context,
+                                                                          ).width *
+                                                                          0.3,
+                                                                      child: Center(
+                                                                        child: Align(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child: SizedBox(
+                                                                            width:
+                                                                                110.w,
+                                                                            height:
+                                                                                Constant.height *
+                                                                                0.05,
+                                                                            child: ElevatedButton(
+                                                                              onPressed: () {
+                                                                                currentRoom = rooms;
+
+                                                                                // roomdifference = roomdiff;
+                                                                                numPeople = TextEditingController(
+                                                                                  text: "1",
+                                                                                );
+                                                                                TextEditingController
+                                                                                name = TextEditingController();
+                                                                                // TextEditingController
+                                                                                // phoneNum =
+                                                                                //     TextEditingController();
+                                                                                TextEditingController
+                                                                                emailAddress = TextEditingController();
+                                                                                // List<
+                                                                                //   TextEditingController
+                                                                                // >
+                                                                                occupantNames = [
+                                                                                  TextEditingController(),
+                                                                                ];
+                                                                                // List<
+                                                                                //   TextEditingController
+                                                                                // >
+                                                                                occupantEmails = [
+                                                                                  TextEditingController(),
+                                                                                ];
+
+                                                                                occupantPhones = [
+                                                                                  TextEditingController(),
+                                                                                ];
+
+                                                                                if (user !=
+                                                                                    null) {
+                                                                                  Get.snackbar(
+                                                                                    'Success',
+                                                                                    'Task saved!',
+                                                                                  );
+                                                                                  showModalBottomSheet(
+                                                                                    context: context,
+                                                                                    isScrollControlled: true,
+                                                                                    builder:
+                                                                                        (
+                                                                                          BuildContext context,
+                                                                                        ) {
+                                                                                          return StatefulBuilder(
+                                                                                            key: key,
+                                                                                            builder:
+                                                                                                (
+                                                                                                  BuildContext context,
+                                                                                                  StateSetter setModalState,
+                                                                                                ) {
+                                                                                                  return Container(
+                                                                                                    height:
+                                                                                                        Constant.height *
+                                                                                                        0.85,
+                                                                                                    decoration: BoxDecoration(
+                                                                                                      color: Colors.white,
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(
+                                                                                                          20,
+                                                                                                        ),
+                                                                                                        topRight: Radius.circular(
+                                                                                                          20,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    padding: EdgeInsets.only(
+                                                                                                      bottom: MediaQuery.of(
+                                                                                                        context,
+                                                                                                      ).viewInsets.bottom,
+                                                                                                    ),
+                                                                                                    child: ClipRRect(
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(
+                                                                                                          20,
+                                                                                                        ),
+                                                                                                        topRight: Radius.circular(
+                                                                                                          20,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      child: SingleChildScrollView(
+                                                                                                        // controller: controller,
+                                                                                                        child: book(
+                                                                                                          setModalState,
+                                                                                                          numPeople,
+                                                                                                          name,
+                                                                                                          // phoneNum,
+                                                                                                          emailAddress,
+                                                                                                          occupantEmails,
+                                                                                                          occupantNames,
+                                                                                                          occupantPhones,
+                                                                                                          () {
+                                                                                                            roomtype =
+                                                                                                                room.type ??
+                                                                                                                "";
+                                                                                                            if (room.type !=
+                                                                                                                null) {
+                                                                                                              if (room.type ==
+                                                                                                                  "1in1") {
+                                                                                                                return 1;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "2in1") {
+                                                                                                                return 2;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "3in1") {
+                                                                                                                return 3;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "4in1") {
+                                                                                                                return 4;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "5in1") {
+                                                                                                                return 5;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "6in1") {
+                                                                                                                return 6;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "7in1") {
+                                                                                                                return 7;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "8in1") {
+                                                                                                                return 8;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "9in1") {
+                                                                                                                return 9;
+                                                                                                              }
+                                                                                                              if (room.type ==
+                                                                                                                  "10in1") {
+                                                                                                                return 10;
+                                                                                                              }
+                                                                                                            }
+                                                                                                            return 0;
+                                                                                                          },
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  );
+                                                                                                },
+                                                                                          );
+                                                                                        },
+                                                                                  ).whenComplete(
+                                                                                    () {
+                                                                                      // numPeople.dispose();
+
+                                                                                      setState(
+                                                                                        () {
+                                                                                          isChecked = false;
+                                                                                        },
+                                                                                      );
+
+                                                                                      // for (var c in occupantNames) {
+                                                                                      //   c.dispose();
+                                                                                      // }
+                                                                                      // for (var c in occupantEmails) {
+                                                                                      //   c.dispose();
+                                                                                      // }
+                                                                                    },
+                                                                                  );
+                                                                                  // roomId = roomIds[0];
+                                                                                } else {
+                                                                                  Get.snackbar(
+                                                                                    'Error',
+                                                                                    'Please sign in to continue.',
+                                                                                  );
+                                                                                }
+                                                                              },
+                                                                              style: ElevatedButton.styleFrom(
+                                                                                elevation: 0,
+                                                                                shape: ContinuousRectangleBorder(
+                                                                                  side: BorderSide.none,
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                    30.r,
+                                                                                  ),
+                                                                                ),
+                                                                                backgroundColor: const Color.fromARGB(
+                                                                                  255,
+                                                                                  33,
+                                                                                  243,
+                                                                                  201,
+                                                                                ),
+                                                                              ),
+                                                                              child: SizedBox(
+                                                                                height:
+                                                                                    Constant.height *
+                                                                                    0.025,
+                                                                                child: FittedBox(
+                                                                                  child: Text(
+                                                                                    "Book now",
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                      fontSize: 14.sp.clamp(
+                                                                                        0,
+                                                                                        14,
+                                                                                      ),
+                                                                                    ),
                                                                                   ),
                                                                                 ),
                                                                               ),
@@ -4063,12 +4739,12 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
                                                     ),
                                                   ),
                                                   // SizedBox(height: 10.h),
