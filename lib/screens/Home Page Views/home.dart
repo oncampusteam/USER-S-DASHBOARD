@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   User? user;
 
-  bool isLoading = false;
+  // bool isLoading = false;
   int num = 0;
 
   @override
@@ -561,25 +561,27 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15.h),
 
-                      isLoading
-                          ? SizedBox(
-                              height: 300,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5,
-                                itemBuilder: (_, __) => const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: HostelCardShimmer(),
+                      Obx(() {
+                        return hostelController.isloading.value
+                            ? SizedBox(
+                                height: 300,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: (_, __) => const Padding(
+                                    padding: EdgeInsets.only(right: 8),
+                                    child: HostelCardShimmer(),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Obx(() {
-                              final hostels = hostelController.privateHostels;
-                              return HostelCard(
-                                hostels: hostels,
-                                seeAllPopular: seeAllPopular,
-                              );
-                            }),
+                              )
+                            : Obx(() {
+                                final hostels = hostelController.privateHostels;
+                                return HostelCard(
+                                  hostels: hostels,
+                                  seeAllPopular: seeAllPopular,
+                                );
+                              });
+                      }),
                       SizedBox(height: 15.h),
                       Container(
                         margin: EdgeInsets.only(left: 25.h),
@@ -646,42 +648,47 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15.h),
 
-                      isLoading
-                          ? SizedBox(
-                              height: 300,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5,
-                                itemBuilder: (_, __) => const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: HostelCardShimmer(),
+                      Obx(() {
+                        debugPrint(
+                          "this is the value of: ${hostelController.isloading.value} ",
+                        );
+                        return hostelController.isloading.value
+                            ? SizedBox(
+                                height: 300,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: (_, __) => const Padding(
+                                    padding: EdgeInsets.only(right: 8),
+                                    child: HostelCardShimmer(),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Builder(
-                              builder: (context) {
-                                return Obx(() {
-                                  final topHostels =
-                                      hostelController.privateHostels;
-                                  return SizedBox(
-                                    height:
-                                        Constant.height *
-                                        0.47 *
-                                        (seeAllTop ? topHostels.length : 5),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 0.h,
+                              )
+                            : Builder(
+                                builder: (context) {
+                                  return Obx(() {
+                                    final topHostels =
+                                        hostelController.privateHostels;
+                                    return SizedBox(
+                                      height:
+                                          Constant.height *
+                                          0.47 *
+                                          (seeAllTop ? topHostels.length : 5),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 0.h,
+                                        ),
+                                        child: HostelCard(
+                                          variant: true,
+                                          hostels: topHostels,
+                                          seeAllPopular: seeAllPopular,
+                                        ),
                                       ),
-                                      child: HostelCard(
-                                        variant: true,
-                                        hostels: topHostels,
-                                        seeAllPopular: seeAllPopular,
-                                      ),
-                                    ),
-                                  );
-                                });
-                              },
-                            ),
+                                    );
+                                  });
+                                },
+                              );
+                      }),
                       SizedBox(height: 20.h),
                       SizedBox(
                         child: Column(

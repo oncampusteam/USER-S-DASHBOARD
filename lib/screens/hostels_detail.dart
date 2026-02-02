@@ -2186,6 +2186,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                               "status": "pending",
                               "paid": false,
                               "createdAt": DateTime.now(),
+                              "verified": false,
+                              "id": "${occupantNames[i].text.trim().split(" ")[0]}${generateSixDigitCode()}",
+
                             });
                           }
 
