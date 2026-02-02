@@ -28,7 +28,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
           padding: EdgeInsets.only(left: 25.h),
           height: 24.h,
           width: 24.w,
-          child: Icon(Icons.chevron_left, color: Color(0xFF323232)),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.chevron_left, color: Color(0xFF323232)),
+          ),
         ),
         title: SizedBox(
           height: 25.h,
@@ -51,11 +56,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
             onChanged: (value) {
               setState(() {
                 turnOn = !turnOn;
-                if(turnOn){
-                   NotificationService.show(
-                title: "Push Notification is active",
-                body: "Welcome to oncampus",
-              );
+                if (turnOn) {
+                  NotificationService.show(
+                    title: "Push Notification is active",
+                    body: "Welcome to oncampus",
+                  );
                 }
               });
             },
@@ -148,23 +153,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             )
           : Column(
-            children: [
-              SizedBox(height: 30.h),
-              notificationCard(
-            name: "Craig",
-            city: "Kumasi",
-            content: "On Campus update: Your booking has been cancelled",
-            status: "Canceled"
-          ),
-          SizedBox(height: 20.h),
-          notificationCard(
-            name: "Eric",
-            city: "Accra",
-            content: "New date and time request",
-            status: "Request pending"
-          ),
-            ],
-          )
+              children: [
+                SizedBox(height: 30.h),
+                notificationCard(
+                  name: "Craig",
+                  city: "Kumasi",
+                  content: "On Campus update: Your booking has been cancelled",
+                  status: "Canceled",
+                ),
+                SizedBox(height: 20.h),
+                notificationCard(
+                  name: "Eric",
+                  city: "Accra",
+                  content: "New date and time request",
+                  status: "Request pending",
+                ),
+              ],
+            ),
     );
   }
 
@@ -174,21 +179,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
     required String content,
     required String status,
     String imageUrl = "",
-    }) {
+  }) {
     return Container(
       // color: Colors.red,
       padding: EdgeInsets.symmetric(horizontal: 25.h),
       // height: Constant.height * 0.08,
       child: Row(
-        children:[
+        children: [
           Container(
             height: Constant.height * 0.075,
             width: Constant.width * 0.155,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle),
             child: CachedNetworkImage(
-              imageUrl: imageUrl,   // Network image
+              imageUrl: imageUrl, // Network image
               fit: BoxFit.cover,
               placeholder: (context, url) => Image.asset(
                 "assets/notification/default.png",
@@ -219,9 +222,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           style: TextStyle(
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF0A0A0A)
-                          )
-                          )
+                            color: Color(0xFF0A0A0A),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -232,41 +235,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           style: TextStyle(
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF717375)
-                          )
-                          )
-                      ),
-                    )
-                  ],
-                ),
-              Text(
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                content,
-                style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF0A0A0A)
-                          )
-                ),
-              SizedBox(
-                      height: Constant.height * 0.025,
-                      child: FittedBox(
-                        child: Text(
-                          status,
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF717375)
-                          )
-                          )
+                            color: Color(0xFF717375),
+                          ),
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                Text(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  content,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF0A0A0A),
+                  ),
+                ),
+                SizedBox(
+                  height: Constant.height * 0.025,
+                  child: FittedBox(
+                    child: Text(
+                      status,
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF717375),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          )
-        ]
-      ));
+          ),
+        ],
+      ),
+    );
   }
 }

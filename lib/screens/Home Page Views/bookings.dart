@@ -61,6 +61,7 @@ class _BookingsState extends State<Bookings> {
   }
 
   Future<void> loadData() async {
+    debugPrint("The load data is triggering");
     setState(() => isLoading = true);
     await getPendingPayment(); // Ensure this finishes first
     await getPendingHostelDetails(); // Then fetch hostel details
@@ -76,7 +77,7 @@ class _BookingsState extends State<Bookings> {
         //debugPrint("Pending: $pending");
       }
     } catch (e) {
-      //debugPrint("Error fetching payments: $e");
+      debugPrint("Error fetching payments: $e");
     }
   }
 
@@ -276,7 +277,9 @@ class _BookingsState extends State<Bookings> {
     return isLoading
         ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
-            child: Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),)),
+            child: Center(
+              child: CircularProgressIndicator(color: Color(0xFF00EFD1)),
+            ),
           )
         : pendingHostels.isEmpty
         ? SizedBox(
@@ -675,7 +678,9 @@ class _BookingsState extends State<Bookings> {
     return isLoading
         ? SizedBox(
             height: MediaQuery.of(context).size.height - 200,
-            child: Center(child: CircularProgressIndicator(color: Color(0xFF00EFD1),)),
+            child: Center(
+              child: CircularProgressIndicator(color: Color(0xFF00EFD1)),
+            ),
           )
         : paidHostels.isEmpty
         ? SizedBox(

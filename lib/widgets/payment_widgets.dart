@@ -155,7 +155,7 @@ Widget roomCard({
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
                             child: Text(
-                              "    ${pendingHostel.amenities?[0]["label"]?.capitalize ?? "Wifi"} • ${pendingHostel.amenities?[1]["label"]?.capitalize ?? "Shower"}• ${pendingHostel.amenities?[2]["label"]?.capitalize ?? "Kitchen"} • ${pendingHostel.amenities?[2]["label"]?.capitalize ?? "Security"} •\n ${pendingHostel.amenities?[2]["label"]?.capitalize ?? "Parking"} • ${pendingHostel.amenities?[1]["label"]?.capitalize ?? "Balcony"} • ${pendingHostel.amenities?[0]["label"]?.capitalize ?? "Friendly environment"}",
+                              "    ${pendingHostel.amenities?[0]["label"]?? "Wifi"} • ${pendingHostel.amenities?[1]["label"]?? "Shower"}• ${pendingHostel.amenities?[2]["label"]?? "Kitchen"} • ${pendingHostel.amenities?[2]["label"] ?? "Security"} •\n ${pendingHostel.amenities?[2]["label"]?? "Parking"} • ${pendingHostel.amenities?[1]["label"] ?? "Balcony"} • ${pendingHostel.amenities?[0]["label"]?? "Friendly environment"}",
                               overflow: TextOverflow.visible,
                               style: TextStyle(
                                 fontSize: 9.sp.clamp(0, 11),

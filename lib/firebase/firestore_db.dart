@@ -506,6 +506,7 @@ class FirestoreDb {
 
   Future<Hostels> getHostelsByName(String hostel_name) async {
     late Hostels hostelByName;
+    debugPrint("This is the valueof hsotel_name: $hostel_name");
     try {
       final querySnapshot = await db
           .collectionGroup("Private Hostels")
@@ -597,7 +598,8 @@ class FirestoreDb {
 
   Future<List<BookedHostels>> getPendingHostels(User user) async {
     List<BookedHostels> bookedHostels = [];
-
+    debugPrint("Getting hostels is triggered");
+    debugPrint("${user.uid}");
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
         .collection("Users")
         .doc(user.uid)
@@ -608,8 +610,9 @@ class FirestoreDb {
       bookedHostels = querySnapshot.docs
           .map((e) => BookedHostels.fromJson(e.data()))
           .toList();
+      debugPrint("This is booked hostels : $bookedHostels");
     } catch (e) {
-      //debugPrint(e.toString());
+      debugPrint(e.toString());
     }
 
     //debugPrint(bookedHostels.toString());

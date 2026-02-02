@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:on_campus/screens/bottom_nav.dart';
 import 'package:on_campus/screens/media.dart';
 import 'package:on_campus/classes/classes.dart';
 import 'package:on_campus/firebase/consts.dart';
@@ -104,11 +105,9 @@ List<List<Map<String, dynamic>>> sort(
     if (capacity == 1) {
       roomsWithOutBedSpace.add(room);
       // return [roomsWithOutBedSpace, roomsWithBedSpace];
-    }
-    else if (room["tenant"] == 0) {
+    } else if (room["tenant"] == 0) {
       roomsWithOutBedSpace.add(room);
-    }
-    else if (room["tenant"]> 0 && room["tenant"] < capacity) {
+    } else if (room["tenant"] > 0 && room["tenant"] < capacity) {
       roomsWithBedSpace.add(room);
     }
   }
@@ -2187,8 +2186,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                               "paid": false,
                               "createdAt": DateTime.now(),
                               "verified": false,
-                              "id": "${occupantNames[i].text.trim().split(" ")[0]}${generateSixDigitCode()}",
-
+                              "id":
+                                  "${occupantNames[i].text.trim().split(" ")[0]}${generateSixDigitCode()}",
                             });
                           }
 
@@ -2215,11 +2214,18 @@ class _HostelDetailsState extends State<HostelDetails> {
                           "duration": duration,
                           "paid": false,
                           "createdAt": DateTime.now(),
+                          "amount": widget.hostel.amt_per_year as double,
                         }, SetOptions(merge: true));
                       });
 
                       // 🎉 SUCCESS
-                      Get.snackbar("Success", "Room booked successfully");
+                      // Get.snackbar("Success", "Room booked successfully");
+                      Get.to(
+                        () => Payment(user: user, subject: "Payment"),
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeIn,
+                      );
                     } catch (e) {
                       Get.snackbar("Booking Failed", e.toString());
                     } finally {
@@ -3760,12 +3766,11 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                       // left: 20.h,
                                                       // right: 20.h
                                                     ),
-                                                    padding:
-                                                        EdgeInsets.only(
-                                                          top: 25.h,
-                                                          bottom: 25.h,
-                                                          left: 25.w,
-                                                        ),
+                                                    padding: EdgeInsets.only(
+                                                      top: 25.h,
+                                                      bottom: 25.h,
+                                                      left: 25.w,
+                                                    ),
                                                     child: StreamBuilder<List<Map<String, dynamic>>>(
                                                       stream:
                                                           availableRoomIdsStream(
@@ -3859,7 +3864,10 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                               .start,
                                                                       children: [
                                                                         Container(
-                                                                          padding: EdgeInsets.only(right: 25.h),
+                                                                          padding: EdgeInsets.only(
+                                                                            right:
+                                                                                25.h,
+                                                                          ),
                                                                           // width:
                                                                           //     Constant
                                                                           //         .width *
@@ -3936,7 +3944,9 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                         Row(
                                                                           children: [
                                                                             SizedBox(
-                                                                              width: Constant.width * 0.22,
+                                                                              width:
+                                                                                  Constant.width *
+                                                                                  0.22,
                                                                               child: FittedBox(
                                                                                 child: Text(
                                                                                   "Available Rooms:",

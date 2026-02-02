@@ -303,7 +303,7 @@ class BookedHostels {
     required this.email,
     required this.gender,
     required this.hostel_name,
-    required this.isDone,
+    // required this.isDone,
     required this.move_in,
     required this.move_out,
     required this.name,
@@ -316,7 +316,7 @@ class BookedHostels {
   String? email;
   String? gender;
   String? hostel_name;
-  bool? isDone;
+  // bool? isDone;
   String? move_in;
   String? move_out;
   String? name;
@@ -324,12 +324,12 @@ class BookedHostels {
 
   factory BookedHostels.fromJson(Map<String, dynamic> json) => BookedHostels(
     people_booking: json["people_booking"],
-    amount: json["amount"],
+    amount: json["amount"].toDouble(),
     duration: json["duration"],
     email: json["email"],
     gender: json["gender"],
     hostel_name: json["hostel_name"],
-    isDone: json["isDone"],
+    // isDone: json["isDone"],
     move_in: json["move_in"],
     move_out: json["move_out"],
     name: json["name"],
@@ -343,7 +343,7 @@ class BookedHostels {
     "email": email,
     "gender": gender,
     "hostel_name": hostel_name,
-    "isDone": isDone,
+    // "isDone": isDone,
     "move_in": move_in,
     "move_out": move_out,
     "name": name,
