@@ -152,7 +152,7 @@ Widget utilities({
                                       child: FittedBox(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          value[index]["id"]?.capitalize ?? "",
+                                          value[index]["id"]?? "",
                                         ),
                                       ),
                                     ),

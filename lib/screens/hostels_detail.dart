@@ -2498,12 +2498,7 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                                       : Icons
                                                                             .favorite_border,
                                                                   color:
-                                                                      Color.fromARGB(
-                                                                        255,
-                                                                        0,
-                                                                        239,
-                                                                        209,
-                                                                      ),
+                                                                      Colors.black,
                                                                 ),
                                                               );
                                                             }),
@@ -3008,19 +3003,14 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                           // SizedBox(height: 10.h),
                                                           GestureDetector(
                                                             onTap: () {
-                                                              // Get.to(
-                                                              //   () => MediaScreen(
-                                                              //     type:
-                                                              //         "photos",
-                                                              //     media:
-                                                              //         (widget.hostel.hostel_images ??
-                                                              //                 [])
-                                                              //             .whereType<
-                                                              //               String
-                                                              //             >()
-                                                              //             .toList(),
-                                                              //   ),
-                                                              // );
+                                                              Get.to(
+                                                                () => MediaScreen(
+                                                                  type:
+                                                                      "photos",
+                                                                  media:
+                                                                      widget.hostel.hostel_images as List<dynamic>,
+                                                                ),
+                                                              );
                                                             },
                                                             child: Container(
                                                               height:
@@ -3138,17 +3128,24 @@ class _HostelDetailsState extends State<HostelDetails> {
                               color: const Color(0xFFF5F8FF),
                               child: Column(
                                 children: [
-                                  Container(
-                                    // padding: const EdgeInsets.symmetric(
-                                    //   horizontal: 15.0,
-                                    // ),
-                                    child: SizedBox(
-                                      height: 70.h,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
+                                  SizedBox(
+                                    height: 70.h,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: (){
+                                            Get.to(
+                                             () => MediaScreen(
+                                               type:
+                                                   "photos",
+                                               media:
+                                                   widget.hostel.hostel_images as List<dynamic>,
+                                             ),
+                                              );
+                                          },
+                                          child: Container(
                                             height: Constant.height * 0.05,
                                             width: Constant.width * 0.27,
                                             decoration: BoxDecoration(
@@ -3195,89 +3192,44 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            height: Constant.height * 0.05,
-                                            width: Constant.width * 0.27,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(16.r),
-                                              border: Border.all(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            child: Align(
-                                              child: SizedBox(
-                                                height: Constant.height * 0.02,
-                                                width: Constant.width * 0.28,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Image.asset(
-                                                      "assets/hostels_detail/video.png",
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                    SizedBox(
-                                                      height:
-                                                          Constant.height *
-                                                          0.021,
-                                                      child: FittedBox(
-                                                        child: Text(
-                                                          " Videos",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Work Sans",
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 13.sp
-                                                                .clamp(0, 13),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                        ),
+                                        Container(
+                                          height: Constant.height * 0.05,
+                                          width: Constant.width * 0.27,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16.r),
+                                            border: Border.all(
+                                              color: Colors.black,
                                             ),
                                           ),
-                                          Container(
-                                            height: Constant.height * 0.05,
-                                            width: Constant.width * 0.28,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(16.r),
-                                              border: Border.all(
-                                                color: Colors.black,
-                                              ),
-                                            ),
+                                          child: Align(
                                             child: SizedBox(
-                                              height: Constant.height * 0.045,
-                                              width: Constant.width * 0.27,
+                                              height: Constant.height * 0.02,
+                                              width: Constant.width * 0.28,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Image.asset(
-                                                    "assets/hostels_detail/360 Degree Rotate.png",
+                                                    "assets/hostels_detail/video.png",
                                                     fit: BoxFit.contain,
                                                   ),
                                                   SizedBox(
                                                     height:
-                                                        Constant.height * 0.021,
+                                                        Constant.height *
+                                                        0.021,
                                                     child: FittedBox(
                                                       child: Text(
-                                                        " View",
+                                                        " Videos",
                                                         style: TextStyle(
                                                           fontFamily:
                                                               "Work Sans",
                                                           fontWeight:
                                                               FontWeight.w600,
-                                                          fontSize: 13.sp.clamp(
-                                                            0,
-                                                            13,
-                                                          ),
+                                                          fontSize: 13.sp
+                                                              .clamp(0, 13),
                                                         ),
                                                       ),
                                                     ),
@@ -3286,8 +3238,53 @@ class _HostelDetailsState extends State<HostelDetails> {
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        Container(
+                                          height: Constant.height * 0.05,
+                                          width: Constant.width * 0.28,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16.r),
+                                            border: Border.all(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          child: SizedBox(
+                                            height: Constant.height * 0.045,
+                                            width: Constant.width * 0.27,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  "assets/hostels_detail/360 Degree Rotate.png",
+                                                  fit: BoxFit.contain,
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                      Constant.height * 0.021,
+                                                  child: FittedBox(
+                                                    child: Text(
+                                                      " View",
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            "Work Sans",
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13.sp.clamp(
+                                                          0,
+                                                          13,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Container(
@@ -5122,20 +5119,8 @@ class _HostelDetailsState extends State<HostelDetails> {
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 10.0.w,
                                             ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Get.to(
-                                                  () => HostelsDetailMap(
-                                                    hostel: widget.hostel,
-                                                  ),
-                                                  transition: Transition.fadeIn,
-                                                  duration: const Duration(
-                                                    milliseconds: 800,
-                                                  ),
-                                                  curve: Curves.easeIn,
-                                                );
-                                              },
-                                              child: SizedBox(
+                                            child: Stack(
+                                              children: [SizedBox(
                                                 width: MediaQuery.sizeOf(
                                                   context,
                                                 ).width.w,
@@ -5146,6 +5131,52 @@ class _HostelDetailsState extends State<HostelDetails> {
                                                   fit: BoxFit.fill,
                                                 ),
                                               ),
+                                              Container(
+                                                height: 400.h,
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromRGBO(0, 0, 0, 0.2),
+                                                ),
+                                                child: Align(
+                                                  child: GestureDetector(
+                                                    onTap: (){
+                                                      Get.to(
+                                                      () => HostelsDetailMap(
+                                                        hostel: widget.hostel,
+                                                      ),
+                                                      transition: Transition.fadeIn,
+                                                      duration: const Duration(
+                                                        milliseconds: 800,
+                                                      ),
+                                                      curve: Curves.easeIn,
+                                                    );
+                                                    },
+                                                    child:  Container(
+                                                      height: Constant.height * 0.04,
+                                                      width: Constant.width * 0.3,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(23),
+                                                        color: Color(0xFF00EFD1)
+                                                      ),
+                                                      child: Align(
+                                                        child: SizedBox(
+                                                          height: Constant.height * 0.025,
+                                                          child: FittedBox(
+                                                            child: Text(
+                                                              "View Location",
+                                                              style: TextStyle(
+                                                                fontFamily: "Poppins",
+                                                                fontWeight: FontWeight.w500,
+                                                                color: Colors.white
+                                                              )
+                                                              ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              ]
                                             ),
                                           ),
                                         ],

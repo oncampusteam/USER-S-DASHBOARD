@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:on_campus/classes/constants.dart';
 import 'package:on_campus/firebase/consts.dart';
 import 'package:on_campus/firebase/classes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -154,9 +155,16 @@ class _HostelsDetailMapState extends State<HostelsDetailMap> {
         actionsPadding: EdgeInsets.only(right: 20),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Text(
-          widget.hostel.name,
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: SizedBox(
+          height: Constant.height * 0.03,
+          width: Constant.width * 0.7,
+          child: FittedBox(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.hostel.name,
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
         ),
         actions: [
           IconButton(

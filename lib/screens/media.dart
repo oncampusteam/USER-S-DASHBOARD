@@ -6,7 +6,7 @@ import 'package:on_campus/classes/constants.dart';
 class MediaScreen extends StatefulWidget {
   // final String title;
   final String type;
-  final List<String> media;
+  final List<dynamic> media;
   const MediaScreen({
     super.key,
     // required this.title,
@@ -47,7 +47,14 @@ class _MediaScreenState extends State<MediaScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actionsPadding: EdgeInsets.only(right: 20),
-        actions: [Icon(Icons.close, color: Color(0xFF323232), size: 20)],
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.close, color: Color(0xFF323232), size: 20),
+          ),
+        ],
         automaticallyImplyLeading: false,
         // leading: IconButton(
         //   icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
@@ -83,7 +90,8 @@ class _MediaScreenState extends State<MediaScreen> {
                 if (widget.type == "photos") _buildImageGallery(),
                 if (widget.type == "videos")
                   // VideoGalleryList(videoUrls: widget.media),
-                const SizedBox(height: 70), // Padding for floating button
+                  const SizedBox(height: 100), // Padding for floating button
+                  const SizedBox(height: 70),
               ],
             ),
           ),
@@ -95,7 +103,7 @@ class _MediaScreenState extends State<MediaScreen> {
 
   Widget _buildImageGallery() {
     // List of images from your reference
-    final List<String> images = widget.media;
+    final List<dynamic> images = widget.media;
 
     return Column(
       children: images
@@ -107,7 +115,7 @@ class _MediaScreenState extends State<MediaScreen> {
                   20,
                 ), // 20px borderRadius applied
                 child: Image.network(
-                  url,
+                  url["imageUrl"],
                   width: double.infinity,
                   height: 220,
                   fit: BoxFit.cover,

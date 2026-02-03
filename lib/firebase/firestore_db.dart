@@ -19,7 +19,57 @@ class FirestoreDb {
   static FirestoreDb instance = FirestoreDb();
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
+  // Future<List<Campus>> getCampus() async {
+  //   List<Campus> campuses = [];
+  //   final regions = await db.collection("Region").get();
+  //   for (final region in regions.docs) {
+  //     final universities = await db
+  //         .collection("Region")
+  //         .doc(region.id)
+  //         .collection("Universities")
+  //         .get();
+  //     List<Map<String, dynamic>> uniList = [];
+  //     for (final university in universities.docs) {
+  //       uniList.add({
+  //         "university": university.id,
+  //         "campuses": university.data()["campuses"],
+  //       });
+  //     }
+  //     campuses.add(Campus(region: region.id, universities: uniList));
+  //   }
+  //   return campuses;
+  // }
   // UserModel? usermodel;
+  Stream<List<Campus>> getCampusStream() {
+    return db.collection("Region").snapshots().asyncMap((regionSnapshot) async {
+      List<Campus> campuses = [];
+
+      for (final region in regionSnapshot.docs) {
+        debugPrint("This is the region id : ${region.id}");
+        final universitiesSnapshot = await db
+            .collection("Region")
+            .doc(region.id)
+            .collection("Universities")
+            .get(); // 👈 one-time fetch inside stream
+        debugPrint(
+          "This is the universitysnap : ${universitiesSnapshot.docs.length}",
+        );
+        List<Map<String, dynamic>> uniList = [];
+
+        for (final university in universitiesSnapshot.docs) {
+          uniList.add({
+            "university": university.id,
+            "campuses": university.data()["campuses"],
+            "location": university.data()["location"],
+          });
+        }
+
+        campuses.add(Campus(region: region.id, universities: uniList));
+      }
+      debugPrint("$campuses");
+      return campuses;
+    });
+  }
 
   Stream<List<Regions>> getRegionsStream() {
     return db
@@ -651,5 +701,25 @@ class FirestoreDb {
         'Error getting documents from "Private Hostels" collection: $e',
       );
     }
+  }
+}
+
+class Campus {
+  final String region;
+  final List<Map<String, dynamic>> universities;
+
+  Campus({required this.region, required this.universities});
+
+  /// 🔹 From JSON / Firestore
+  factory Campus.fromJson(Map<String, dynamic> json) {
+    return Campus(
+      region: json['region'] as String,
+      universities: json['universities'],
+    );
+  }
+
+  /// 🔹 To JSON (Firestore / API)
+  Map<String, dynamic> toJson() {
+    return {'region': region, 'universities': universities};
   }
 }

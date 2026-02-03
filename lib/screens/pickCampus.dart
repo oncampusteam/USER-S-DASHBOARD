@@ -17,16 +17,27 @@ class Pickcampus extends StatefulWidget {
 }
 
 class _PickcampusState extends State<Pickcampus> {
-  final HostelController hostelController = Get.find();
+  final HostelController hostelController = Get.put(HostelController());
   TextEditingController searchController = TextEditingController();
   int selectedIndex = 0;
   bool pop = false;
   int index = 0;
+  List<bool> dropDownBools = [];
+
+  @override
+  void initState() {
+    super.initState();
+    dropDownBools = List.generate(hostelController.campuses.length, (index) {
+      return false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final regions = hostelController.regions;
+      // final regions = hostelController.regions;
+      final campuses = hostelController.campuses;
+      debugPrint("This is the length of campuses: $campuses");
       return Stack(
         children: [
           Scaffold(
@@ -356,10 +367,11 @@ class _PickcampusState extends State<Pickcampus> {
                         height: 50,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: regions.length,
+                          itemCount: campuses.length,
                           itemBuilder: (BuildContext context, int index) {
-                            Regions reg = regions[index];
-                            return Center(
+                            Campus campus = campuses[index];
+                            return Column(children: [
+                              Center(
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -390,7 +402,7 @@ class _PickcampusState extends State<Pickcampus> {
                                   ),
                                   child: SizedBox(
                                     child: Text(
-                                      reg.name,
+                                      campus.region,
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: "Poppins",
@@ -401,49 +413,48 @@ class _PickcampusState extends State<Pickcampus> {
                                   ),
                                 ),
                               ),
-                            );
+                            ),
+                            ]);
                           },
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Container(
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            "assets/pickCampus/University.png",
-                            height: 35,
-                            width: 40,
-                          ),
-                          SizedBox(width: 5.w),
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.65,
-                                  child: FittedBox(
-                                    child: Text(
-                                      "Popular Universities in ${regions[selectedIndex].name}",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Poppins",
-                                        fontSize: 19.sp.clamp(0, 19),
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                    Row(
+                      children: [
+                        Image.asset(
+                          "assets/pickCampus/University.png",
+                          height: 35,
+                          width: 40,
+                        ),
+                        SizedBox(width: 5.w),
+                        Expanded(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Popular Universities in ${campuses[selectedIndex].region == "Greater Accra" ? "Accra" : campuses[selectedIndex].region}",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Poppins",
+                                      fontSize: 19.sp.clamp(0, 19),
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                    dropDown(campus: campuses[selectedIndex]),
                   ],
                 ),
               ),
@@ -452,5 +463,83 @@ class _PickcampusState extends State<Pickcampus> {
         ],
       );
     });
+  }
+
+  Widget dropDown({required Campus campus}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: List.generate(campus.universities.length, (index) {
+          final university = campus.universities[index];
+          final dropDownBools = List.generate(campus.universities.length, (
+            index,
+          ) {
+            return false;
+          });
+          return Column(
+            children: [
+              Container(
+                height: Constant.height * 0.05,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(bottom: BorderSide(color: Colors.black)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Align(
+                      child: SizedBox(
+                        height: Constant.height * 0.04,
+                        child: FittedBox(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(university["university"]),
+                              Text(university["location"]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          dropDownBools[index] = !dropDownBools[index];
+                        });
+                      },
+                      child: Icon(
+                        dropDownBools[index]
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (dropDownBools[index])
+                Column(
+                  children: List.generate(university["campuses"].length, (index) {
+                    final campus = university["campuses"][index];
+                    return SizedBox(
+                      height: Constant.height * 0.35,
+                      child: Column(
+                        children: [
+                          Align(
+                            child: SizedBox(
+                              height: Constant.height * 0.025,
+                              child: FittedBox(child: Text(campus)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+            ],
+          );
+        }),
+      ),
+    );
   }
 }

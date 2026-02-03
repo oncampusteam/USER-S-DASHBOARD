@@ -10,6 +10,7 @@ class HostelController extends GetxController {
   final RxList<Hostels> privateHostels = <Hostels>[].obs;
   final RxList<Hostels> schoolHostels = <Hostels>[].obs;
   final RxList<Regions> regions = <Regions>[].obs;
+  final RxList<Campus> campuses = <Campus>[].obs;
   RxBool isloading = false.obs;
 
   // @override
@@ -33,23 +34,26 @@ class HostelController extends GetxController {
   //   });
   //   isloading.value = false;
   // }
-@override
-void onInit() {
-  super.onInit();
-  isloading.value = true;
+  @override
+  void onInit() {
+    super.onInit();
+    isloading.value = true;
 
-  _db.getPopularStream().listen((data) {
-    popularHostels.assignAll(data);
-    isloading.value = false; // 👈 first data arrived
-  });
+    _db.getPopularStream().listen((data) {
+      popularHostels.assignAll(data);
+      isloading.value = false; // 👈 first data arrived
+    });
 
-  _db.getPrivateHostelsStream().listen((data) {
-    privateHostels.assignAll(data);
-  });
+    _db.getPrivateHostelsStream().listen((data) {
+      privateHostels.assignAll(data);
+    });
 
-  _db.getRegionsStream().listen((data) {
-    regions.assignAll(data);
-  });
-}
+    // _db.getRegionsStream().listen((data) {
+    //   regions.assignAll(data);
+    // });
 
+    _db.getCampusStream().listen((data) {
+      campuses.assignAll(data);
+    });
+  }
 }
